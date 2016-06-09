@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>SSISExecutionManager</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{f8ea7c7b-9b18-4b2e-9d59-a7539c6aeb05}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>Database1</RootNamespace>
+    <AssemblyName>Database1</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Functions" />
+    <Folder Include="Functions\Scalar-valued" />
+    <Folder Include="Functions\Table-valued" />
+    <Folder Include="Functions\Table-valued\ops" />
+    <Folder Include="References" />
+    <Folder Include="Scripts" />
+    <Folder Include="Stored Procedures" />
+    <Folder Include="Stored Procedures\cfg" />
+    <Folder Include="Stored Procedures\ctl" />
+    <Folder Include="Stored Procedures\log" />
+    <Folder Include="Stored Procedures\ops" />
+    <Folder Include="Stored Procedures\sqlcmd" />
+    <Folder Include="Stored Procedures\sup" />
+    <Folder Include="Security" />
+    <Folder Include="Security\Schemas" />
+    <Folder Include="Security\Users" />
+    <Folder Include="Tables" />
+    <Folder Include="Tables\cfg" />
+    <Folder Include="Tables\ctl" />
+    <Folder Include="Tables\log" />
+    <Folder Include="Tables\ref" />
+    <Folder Include="Views" />
+    <Folder Include="Views\rpt" />
+    <Folder Include="Scripts\Initial Deployment" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Functions\Scalar-valued\func_GetConfigurationValue.sql" />
+    <Build Include="Functions\Scalar-valued\func_GetETLBatchStatusId.sql" />
+    <Build Include="Functions\Scalar-valued\func_GetLastPackageExecutionStatus.sql" />
+    <Build Include="Functions\Scalar-valued\func_GetSQLAgentJobNextRunDateTime.sql" />
+    <Build Include="Functions\Scalar-valued\func_GetSSISDBPackageId.sql" />
+    <Build Include="Functions\Scalar-valued\func_GetTimeAsInt.sql" />
+    <Build Include="Functions\Scalar-valued\func_IsSQLAgentJobRunning.sql" />
+    <Build Include="Functions\Table-valued\ops\func_GetSSISPackageExecutionMessages.sql" />
+    <Build Include="Functions\Table-valued\func_GetETLBatchStatus.sql" />
+    <Build Include="Functions\Table-valued\func_GetETLPackageExecutionErrorsForBatch.sql" />
+    <Build Include="Functions\Table-valued\func_GetETLPackageExecutionErrorsFromSSISDB.sql" />
+    <Build Include="Functions\Table-valued\func_GetETLPackageExecutionStatusesFromSSISDB.sql" />
+    <Build Include="Functions\Table-valued\func_GetETLPackagesForBatch.sql" />
+    <Build Include="Functions\Table-valued\func_GetETLPackagesToExecute.sql" />
+    <Build Include="Functions\Table-valued\func_GetLatestETLBatch.sql" />
+    <Build Include="Functions\Table-valued\func_GetRunningETLBatch.sql" />
+    <None Include="Scripts\Populate Reference Data.sql" />
+    <None Include="Scripts\Sync Configurations.sql" />
+    <Build Include="Stored Procedures\cfg\AddSSISDBProjectToETLPackageSet.sql" />
+    <Build Include="Stored Procedures\cfg\DeleteETLPackage.sql" />
+    <Build Include="Stored Procedures\cfg\DeleteETLPackage_ETLPackageSet.sql" />
+    <Build Include="Stored Procedures\cfg\DeleteSQLCommand_SQLCommandSet.sql" />
+    <Build Include="Stored Procedures\cfg\InsertETLPackage_ETLPackageSet.sql" />
+    <Build Include="Stored Procedures\cfg\InsertSQLCommand_SQLCommandSet.sql" />
+    <Build Include="Stored Procedures\cfg\RemoveSSISDBProjectFromETLPackageSet.sql" />
+    <Build Include="Stored Procedures\cfg\SaveETLPackage.sql" />
+    <Build Include="Stored Procedures\cfg\SaveETLPackageDependency.sql" />
+    <Build Include="Stored Procedures\cfg\SaveETLPackageSet.sql" />
+    <Build Include="Stored Procedures\cfg\SaveSQLCommand.sql" />
+    <Build Include="Stored Procedures\cfg\SaveSQLCommandSet.sql" />
+    <Build Include="Stored Procedures\ctl\DeleteETLBatch.sql" />
+    <Build Include="Stored Procedures\ctl\EndETLBatch.sql" />
+    <Build Include="Stored Procedures\ctl\ExecuteETLBatch.sql" />
+    <Build Include="Stored Procedures\ctl\ExecuteETLPackage.sql" />
+    <Build Include="Stored Procedures\ctl\ExecuteETLPackagesForBatch.sql" />
+    <Build Include="Stored Procedures\ctl\ExecuteSQLCommandSet.sql" />
+    <Build Include="Stored Procedures\ctl\InsertETLBatchSSISDBExecution.sql" />
+    <Build Include="Stored Procedures\ctl\InsertUnhandledError.sql" />
+    <Build Include="Stored Procedures\ctl\RestartETLPackagesForETLBatch.sql" />
+    <Build Include="Stored Procedures\ctl\SaveETLBatch.sql" />
+    <Build Include="Stored Procedures\ctl\SendErrorNotificationsForETLBatch.sql" />
+    <Build Include="Stored Procedures\ctl\UpdateETLBatchStatus.sql" />
+    <Build Include="Stored Procedures\ctl\UpdatePackagesToExecuteForBatch.sql" />
+    <Build Include="Stored Procedures\log\InsertETLBatchEvent.sql" />
+    <Build Include="Stored Procedures\log\SaveETLPackageExecutionErrors.sql" />
+    <Build Include="Stored Procedures\log\SaveETLPackageExecutions.sql" />
+    <Build Include="Stored Procedures\ops\SendAndLogLongRunningETLPackageNotification.sql" />
+    <Build Include="Stored Procedures\ops\SendLongRunningBlockingQueryNotification.sql" />
+    <Build Include="Stored Procedures\ops\SendSSISErrorEmail.sql" />
+    <Build Include="Stored Procedures\sqlcmd\CheckAndWaitForCompetingJobs.sql" />
+    <Build Include="Stored Procedures\sqlcmd\StartDelayedSQLAgentJob.sql" />
+    <Build Include="Stored Procedures\sup\EnableDisableProjectPackage.sql" />
+    <Build Include="Stored Procedures\sup\ManuallyExecutePackageForBatch.sql" />
+    <Build Include="Stored Procedures\sup\ResetProjectPackageForNormalExecution.sql" />
+    <Build Include="Stored Procedures\sup\RestartPackageForETLBatch.sql" />
+    <Build Include="Security\Schemas\cfg.sql" />
+    <Build Include="Security\Schemas\ctl.sql" />
+    <Build Include="Security\Schemas\log.sql" />
+    <Build Include="Security\Schemas\maint.sql" />
+    <Build Include="Security\Schemas\ops.sql" />
+    <Build Include="Security\Schemas\ref.sql" />
+    <Build Include="Security\Schemas\rpt.sql" />
+    <Build Include="Security\Schemas\sqlcmd.sql" />
+    <Build Include="Security\Schemas\sup.sql" />
+    <Build Include="Tables\cfg\Configuration.sql" />
+    <Build Include="Tables\ctl\ETLBatch.sql" />
+    <Build Include="Tables\ctl\ETLBatchSSISDBExecutions.sql" />
+    <Build Include="Tables\ctl\ETLPackage.sql" />
+    <Build Include="Tables\ctl\ETLPackage_ETLPackageSet.sql" />
+    <Build Include="Tables\ctl\ETLPackage_SQLCommandDependency.sql" />
+    <Build Include="Tables\ctl\ETLPackageDependency.sql" />
+    <Build Include="Tables\ctl\ETLPackageSet.sql" />
+    <Build Include="Tables\ctl\SQLCommand.sql" />
+    <Build Include="Tables\ctl\SQLCommand_SQLCommandSet.sql" />
+    <Build Include="Tables\ctl\SQLCommandSet.sql" />
+    <Build Include="Tables\log\ETLBatchEvent.sql" />
+    <Build Include="Tables\log\ETLPackageExecution.sql" />
+    <Build Include="Tables\log\ETLPackageExecutionError.sql" />
+    <Build Include="Tables\log\ETLPackageExecutionLongRunning.sql" />
+    <Build Include="Tables\ref\ETLBatchEventType.sql" />
+    <Build Include="Tables\ref\ETLBatchStatus.sql" />
+    <Build Include="Tables\ref\ETLExecutionStatus.sql" />
+    <Build Include="Tables\ref\ETLPackageExecutionErrorType.sql" />
+    <Build Include="Tables\ref\ETLPackageExecutionStatus.sql" />
+    <Build Include="Tables\ref\IssueNotificationCategory.sql" />
+    <Build Include="Tables\ref\IssueNotificationSubcategory.sql" />
+    <Build Include="Tables\ref\SQLCommandDependencyType.sql" />
+    <Build Include="Tables\ref\SupportSeverityLevel.sql" />
+    <Build Include="Views\rpt\ETLBatches.sql" />
+    <Build Include="Views\rpt\ETLBatchEvents.sql" />
+    <Build Include="Views\rpt\ETLBatchStatsForLatestBatch.sql" />
+    <Build Include="Views\rpt\ETLPackageDependencies.sql" />
+    <Build Include="Views\rpt\ETLPackageExecutionErrors.sql" />
+    <Build Include="Views\rpt\ETLPackageExecutionHistory.sql" />
+    <Build Include="Views\rpt\ETLPackageLongRunningNotifications.sql" />
+    <Build Include="Views\rpt\ETLPackagesDisabled.sql" />
+    <Build Include="Views\rpt\ETLPackageSetsETLPackages.sql" />
+    <Build Include="Views\rpt\ETLPackagesForLatestBatch.sql" />
+    <Build Include="Views\rpt\ETLPackagesSQLCommandTriggers.sql" />
+    <Build Include="Views\rpt\SQLCommandSetsSQLCommands.sql" />
+    <Build Include="Views\rpt\SSISDBErrorMessages.sql" />
+    <None Include="Scripts\Initial Deployment\Insert ETLPackage Configurations.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="References\SSISDB.dacpac" />
+    <None Include="localhost.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ArtifactReference Include="References\SSISDB.dacpac">
+      <HintPath>References\SSISDB.dacpac</HintPath>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseSqlCmdVariable>SSISDB</DatabaseSqlCmdVariable>
+    </ArtifactReference>
+    <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
+      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac</HintPath>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
+    </ArtifactReference>
+    <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\msdb.dacpac">
+      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\msdb.dacpac</HintPath>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseVariableLiteralValue>msdb</DatabaseVariableLiteralValue>
+    </ArtifactReference>
+  </ItemGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="DeployPackageConfiguration">
+      <DefaultValue>0</DefaultValue>
+      <Value>$(SqlCmdVar__3)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="EmailRecipientsDefault">
+      <DefaultValue>you@youremail.com</DefaultValue>
+      <Value>$(SqlCmdVar__4)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="EmailRecipientsMonitors">
+      <DefaultValue>support@youremail.com</DefaultValue>
+      <Value>$(SqlCmdVar__5)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="PopulateReferenceData">
+      <DefaultValue>1</DefaultValue>
+      <Value>$(SqlCmdVar__2)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="SSISDB">
+      <DefaultValue>SSISDB</DefaultValue>
+      <Value>$(SqlCmdVar__1)</Value>
+    </SqlCmdVariable>
+  </ItemGroup>
+</Project>

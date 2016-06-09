@@ -1,0 +1,5 @@
+﻿CREATE SCHEMA [maint]
+    AUTHORIZATION [dbo];
+
+GO
+
