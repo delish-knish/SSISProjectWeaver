@@ -18,7 +18,6 @@ VALUES
 	(6, 'Waiting for Dependency'),
 	(7, 'Unknown'),
 	(8, 'Ready'),
-	(9, 'Waiting for Post-transform Sequence'),
 	(10, 'Waiting to be called by Parent'),
 	(11, 'Parent failed')
 
@@ -114,12 +113,9 @@ INSERT Sync_ETLBatchStatus (
 	 ,[ETLBatchStatus] )
 VALUES 
 	(1,'Created'),
-	(2,'Running Extract and Transform'),
-	(3,'Running Post-transform'),
 	(4,'Halted'),
 	(5,'Completed'),
-	(6,'Critical Path Packages Complete'),
-	(7,'Post-critical Path SQL Commands Executed'),
+	(6,'Running'),
 	(8,'Timed Out'),
 	(9,'Exception'),
 	(10,'Manually Ended/Canceled')
@@ -157,14 +153,14 @@ INSERT Sync_SupportSeverityLevel
        ([SupportSeverityLevelId]
         ,[SupportSeverityLevelCd]
         ,[SupportSeverityLevel])
-VALUES (2
-        ,'2'
+VALUES (1
+        ,'1'
         ,'High'),
+       (2
+        ,'2'
+        ,'Medium'),
        (3
         ,'3'
-        ,'Medium'),
-       (4
-        ,'4'
         ,'Low')
 
 MERGE ref.SupportSeverityLevel AS Target
@@ -205,18 +201,12 @@ VALUES
 	(3,'Executing Package'),
 	(4,'Error'),
 	(5,'Completed'),
-	(6,'Critical Path Packages Complete'),
 	(7,'Error Notifications Sent'),
-	(8,'Post-critical Path SQL Commands Executed'),
-	(9,'Checking IP Inventory Trigger'),
-	(10,'Waiting for Job to Complete'),
 	(11,'Waiting for Sufficient Time to Pass'),
-	(12,'Checking IP Sales Trigger'),
 	(13,'Restarting Package After Unexpected Termination'),
 	(14,'Timeout'),
 	(15,'Executing SQL Command'),
-	(16,'ETL Batch Complete SQL Commands Executed'),
-	(17,'ETL Batch Created SQL Commands Executed'),
+	(16,'SQL Command(s) Executed'),
 	(18,'SQL Command-based Trigger Executed'),
 	(19,'SQL Command Execution Error')
 
@@ -231,37 +221,6 @@ WHEN NOT MATCHED BY TARGET THEN
 WHEN NOT MATCHED BY SOURCE THEN DELETE;
 
 DROP TABLE Sync_ETLBatchEventType;
-
-
------------------------------------------------------------
-
-IF EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLES
-                  WHERE TABLE_NAME = N'Sync_SQLCommandDependencyType')
-      DROP TABLE Sync_SQLCommandDependencyType
-      
-CREATE TABLE Sync_SQLCommandDependencyType (
-      [SQLCommandDependencyTypeId] INT NOT NULL 
-     ,[SQLCommandDependencyType]  VARCHAR(50) NULL)
-
-INSERT Sync_SQLCommandDependencyType (
-      [SQLCommandDependencyTypeId]
-	 ,[SQLCommandDependencyType] )
-VALUES 
-	(1,'Post-critical Path'),
-	(2,'ETL Batch Create'),
-	(3,'ETL Batch Complete')
-
-MERGE ref.[SQLCommandDependencyType] AS Target
-USING Sync_SQLCommandDependencyType AS Source ON (Target.[SQLCommandDependencyTypeId] = Source.[SQLCommandDependencyTypeId])
-WHEN MATCHED THEN
-UPDATE SET Target.[SQLCommandDependencyType] = Source.[SQLCommandDependencyType]
-WHEN NOT MATCHED BY TARGET THEN 
-    INSERT ([SQLCommandDependencyTypeId], [SQLCommandDependencyType])
-    VALUES ([SQLCommandDependencyTypeId], [SQLCommandDependencyType])
-
-WHEN NOT MATCHED BY SOURCE THEN DELETE;
-
-DROP TABLE Sync_SQLCommandDependencyType;
 
 -------------------------------------------------------------------------------------
 
@@ -301,9 +260,6 @@ WHEN MATCHED THEN
              ,Target.ReadyForExecutionInd = Source.ReadyForExecutionInd
              ,Target.BypassEntryPointInd = Source.BypassEntryPointInd
              ,Target.IgnoreDependenciesInd = Source.IgnoreDependenciesInd
-             ,Target.InCriticalPathPostTransformProcessesInd = Source.InCriticalPathPostTransformProcessesInd
-             ,Target.InCriticalPathPostLoadProcessesInd = Source.InCriticalPathPostLoadProcessesInd
-             ,Target.ExecutePostTransformInd = Source.ExecutePostTransformInd
              ,Target.ExecuteSundayInd = Source.ExecuteSundayInd
              ,Target.ExecuteMondayInd = Source.ExecuteMondayInd
              ,Target.ExecuteTuesdayInd = Source.ExecuteTuesdayInd
@@ -323,9 +279,6 @@ WHEN NOT MATCHED BY TARGET THEN
           ,ReadyForExecutionInd
           ,BypassEntryPointInd
           ,IgnoreDependenciesInd
-          ,InCriticalPathPostTransformProcessesInd
-          ,InCriticalPathPostLoadProcessesInd
-          ,ExecutePostTransformInd
           ,ExecuteSundayInd
           ,ExecuteMondayInd
           ,ExecuteTuesdayInd
@@ -345,9 +298,6 @@ WHEN NOT MATCHED BY TARGET THEN
           ,ReadyForExecutionInd
           ,BypassEntryPointInd
           ,IgnoreDependenciesInd
-          ,InCriticalPathPostTransformProcessesInd
-          ,InCriticalPathPostLoadProcessesInd
-          ,ExecutePostTransformInd
           ,ExecuteSundayInd
           ,ExecuteMondayInd
           ,ExecuteTuesdayInd
@@ -361,7 +311,7 @@ WHEN NOT MATCHED BY TARGET THEN
 SET IDENTITY_INSERT ctl.ETLPackage OFF;
 
 -----------------------------------------------------------------------------------
-
+/*
 IF EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLES
                   WHERE TABLE_NAME = N'Sync_ETLPackageSet')
       DROP TABLE Sync_ETLPackageSet
@@ -392,6 +342,6 @@ WHEN NOT MATCHED BY TARGET THEN
 SET IDENTITY_INSERT ctl.ETLPackageSet OFF;
 
 DROP TABLE Sync_ETLPackageSet;
-
+*/
 --------------------------------------------------
 PRINT 'Completed populating reference tables'

@@ -1,7 +1,7 @@
 ﻿CREATE VIEW [rpt].[SSISDBErrorMessages]
 AS
   SELECT TOP 1000
-    dwx.ETLBatchId           AS ETLBatchId
+    dwx.[ETLBatchExecutionId]           AS ETLBatchId
     ,eb.SQLAgentJobName      AS SQLAgentJobName
     --,eb.Periodicity          AS Periodicity
     ,p.ETLPackageId          AS ETLPackageId
@@ -28,8 +28,8 @@ AS
          AND x.package_name = p.SSISDBPackageName
     JOIN ctl.ETLBatchSSISDBExecutions dwx
       ON x.execution_id = dwx.SSISDBExecutionId
-    JOIN ctl.ETLBatch eb
-      ON dwx.ETLBatchId = eb.ETLBatchId
+    JOIN ctl.[ETLBatchExecution] eb
+      ON dwx.[ETLBatchExecutionId] = eb.[ETLBatchExecutionId]
   WHERE
     message_type = 120
   ORDER  BY

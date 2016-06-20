@@ -16,7 +16,7 @@
      ,[LastUpdatedUser]                VARCHAR (50) CONSTRAINT [DF_ETLPackageExecutionError_LastUpdatedUser] DEFAULT (SUSER_SNAME()) NOT NULL,
      CONSTRAINT [PK_ETLPackageExecutionError] PRIMARY KEY (ETLPackageExecutionErrorId),
      CONSTRAINT [FK_ETLPackageExecutionError_ETLPackage] FOREIGN KEY ([ETLPackageId]) REFERENCES [ctl].ETLPackage([ETLPackageId]),
-     CONSTRAINT [FK_ETLPackageExecutionError_ETLBatch] FOREIGN KEY ([ETLBatchId]) REFERENCES [ctl].ETLBatch([ETLBatchId]),
+     CONSTRAINT [FK_ETLPackageExecutionError_ETLBatch] FOREIGN KEY ([ETLBatchId]) REFERENCES [ctl].[ETLBatchExecution]([ETLBatchExecutionId]),
      --CONSTRAINT [AK_ETLPackageExecutionError_SSISDBExecutionId_SSISDBEventMessageId] UNIQUE (SSISDBExecutionId, SSISDBEventMessageId), Removed to allow for non SSISDB errors
      CONSTRAINT [FK_ETLPackageExecutionError_ETLPackageExecutionErrorType] FOREIGN KEY (ETLPackageExecutionErrorTypeId) REFERENCES ref.ETLPackageExecutionErrorType(ETLPackageExecutionErrorTypeId)
   )

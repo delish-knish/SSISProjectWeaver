@@ -26,10 +26,10 @@ AS
           DELETE FROM [log].ETLPackageExecution
           WHERE  ETLPackageId = @ETLPackageId;
 
-          DELETE FROM ctl.ETLPackage_ETLPackageSet
+          DELETE FROM ctl.[ETLBatchPhase_ETLPackage]
           WHERE  ETLPackageId = @ETLPackageId;
 
-          DELETE FROM ctl.[ETLPackage_SQLCommandDependency]
+          DELETE FROM ctl.[ETLPackage_SQLCommandTrigger]
           WHERE  ETLPackageId = @ETLPackageId;
 
           DELETE FROM ctl.ETLPackage

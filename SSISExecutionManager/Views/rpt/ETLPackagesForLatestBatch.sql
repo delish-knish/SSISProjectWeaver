@@ -1,9 +1,9 @@
 ﻿CREATE VIEW [rpt].[ETLPackagesForLatestBatch]
 AS
   SELECT TOP 1000
-    eb.ETLBatchId
+    eb.[ETLBatchExecutionId]
     --,eb.Periodicity
-    ,eps.ETLPackageSetName
+    ,eps.[ETLBatchName]
     ,ep.[ETLPackageId]
     ,pkg.SSISDBExecutionId
     ,ep.[SSISDBProjectName]
@@ -17,29 +17,26 @@ AS
     ,pkg.ETLPackageLastMessage
     ,ep.[EntryPointPackageInd]
     ,ep.[ReadyForExecutionInd] --entry point packages only
-    ,ep.[ExecutePostTransformInd]
   FROM
-    [ctl].[ETLPackage] ep WITH (NOLOCK)
+    [ctl].[ETLPackage] ep
     --Get the id of the last batch executed for NA and EU
     CROSS JOIN (SELECT
-                  ETLBatchId
-                  ,ETLPackageSetId
+                  [ETLBatchExecutionId]
+                  ,[ETLBatchId]
                   --,Periodicity
                   ,ROW_NUMBER()
                      OVER (
-                       PARTITION BY ETLPackageSetId
+                       PARTITION BY [ETLBatchId]
                        ORDER BY StartDateTime DESC) rnk
                 FROM
-                  [ctl].ETLBatch WITH (NOLOCK)
-                WHERE
-                 ETLPackageSetId IN ( 1, 2 ) --Daily
+                  [ctl].[ETLBatchExecution] WITH (NOLOCK)
                ) eb
-    CROSS APPLY [dbo].[func_GetETLPackagesForBatch] (eb.ETLBatchId) pkg
-    JOIN ctl.ETLPackageSet eps
-      ON eb.ETLPackageSetId = eps.ETLPackageSetId
+    CROSS APPLY [dbo].[func_GetETLPackagesForBatch] (eb.[ETLBatchExecutionId]) pkg
+    JOIN ctl.[ETLBatch] eps
+      ON eb.[ETLBatchId] = eps.[ETLBatchId]
     LEFT JOIN ref.ETLPackageExecutionStatus rpes
            ON pkg.ETLPackageExecutionStatusId = rpes.ETLPackageExecutionStatusId
-    LEFT JOIN ref.ETLExecutionStatus rees WITH (NOLOCK)
+    LEFT JOIN ref.ETLExecutionStatus rees 
            ON pkg.ETLExecutionStatusId = rees.ETLExecutionStatusId
   WHERE
     ep.ETLPackageId = pkg.ETLPackageId

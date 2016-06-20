@@ -14,7 +14,7 @@ AS
     SELECT
       e.execution_id            AS [SSISDBExecutionId]
       ,NULL                     AS [SSISDBEventMessageId]
-      ,ebe.ETLBatchId           AS [ETLBatchId]
+      ,ebe.[ETLBatchExecutionId]           AS [ETLBatchId]
       ,p.ETLPackageId           AS [ETLPackageId]
       ,e.end_time               AS [ErrorDateTime]
       ,'Unexpected termination' AS [ErrorMessage]
@@ -28,7 +28,7 @@ AS
            AND e.project_name = p.SSISDBProjectName
            AND e.package_name = p.SSISDBPackageName
     WHERE
-      ebe.ETLBatchId = @ETLBatchId
+      ebe.[ETLBatchExecutionId] = @ETLBatchId
       AND [status] = 6
       AND p.ETLPackageId NOT IN (SELECT
                                    ETLPackageId

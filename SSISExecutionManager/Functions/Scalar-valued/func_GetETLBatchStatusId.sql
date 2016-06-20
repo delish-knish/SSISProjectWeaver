@@ -5,9 +5,9 @@ AS
       DECLARE @ReturnValue INT = (SELECT
            ETLBatchStatusId
          FROM
-           ctl.ETLBatch
+           ctl.[ETLBatchExecution]
          WHERE
-          ETLBatchId = @ETLBatchId)
+          [ETLBatchExecutionId] = @ETLBatchId)
 
       RETURN @ReturnValue
   END 

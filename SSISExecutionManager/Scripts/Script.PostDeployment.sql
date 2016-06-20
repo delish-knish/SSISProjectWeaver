@@ -9,7 +9,7 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
-PRINT 'Started populating reference tables'
+PRINT 'Started populating database'
 ----------------------------------------------------------------------------------
 IF $(PopulateReferenceData) = 1
 BEGIN
@@ -21,13 +21,22 @@ END
 IF $(DeployPackageConfiguration) = 1
 BEGIN
 	PRINT 'Started Insert ETLPackage Configurations.sql'
-		:r ".\Initial Deployment\Insert ETLPackage Configurations.sql"
+		:r "Insert ETLPackage Configurations.sql"
 	PRINT 'Completed Insert ETLPackage Configurations.sql'
 END
 -----------------------------------------------------------------------------------
 PRINT 'Started Sync cfg.Configurations.sql'
 		:r "Sync Configurations.sql"
 PRINT 'Completed Sync cfg.Configurations.sql'
+-----------------------------------------------------------------------------------
+IF $(DeployExample) = 1
+BEGIN
+	PRINT 'Started Setting Up Example Projects.sql'
+		:r ".\Example 1 Setup\Configure SSIS Catalog and Deploy Example1 Projects.sql"
+		:r ".\Example 1 Setup\Populate Example1 Metadata.sql"
+		:r ".\Example 1 Setup\Create Example 1 SQL Agent Job.sql"
+	PRINT 'Started Setting Up Example Projects.sql'
+END
+-----------------------------------------------------------------------------------
 
-------------------------------------------------------------------------------------
-PRINT 'Completed populating reference tables'
+PRINT 'Completed populating database'

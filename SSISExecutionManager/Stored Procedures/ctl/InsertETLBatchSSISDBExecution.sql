@@ -4,7 +4,7 @@
 AS
   BEGIN
       INSERT INTO ctl.ETLBatchSSISDBExecutions
-                  (ETLBatchId
+                  ([ETLBatchExecutionId]
                    ,SSISDBExecutionId
                    ,ETLPackageId)
       VALUES      (@ETLBatchId

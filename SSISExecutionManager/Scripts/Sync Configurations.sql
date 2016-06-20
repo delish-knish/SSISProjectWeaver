@@ -4,7 +4,8 @@ MERGE cfg.[Configuration] AS Target
 USING (VALUES ('Email Recipients - Default','$(EmailRecipientsDefault)'),
 			  ('Email Recipients - Monitors', '$(EmailRecipientsMonitors)'),
 			  ('Minutes Back to Continue a Batch', '4320'),
-			  ('Polling Delay in Minutes','5')
+			  ('ETL Batch Polling Delay','00:00:05'),
+			  ('Default SQL Command Trigger Polling Delay','00:05:00')
 			  
 			  	  ) AS Source (ConfigurationName, ConfigurationValue )
 ON ( Target.ConfigurationName = Source.ConfigurationName )

@@ -23,7 +23,7 @@ AS
 		END
 	ELSE
       BEGIN
-          MERGE [ctl].ETLPackageDependency AS Target
+          MERGE [ctl].[ETLPackage_ETLPackageDependency] AS Target
           USING (SELECT
                    @ETLPackageId
                    ,@DependedOnETLPackageId

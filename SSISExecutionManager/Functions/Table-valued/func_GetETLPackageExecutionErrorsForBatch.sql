@@ -3,7 +3,7 @@ RETURNS TABLE
 AS
     RETURN
       (SELECT
-         ebe.[ETLBatchId]                                AS [ETLBatchId]
+         ebe.[ETLBatchExecutionId]                                AS [ETLBatchId]
          ,ISNULL(err.[ETLPackageId], ebe.[ETLPackageId]) AS [ETLPackageId]
          ,ebe.[SSISDBExecutionId]                        AS [SSISDBExecutionId]
          ,err.[EventMessageId]                           AS [EventMessageId]
@@ -13,4 +13,4 @@ AS
          ctl.ETLBatchSSISDBExecutions ebe
          CROSS APPLY dbo.func_GetETLPackageExecutionErrorsFromSSISDB(ebe.SSISDBExecutionId) err
        WHERE
-        ebe.ETLBatchId = @ETLBatchId) 
+        ebe.[ETLBatchExecutionId] = @ETLBatchId) 

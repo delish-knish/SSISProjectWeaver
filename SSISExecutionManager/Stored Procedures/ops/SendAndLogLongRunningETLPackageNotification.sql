@@ -73,7 +73,7 @@ AS
         BEGIN
             SELECT
               @EMailBody = @@SERVERNAME + @CRLF +
-					N'URGENCY=2' + @CRLF +
+					N'Severity Level=2' + @CRLF +
 					@SSISDBPackageName + ' has been running for ' + CONVERT(VARCHAR(4000), @ETLPackageRunTime) + ' minutes.  The average execution time is ' + CONVERT(VARCHAR(4000), @AverageExecutionTime) + ' minutes.  The execution event started at ' + CONVERT(VARCHAR(30), @StartTime) + '.'
 
             EXEC msdb.dbo.sp_send_dbmail @recipients = @EmailRecipients,@subject = 'Open Incident',@body = @EMailBody

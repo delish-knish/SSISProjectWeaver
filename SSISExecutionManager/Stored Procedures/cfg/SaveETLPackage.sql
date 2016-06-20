@@ -7,8 +7,8 @@
                                         @ReadyForExecutionInd           BIT,
                                         @BypassEntryPointInd            BIT,
                                         @IgnoreDependenciesInd          BIT,
-                                        @CriticalPathETLLoadPackagesInd BIT,
-                                        @CriticalPathETLCompleteInd     BIT,
+                                        --@CriticalPathETLLoadPackagesInd BIT,
+                                        --@CriticalPathETLCompleteInd     BIT,
                                         @ExecuteSundayInd             BIT,
                                         @ExecuteMondayInd             BIT,
                                         @ExecuteTuesdayInd            BIT,
@@ -16,7 +16,7 @@
                                         @ExecuteThursdayInd           BIT,
                                         @ExecuteFridayInd             BIT,
                                         @ExecuteSaturdayInd           BIT,
-                                        @ExecutePostTransformInd        BIT,
+                                        --@ExecutePostTransformInd        BIT,
                                         @Use32BitDtExecInd              BIT,
                                         @SupportSeverityLevelId         INT
 AS
@@ -42,8 +42,8 @@ AS
              AND @EntryPointETLPackageId IS NULL )
         OR ( @EntryPointETLPackageId IS NOT NULL
              AND @ReadyForExecutionInd = 1 )
-        OR ( @ExecutePostTransformInd = 1
-             AND @CriticalPathETLLoadPackagesInd = 1 )
+        --OR ( @ExecutePostTransformInd = 1
+        --     AND @CriticalPathETLLoadPackagesInd = 1 )
         OR ( @EntryPointSSISDBPackageName IS NOT NULL
              AND @BypassEntryPointInd = 0
              AND @Use32BitDtExecInd = 1 )
@@ -60,9 +60,9 @@ AS
              AND @ReadyForExecutionInd = 1
             THROW 50002, 'Only entry-point packages can be marked "ready for execution" unless bypass entry-point is set to true.', 1;
 
-          IF @ExecutePostTransformInd = 1
+          /*IF @ExecutePostTransformInd = 1
              AND @CriticalPathETLLoadPackagesInd = 1
-            THROW 50003, 'A package cannot be part of the LOAD sequence and in the critical path of the LOAD sequence as they are mutually exclusive.', 1;
+            THROW 50003, 'A package cannot be part of the LOAD sequence and in the critical path of the LOAD sequence as they are mutually exclusive.', 1; */
 
           IF @EntryPointSSISDBPackageName IS NOT NULL
              AND @BypassEntryPointInd = 0
@@ -83,8 +83,8 @@ AS
                    ,@ReadyForExecutionInd
                    ,@BypassEntryPointInd
                    ,@IgnoreDependenciesInd
-                   ,@CriticalPathETLLoadPackagesInd
-                   ,@CriticalPathETLCompleteInd
+                   --,@CriticalPathETLLoadPackagesInd
+                   --,@CriticalPathETLCompleteInd
                    ,@ExecuteSundayInd
                    ,@ExecuteMondayInd
                    ,@ExecuteTuesdayInd
@@ -92,9 +92,13 @@ AS
                    ,@ExecuteThursdayInd
                    ,@ExecuteFridayInd
                    ,@ExecuteSaturdayInd
-                   ,@ExecutePostTransformInd
+                   --,@ExecutePostTransformInd
                    ,@Use32BitDtExecInd
-                   ,@SupportSeverityLevelId) AS source ( SSISDBPackageName, SSISDBProjectName, SSISDBFolderName, Comments, EntryPointETLPackageId, EnabledInd, ReadyForExecutionInd, BypassEntryPointInd, IgnoreDependenciesInd, CriticalPathETLLoadPackagesInd, CriticalPathETLCompleteInd, ExecuteSundayInd, ExecuteMondayInd, ExecuteTuesdayInd, ExecuteWednesdayInd, ExecuteThursdayInd, ExecuteFridayInd, ExecuteSaturdayInd, ExecutePostTransformInd, Use32BitDtExecInd, SupportSeverityLevelId )
+                   ,@SupportSeverityLevelId) AS source ( SSISDBPackageName, SSISDBProjectName, SSISDBFolderName, Comments, EntryPointETLPackageId, EnabledInd, ReadyForExecutionInd, BypassEntryPointInd, IgnoreDependenciesInd, 
+				   --CriticalPathETLLoadPackagesInd, CriticalPathETLCompleteInd, 
+				   ExecuteSundayInd, ExecuteMondayInd, ExecuteTuesdayInd, ExecuteWednesdayInd, ExecuteThursdayInd, ExecuteFridayInd, ExecuteSaturdayInd, 
+				   --ExecutePostTransformInd, 
+				   Use32BitDtExecInd, SupportSeverityLevelId )
           ON target.SSISDBPackageName = source.SSISDBPackageName
              AND target.SSISDBProjectName = source.SSISDBProjectName
              AND target.SSISDBFolderName = source.SSISDBFolderName
@@ -108,8 +112,8 @@ AS
                        ,ReadyForExecutionInd = source.ReadyForExecutionInd
                        ,BypassEntryPointInd = source.BypassEntryPointInd
                        ,IgnoreDependenciesInd = source.IgnoreDependenciesInd
-                       ,[InCriticalPathPostTransformProcessesInd] = source.CriticalPathETLLoadPackagesInd
-                       ,[InCriticalPathPostLoadProcessesInd] = source.CriticalPathETLCompleteInd
+                       --,[InCriticalPathPostTransformProcessesInd] = source.CriticalPathETLLoadPackagesInd
+                       --,[InCriticalPathPostLoadProcessesInd] = source.CriticalPathETLCompleteInd
                        ,ExecuteSundayInd = source.ExecuteSundayInd
                        ,ExecuteMondayInd = source.ExecuteMondayInd
                        ,ExecuteTuesdayInd = source.ExecuteTuesdayInd
@@ -117,7 +121,7 @@ AS
                        ,ExecuteThursdayInd = source.ExecuteThursdayInd
                        ,ExecuteFridayInd = source.ExecuteFridayInd
                        ,ExecuteSaturdayInd = source.ExecuteSaturdayInd
-                       ,[ExecutePostTransformInd] = source.ExecutePostTransformInd
+                       --,[ExecutePostTransformInd] = source.ExecutePostTransformInd
                        ,Use32BitDtExecInd = source.Use32BitDtExecInd
                        ,SupportSeverityLevelId = source.SupportSeverityLevelId
                        ,[LastUpdatedDate] = GETDATE()
@@ -132,8 +136,8 @@ AS
                      ,ReadyForExecutionInd
                      ,BypassEntryPointInd
                      ,IgnoreDependenciesInd
-                     ,[InCriticalPathPostTransformProcessesInd]
-                     ,[InCriticalPathPostLoadProcessesInd]
+                     --,[InCriticalPathPostTransformProcessesInd]
+                     --,[InCriticalPathPostLoadProcessesInd]
                      ,ExecuteSundayInd
                      ,ExecuteMondayInd
                      ,ExecuteTuesdayInd
@@ -141,7 +145,7 @@ AS
                      ,ExecuteThursdayInd
                      ,ExecuteFridayInd
                      ,ExecuteSaturdayInd
-                     ,[ExecutePostTransformInd]
+                     --,[ExecutePostTransformInd]
                      ,Use32BitDtExecInd
                      ,SupportSeverityLevelId )
             VALUES( source.SSISDBPackageName
@@ -153,8 +157,8 @@ AS
                     ,source.ReadyForExecutionInd
                     ,source.BypassEntryPointInd
                     ,source.IgnoreDependenciesInd
-                    ,source.CriticalPathETLLoadPackagesInd
-                    ,source.CriticalPathETLCompleteInd
+                    --,source.CriticalPathETLLoadPackagesInd
+                    --,source.CriticalPathETLCompleteInd
                     ,source.ExecuteSundayInd
                     ,source.ExecuteMondayInd
                     ,source.ExecuteTuesdayInd
@@ -162,7 +166,7 @@ AS
                     ,source.ExecuteThursdayInd
                     ,source.ExecuteFridayInd
                     ,source.ExecuteSaturdayInd
-                    ,source.ExecutePostTransformInd
+                    --,source.ExecutePostTransformInd
                     ,source.Use32BitDtExecInd
                     ,source.SupportSeverityLevelId );
       END

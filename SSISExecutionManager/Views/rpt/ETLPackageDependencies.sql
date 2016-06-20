@@ -7,7 +7,7 @@ AS
     ,epdon.SSISDBPackageName    AS DependedOnPackageName
     ,epd.EnabledInd             AS EnabledInd
   FROM
-    [ctl].ETLPackageDependency epd
+    [ctl].[ETLPackage_ETLPackageDependency] epd
     JOIN [ctl].ETLPackage ep
       ON epd.ETLPackageId = ep.ETLPackageId
     JOIN [ctl].ETLPackage epdon

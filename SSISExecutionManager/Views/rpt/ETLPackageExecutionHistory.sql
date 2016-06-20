@@ -15,8 +15,8 @@ AS
     ,ex.[ErrorMessage]
   FROM
     [log].[ETLPackageExecution] ex
-    JOIN [ctl].ETLBatch eb
-      ON ex.ETLBatchId = eb.ETLBatchId
+    JOIN [ctl].[ETLBatchExecution] eb
+      ON ex.ETLBatchId = eb.[ETLBatchExecutionId]
     JOIN [ctl].ETLPackage ep
       ON ex.ETLPackageId = ep.ETLPackageId
     JOIN ref.ETLBatchStatus rbs

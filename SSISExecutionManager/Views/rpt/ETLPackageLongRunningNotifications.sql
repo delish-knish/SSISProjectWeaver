@@ -1,7 +1,7 @@
 ﻿CREATE VIEW [rpt].[ETLPackageLongRunningNotifications]
 AS
   SELECT TOP 1000
-    dwx.ETLBatchId                    AS ETLBatchId
+    dwx.[ETLBatchExecutionId]                    AS ETLBatchId
     ,eplr.SSISDBExecutionId           AS SSISDBExecutionId
     ,eb.SQLAgentJobName               AS SQLAgentJobName
     --,eb.Periodicity                   AS Periodicity
@@ -23,7 +23,7 @@ AS
               AND x.package_name = p.SSISDBPackageName
     LEFT JOIN ctl.ETLBatchSSISDBExecutions dwx
            ON x.execution_id = dwx.SSISDBExecutionId
-    LEFT JOIN ctl.ETLBatch eb
-           ON dwx.ETLBatchId = eb.ETLBatchId
+    LEFT JOIN ctl.[ETLBatchExecution] eb
+           ON dwx.[ETLBatchExecutionId] = eb.[ETLBatchExecutionId]
   ORDER  BY
     eplr.ExecutionStartTime DESC 

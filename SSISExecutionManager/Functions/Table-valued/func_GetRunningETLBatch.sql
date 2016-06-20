@@ -4,13 +4,14 @@ RETURNS TABLE
 AS
     RETURN
       (SELECT
-         ETLBatchId
+         ETLBatchExecutionId
          ,ETLBatchStatusId
          ,DayOfWeekName
          ,StartDateTime
-		 ,ETLPackageSetId
+		 ,ETLBatchId
+		 ,ETLBatchPhaseId
        FROM
-         ctl.ETLBatch
+         ctl.[ETLBatchExecution]
        WHERE
         DATEDIFF(MINUTE, StartDateTime, GETDATE()) <= @BatchStartedWithinMinutes
         AND EndDateTime IS NULL

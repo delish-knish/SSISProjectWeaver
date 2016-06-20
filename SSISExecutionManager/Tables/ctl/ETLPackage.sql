@@ -13,9 +13,9 @@
      ,[ReadyForExecutionInd]                    BIT NULL
      ,[BypassEntryPointInd]                     BIT CONSTRAINT [DF_ETLPackage_ByPassEntryPointInd] DEFAULT ((0)) NOT NULL
      ,[IgnoreDependenciesInd]                   BIT CONSTRAINT [DF_ETLPackage_IgnoreDependenciesInd] DEFAULT ((0)) NOT NULL
-     ,[InCriticalPathPostTransformProcessesInd] BIT CONSTRAINT [DF_ETLPackage_CriticalPathETLLoadPackagesInd] DEFAULT ((0)) NOT NULL
-     ,[InCriticalPathPostLoadProcessesInd]      BIT CONSTRAINT [DF_ETLPackage_CriticalPathETLCompleteInd] DEFAULT ((0)) NOT NULL
-     ,[ExecutePostTransformInd]                 BIT NOT NULL
+     --,[InCriticalPathPostTransformProcessesInd] BIT CONSTRAINT [DF_ETLPackage_CriticalPathETLLoadPackagesInd] DEFAULT ((0)) NOT NULL
+     --,[InCriticalPathPostLoadProcessesInd]      BIT CONSTRAINT [DF_ETLPackage_CriticalPathETLCompleteInd] DEFAULT ((0)) NOT NULL
+     --,[ExecutePostTransformInd]                 BIT NOT NULL
      ,[ExecuteSundayInd]                      BIT CONSTRAINT [DF_ETLPackage_ExecuteSundayInd] DEFAULT ((0)) NOT NULL
      ,[ExecuteMondayInd]                      BIT CONSTRAINT [DF_ETLPackage_ExecuteMondayInd] DEFAULT ((0)) NOT NULL
      ,[ExecuteTuesdayInd]                     BIT CONSTRAINT [DF_ETLPackage_ExecuteTuesdayInd] DEFAULT ((0)) NOT NULL
@@ -40,17 +40,17 @@
 
 GO
 
-EXECUTE sp_addextendedproperty @name = N'MS_Description',@value = N'Does this package have to complete successfully for the ETL process to be considered complete.',@level0type = N'SCHEMA',@level0name = N'ctl',@level1type = N'TABLE',@level1name = N'ETLPackage',@level2type = N'COLUMN',@level2name = N'InCriticalPathPostLoadProcessesInd';
+--EXECUTE sp_addextendedproperty @name = N'MS_Description',@value = N'Does this package have to complete successfully for the ETL process to be considered complete.',@level0type = N'SCHEMA',@level0name = N'ctl',@level1type = N'TABLE',@level1name = N'ETLPackage',@level2type = N'COLUMN',@level2name = N'InCriticalPathPostLoadProcessesInd';
 
-GO
+--GO
 
-EXECUTE sp_addextendedproperty @name = N'MS_Description',@value = N'Does this package have to complete successfully for the post-transform processes such as "LOAD" packages and hourly sales jobs to execute.',@level0type = N'SCHEMA',@level0name = N'ctl',@level1type = N'TABLE',@level1name = N'ETLPackage',@level2type = N'COLUMN',@level2name = N'InCriticalPathPostTransformProcessesInd';
+--EXECUTE sp_addextendedproperty @name = N'MS_Description',@value = N'Does this package have to complete successfully for the post-transform processes such as "LOAD" packages and hourly sales jobs to execute.',@level0type = N'SCHEMA',@level0name = N'ctl',@level1type = N'TABLE',@level1name = N'ETLPackage',@level2type = N'COLUMN',@level2name = N'InCriticalPathPostTransformProcessesInd';
 
-GO
+--GO
 
-EXECUTE sp_addextendedproperty @name = N'MS_Description',@value = N'Indicates whether this package is a "Load" type package and should be executed at the end of the process. Could be replaced by PackageType column.',@level0type = N'SCHEMA',@level0name = N'ctl',@level1type = N'TABLE',@level1name = N'ETLPackage',@level2type = N'COLUMN',@level2name = N'ExecutePostTransformInd';
+--EXECUTE sp_addextendedproperty @name = N'MS_Description',@value = N'Indicates whether this package is a "Load" type package and should be executed at the end of the process. Could be replaced by PackageType column.',@level0type = N'SCHEMA',@level0name = N'ctl',@level1type = N'TABLE',@level1name = N'ETLPackage',@level2type = N'COLUMN',@level2name = N'ExecutePostTransformInd';
 
-GO
+--GO
 
 EXECUTE sp_addextendedproperty @name = N'MS_Description',@value = N'Run regardless of dependency statuses. Good for dev/debug and potential prod scenarios. Initialize process should set to False.',@level0type = N'SCHEMA',@level0name = N'ctl',@level1type = N'TABLE',@level1name = N'ETLPackage',@level2type = N'COLUMN',@level2name = N'IgnoreDependenciesInd';
 

@@ -53,14 +53,14 @@ AS
                       OR ( err.SSISDBEventMessageId IS NULL
                            AND err.SSISDBExecutionId = minerr.SSISDBExecutionId ) )
                     OR minerr.ETLPackageExecutionErrorTypeId = 3 )
-        JOIN ctl.ETLBatch eb
-          ON err.ETLBatchId = eb.ETLBatchId
+        JOIN ctl.[ETLBatchExecution] eb
+          ON err.ETLBatchId = eb.[ETLBatchExecutionId]
         JOIN ctl.ETLPackage ep
           ON err.ETLPackageId = ep.ETLPackageId
         JOIN ref.SupportSeverityLevel rssl
           ON ep.SupportSeverityLevelId = rssl.SupportSeverityLevelId
       WHERE
-        eb.ETLBatchId = @ETLBatchId
+        eb.[ETLBatchExecutionId] = @ETLBatchId
         AND err.EmailNotificationSentDateTime IS NULL
 
     OPEN PackageCursor
@@ -75,7 +75,7 @@ AS
 
           SELECT
             @MailBody = @@SERVERNAME + @CRLF + 
-			N'URGENCY=' + @SupportSeverityLevelCd + @CRLF + 
+			N'Severity Level=' + @SupportSeverityLevelCd + @CRLF + 
 			@SSISDBPackageName + @CRLF + 
 			@SSISDBProjectName + '.' + @SSISDBPackageName + ', configured for SSIS Environment [' + @SSISEnvironmentName + '],  under SQL Agent job [' + @SQLAgentJobName + '] failed with error message ["' + @ErrorMessage + '] The error was logged at ' + CAST(CONVERT(VARCHAR(30), @ErrorDateTime) AS NVARCHAR(MAX)) + '.'
 

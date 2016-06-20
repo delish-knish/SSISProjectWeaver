@@ -3,17 +3,17 @@ RETURNS TABLE
 AS
     RETURN
       (SELECT
-         ETLBatchId
+         [ETLBatchExecutionId]
        FROM
          (SELECT
-            ETLBatchId
+            [ETLBatchExecutionId]
             ,ROW_NUMBER()
                OVER (
-                 PARTITION BY ETLPackageSetId
+                 PARTITION BY [ETLBatchId]
                  ORDER BY StartDateTime DESC) rownum
           FROM
-            [ctl].ETLBatch
+            [ctl].[ETLBatchExecution]
           WHERE
-           ETLPackageSetId = @ETLPackageSetId) t
+           [ETLBatchId] = @ETLPackageSetId) t
        WHERE
         t.rownum = 1) 

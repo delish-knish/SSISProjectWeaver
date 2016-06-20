@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [ctl].[ExecuteETLPackagesForBatch] @ETLBatchId          INT,
+﻿CREATE PROCEDURE [ctl].[ExecuteETLPackagesForBatch] @ETLBatchExecutionId INT,
                                                     --@Periodicity         CHAR(2),
                                                     @SSISEnvironmentName VARCHAR(128)
 AS
@@ -10,7 +10,7 @@ AS
       SELECT
         ETLPackageId
       FROM
-        dbo.func_GetETLPackagesToExecute(@ETLBatchId) t
+        dbo.func_GetETLPackagesToExecute(@ETLBatchExecutionId) t
 
     OPEN PackageCursor
 
@@ -29,7 +29,7 @@ AS
               SQLCommand + ' @TriggerMetInd OUTPUT'
               ,SQLCommandName
             FROM
-              ctl.[ETLPackage_SQLCommandDependency] b
+              ctl.[ETLPackage_SQLCommandTrigger] b
               JOIN ctl.SQLCommand sc
                 ON b.SQLCommandId = sc.SQLCommandId
             WHERE
@@ -51,7 +51,7 @@ AS
                       --Log the failed trigger
                       SET @EventDescription = @SQLCommandName + ' trigger condition not met.';
 
-                      EXEC [log].InsertETLBatchEvent 18,@ETLBatchId,@ETLPackageId,@EventDescription;
+                      EXEC [log].InsertETLBatchEvent 18,@ETLBatchExecutionId,@ETLPackageId,@EventDescription;
 
                       BREAK;
                   END
@@ -60,7 +60,7 @@ AS
                       --Log the trigger success condition
                       SET @EventDescription = @SQLCommandName + ' trigger condition met.';
 
-                      EXEC [log].InsertETLBatchEvent 18,@ETLBatchId,@ETLPackageId,@EventDescription;
+                      EXEC [log].InsertETLBatchEvent 18,@ETLBatchExecutionId,@ETLPackageId,@EventDescription;
                   END
 
                 FETCH NEXT FROM SQLCommandCursor INTO @SQLCommand, @SQLCommandName
@@ -77,9 +77,9 @@ AS
                 --Log and execute the package
                 SET @EventDescription = 'Executing package Id ' + CAST(@ETLPackageId AS VARCHAR(10));
 
-                EXEC [log].InsertETLBatchEvent 3,@ETLBatchId,@ETLPackageId,@EventDescription;
+                EXEC [log].InsertETLBatchEvent 3,@ETLBatchExecutionId,@ETLPackageId,@EventDescription;
 
-                EXEC [ctl].ExecuteETLPackage @ETLBatchId,@ETLPackageId,@SSISEnvironmentName,@SSISExecutionId OUT
+                EXEC [ctl].ExecuteETLPackage @ETLBatchExecutionId,@ETLPackageId,@SSISEnvironmentName,@SSISExecutionId OUT
             END
 
           FETCH NEXT FROM PackageCursor INTO @ETLPackageId

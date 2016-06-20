@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [log].SaveETLPackageExecutions @ETLBatchId INT
+﻿CREATE PROCEDURE [log].SaveETLPackageExecutions @ETLBatchExecutionId INT
 AS
     --Get the time window to look for package executions in the SSISDB database
     DECLARE @ETLBatchStartDateTime DATETIME2
@@ -8,15 +8,15 @@ AS
       @ETLBatchStartDateTime = eb.StartDateTime
       ,@ETLBatchEndDateTime = eb.EndDateTime
     FROM
-      [ctl].ETLBatch eb
+      [ctl].[ETLBatchExecution] eb
     WHERE
-      ETLBatchId = @ETLBatchId
+      [ETLBatchExecutionId] = @ETLBatchExecutionId
 
     --Insert or update packages stats
     MERGE [log].ETLPackageExecution AS Target
     USING (SELECT
              ep.SSISDBExecutionId
-             ,@ETLBatchId
+             ,@ETLBatchExecutionId
              ,ep.ETLPackageId
              ,ep.StartDateTime
              ,ep.EndDateTime
@@ -24,7 +24,7 @@ AS
              ,ep.ETLPackageFirstErrorMessage
              ,ep.MissingSSISDBExecutablesEntryInd
            FROM
-             dbo.func_GetETLPackagesForBatch(@ETLBatchId) ep
+             dbo.func_GetETLPackagesForBatch(@ETLBatchExecutionId) ep
            WHERE
             ep.SSISDBExecutionId IS NOT NULL) AS source (SSISDBExecutionId, ETLBatchId, ETLPackageId, StartDateTime, EndDateTime, ETLPackageStatusId, ETLPackageErrorMessage, MissingSSISDBExecutablesEntryInd)
     ON target.SSISDBExecutionId = source.SSISDBExecutionId

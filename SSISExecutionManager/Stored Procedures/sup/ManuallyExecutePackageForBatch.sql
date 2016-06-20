@@ -14,9 +14,9 @@ AS
 		--@Periodicity = Periodicity
 		@SSISEnvironmentName = SSISEnvironmentName
 	FROM 
-		ctl.ETLBatch 
+		ctl.[ETLBatchExecution] 
 	WHERE
-		ETLBatchId = @ETLBatchId
+		[ETLBatchExecutionId] = @ETLBatchId
 
     DECLARE @ETLPackageId INT = (SELECT
          ETLPackageId

@@ -1,7 +1,7 @@
 ﻿CREATE VIEW [rpt].[ETLPackagesSQLCommandTriggers]
 AS
   SELECT
-    b.[ETLPackage_SQLCommandDependencyId]
+    b.[ETLPackage_SQLCommandTriggerId]
 	,b.ETLPackageId
     ,ep.SSISDBPackageName
     ,b.SQLCommandId
@@ -11,7 +11,7 @@ AS
     ,sc.RequiresETLBatchIdParameterInd
     ,b.EnabledInd
   FROM
-    [ctl].[ETLPackage_SQLCommandDependency] b
+    [ctl].[ETLPackage_SQLCommandTrigger] b
     JOIN ctl.SQLCommand sc
       ON b.SQLCommandId = sc.SQLCommandId
     JOIN ctl.ETLPackage ep
