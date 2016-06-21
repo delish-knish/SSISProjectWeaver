@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [ctl].[DeleteETLBatch] @ETLBatchId INT
 AS
-    DELETE FROM log.ETLBatchEvent
+    DELETE FROM log.[ETLBatchExecutionEvent]
     WHERE  [ETLBatchExecutionId] = @ETLBatchId
 
     DELETE FROM log.ETLPackageExecutionError

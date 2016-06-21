@@ -210,12 +210,12 @@ VALUES
 	(18,'SQL Command-based Trigger Executed'),
 	(19,'SQL Command Execution Error')
 
-MERGE ref.ETLBatchEventType AS Target
-USING Sync_ETLBatchEventType AS Source ON (Target.[ETLBatchEventTypeId] = Source.[ETLBatchEventTypeId])
+MERGE ref.[ETLBatchExecutionEventType] AS Target
+USING Sync_ETLBatchEventType AS Source ON (Target.[ETLBatchExecutionEventTypeId] = Source.[ETLBatchEventTypeId])
 WHEN MATCHED THEN
-UPDATE SET Target.[ETLBatchEventType] = Source.[ETLBatchEventType]
+UPDATE SET Target.[ETLBatchExecutionEventType] = Source.[ETLBatchEventType]
 WHEN NOT MATCHED BY TARGET THEN 
-    INSERT ([ETLBatchEventTypeId], [ETLBatchEventType])
+    INSERT ([ETLBatchExecutionEventTypeId], [ETLBatchExecutionEventType])
     VALUES ([ETLBatchEventTypeId], [ETLBatchEventType])
 
 WHEN NOT MATCHED BY SOURCE THEN DELETE;

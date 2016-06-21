@@ -12,8 +12,8 @@
   DTS:ObjectName="ProjectB_Load1"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="9"
-  DTS:VersionGUID="{6025FD76-51CC-4480-B61D-CE92DEBB5156}">
+  DTS:VersionBuild="10"
+  DTS:VersionGUID="{953D7F2D-4A0B-4F85-B02C-2E62D45A3156}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">6</DTS:Property>
   <DTS:Variables />
@@ -57,7 +57,7 @@
           FontInfo="{assembly:Null}"
           Size="510,40"
           Id="d6163a35-fd43-4ba5-bca8-995d756a0538"
-          TopLeft="291,197" />
+          TopLeft="295,197" />
       </GraphLayout>
     </LayoutInfo>
   </Package>

@@ -20,7 +20,7 @@ AS
           DELETE FROM [ctl].[ETLBatchSSISDBExecutions]
           WHERE  ETLPackageId = @ETLPackageId;
 
-          DELETE FROM [log].ETLBatchEvent
+          DELETE FROM [log].[ETLBatchExecutionEvent]
           WHERE  ETLPackageId = @ETLPackageId;
 
           DELETE FROM [log].ETLPackageExecution

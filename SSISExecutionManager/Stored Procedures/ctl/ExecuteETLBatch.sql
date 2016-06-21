@@ -1,8 +1,7 @@
 ﻿CREATE PROCEDURE [ctl].[ExecuteETLBatch] @SQLAgentJobName		VARCHAR(128),
                                          @SSISEnvironmentName	VARCHAR(128),
                                          --@Periodicity              CHAR(2),
-                                         @ETLBatchId			INT = NULL
-                                         --@ETLBatchStatusId		INT OUT
+                                         @ETLBatchId			INT
 AS
     SET XACT_ABORT, NOCOUNT ON;
 

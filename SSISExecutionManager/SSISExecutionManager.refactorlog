@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="3dcb1a77-cf70-478a-9f5e-bef77e90cc91" ChangeDateTime="06/21/2016 03:04:45">
+    <Property Name="ElementName" Value="[log].[ETLBatchEvent]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[log]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[ETLBatchExecutionEvent]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4394305d-e82f-4820-b818-2e20708f92a9" ChangeDateTime="06/21/2016 03:05:09">
+    <Property Name="ElementName" Value="[log].[ETLBatchExecutionEvent].[ETLBatchEventId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[log].[ETLBatchExecutionEvent]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ETLBatchExecutionEventId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a26b364d-b3d4-4ba7-be5d-656c4b94b60c" ChangeDateTime="06/21/2016 03:05:34">
+    <Property Name="ElementName" Value="[ref].[ETLBatchEventType]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[ref]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[ETLBatchExecutionEventType]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="90c35b4a-2cb6-4832-ab2e-493cb4157e36" ChangeDateTime="06/21/2016 03:05:55">
+    <Property Name="ElementName" Value="[ref].[ETLBatchExecutionEventType].[ETLBatchEventTypeId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[ref].[ETLBatchExecutionEventType]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ETLBatchExecutionEventTypeId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a3a9e3e5-ab28-48f6-a7cb-ae2a6e67ed58" ChangeDateTime="06/21/2016 03:06:03">
+    <Property Name="ElementName" Value="[ref].[ETLBatchExecutionEventType].[ETLBatchEventType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[ref].[ETLBatchExecutionEventType]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ETLBatchExecutionEventType]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d897aea1-a1f1-4de5-a554-1b6a49cad760" ChangeDateTime="06/21/2016 03:06:34">
+    <Property Name="ElementName" Value="[log].[ETLBatchExecutionEvent].[ETLBatchEventTypeId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[log].[ETLBatchExecutionEvent]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ETLBatchExecutionEventTypeId]" />
+  </Operation>
+</Operations>

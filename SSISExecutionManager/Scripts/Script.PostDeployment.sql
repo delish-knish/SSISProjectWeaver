@@ -21,7 +21,7 @@ END
 IF $(DeployPackageConfiguration) = 1
 BEGIN
 	PRINT 'Started Insert ETLPackage Configurations.sql'
-		:r "Insert ETLPackage Configurations.sql"
+		:r "Sync ETLPackage Configurations.sql"
 	PRINT 'Completed Insert ETLPackage Configurations.sql'
 END
 -----------------------------------------------------------------------------------

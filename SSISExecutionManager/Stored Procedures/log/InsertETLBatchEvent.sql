@@ -3,8 +3,8 @@
                                              @ETLPackageId        INT,
                                              @Description         VARCHAR(MAX)
 AS
-    INSERT INTO [log].ETLBatchEvent
-                ([ETLBatchEventTypeId]
+    INSERT INTO [log].[ETLBatchExecutionEvent]
+                ([ETLBatchExecutionEventTypeId]
                  ,[ETLBatchExecutionId]
                  ,[ETLPackageId]
                  ,[Description]

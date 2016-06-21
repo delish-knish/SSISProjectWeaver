@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [cfg].[SaveETLPackageDependency] @ETLPackageId            INT,
+﻿CREATE PROCEDURE [cfg].[SaveETLPackage_ETLPackageDependency] @ETLPackageId            INT,
                                                   @DependedOnETLPackageId INT,
                                                   @EnabledInd              BIT
 AS
