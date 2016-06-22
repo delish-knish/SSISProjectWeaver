@@ -6,7 +6,7 @@ echo.
 echo Deploying SSIS project "ExampleProjectA"...
 
 set ispacName=ExampleProjectA.ispac
-set ispacPath=%DeploymentPackagePath%\ExampleProjectA\bin\Development\%ispacName%
+set ispacPath=%DeploymentPackagePath%\ExampleProjectA\bin\Release\%ispacName%
 
 REM echo %DeploymentPackagePath%
 REM echo %ispacPath%
@@ -19,7 +19,7 @@ echo.
 echo Deploying SSIS project "ExampleProjectB"...
 
 set ispacName=ExampleProjectB.ispac
-set ispacPath=%DeploymentPackagePath%\ExampleProjectB\bin\Development\%ispacName%
+set ispacPath=%DeploymentPackagePath%\ExampleProjectB\bin\Release\%ispacName%
 
 REM echo %DeploymentPackagePath%
 REM echo %ispacPath%
