@@ -1,30 +1,29 @@
-﻿CREATE PROCEDURE [ctl].[ExecuteETLBatch] @SQLAgentJobName		VARCHAR(128),
+﻿CREATE PROCEDURE [ctl].[ExecuteETLBatch] @CallingJobName		VARCHAR(128),
                                          @SSISEnvironmentName	VARCHAR(128),
-                                         --@Periodicity              CHAR(2),
                                          @ETLBatchId			INT
 AS
     SET XACT_ABORT, NOCOUNT ON;
 
     --Set up "Constants"
-    DECLARE @ETLBatchCompleteStatusId                   INT = 5,
-            @ETLBatchTimeOutStatusId                    INT = 8,
-            @ETLBatchExceptionStatusId                  INT = 9;
+    DECLARE @ETLBatchExecutionCompleteStatusId                   INT = 5,
+            @ETLBatchExecutionTimeOutStatusId                    INT = 8,
+            @ETLBatchExecutionExceptionStatusId                  INT = 9;
 
     --Set up logging variables
     DECLARE @CurrentDateTime  DATETIME = GETDATE(),
             @EventDescription VARCHAR(MAX);
 
     --Set up batch variables
-    DECLARE @ETLBatchExecutionId      INT,
-            @PreviousETLBatchStatusId INT,
-			@PreviousETLBatchPhaseId	INT,
-			@ETLBatchStatusId			INT = 0,
-			@ETLBatchPhaseId			INT;
+    DECLARE @ETLBatchExecutionId				INT,
+            @PreviousETLBatchExecutionStatusId	INT,
+			@PreviousETLBatchPhaseId			INT,
+			@ETLBatchExecutionStatusId			INT = 0,
+			@ETLBatchPhaseId					INT;
 
 	--Set up Batch behavior variables
     DECLARE @EndETLBatchExecutionInd BIT = 0;
 
-   WHILE @ETLBatchStatusId NOT IN (5,8,9) --While batch is not in the "Complete" state, hasn't timed out, and hasn't encountered an exception
+   WHILE @ETLBatchExecutionStatusId NOT IN (5,8,9) --While batch is not in the "Complete" state, hasn't timed out, and hasn't encountered an exception
    BEGIN
    BEGIN TRY
       --Get values from Config table
@@ -35,10 +34,10 @@ AS
       --Get running ETLBatch
       SELECT
         @ETLBatchExecutionId = [ETLBatchExecutionId]
-        ,@PreviousETLBatchStatusId = ETLBatchStatusId
+        ,@PreviousETLBatchExecutionStatusId = ETLBatchStatusId
 		,@PreviousETLBatchPhaseId = ETLBatchPhaseId
       FROM
-        [dbo].[func_GetRunningETLBatch] (@BatchStartedWithinMinutes, @SQLAgentJobName) eb;
+        [dbo].[func_GetRunningETLBatchExecution] (@BatchStartedWithinMinutes, @CallingJobName) eb;
 
 	  SET @PreviousETLBatchPhaseId = ISNULL(@PreviousETLBatchPhaseId,-1);
 
@@ -46,7 +45,7 @@ AS
       IF @ETLBatchExecutionId IS NOT NULL
         BEGIN
             --Update the batch with statuses that have changed since the last execution of this proc
-            EXEC [ctl].[UpdateETLBatchStatus] @ETLBatchExecutionId = @ETLBatchExecutionId,@ETLBatchStatusId = @ETLBatchStatusId OUT, @ETLBatchPhaseId = @ETLBatchPhaseId OUT;
+            EXEC [ctl].[UpdateETLBatchStatus] @ETLBatchExecutionId = @ETLBatchExecutionId,@ETLBatchExecutionStatusId = @ETLBatchExecutionStatusId OUT, @ETLBatchPhaseId = @ETLBatchPhaseId OUT;
 
             --Log any errors found in the SSISDB
             DECLARE @ErrorsRequiringNotificationCount INT,
@@ -57,7 +56,7 @@ AS
             --If there are errors that have not had notifications sent, send them
             IF @ErrorsRequiringNotificationCount > 0
               BEGIN
-                  EXEC ctl.SendErrorNotificationsForETLBatch @ETLBatchExecutionId,@ErrorEmailRecipients;
+                  EXEC ctl.[SendErrorNotificationsForETLBatchExecution] @ETLBatchExecutionId,@ErrorEmailRecipients;
 
                   SET @EventDescription = 'Error Notification(s) Sent (' + CAST(@ErrorsRequiringNotificationCount AS VARCHAR(10)) + ')';
 
@@ -66,10 +65,10 @@ AS
 
             --If there are packages that require restart, flag them for restart (this is determined when executing SaveETLPackageExecutionErrors)
             IF @ETLPackagesRequiringRestartCount > 0
-              EXEC ctl.RestartETLPackagesForETLBatch @ETLBatchExecutionId,@ErrorEmailRecipients;
+              EXEC ctl.[RestartETLPackagesForETLBatchExecution] @ETLBatchExecutionId,@ErrorEmailRecipients;
 
             --The batch has just been marked as complete
-            IF @ETLBatchStatusId = @ETLBatchCompleteStatusId --Was already completed or has just completed 
+            IF @ETLBatchExecutionStatusId = @ETLBatchExecutionCompleteStatusId --Was already completed or has just completed 
               BEGIN
                   --Archive the execution stats of the packages for the batch
                   EXEC [log].SaveETLPackageExecutions @ETLBatchExecutionId = @ETLBatchExecutionId;
@@ -82,7 +81,7 @@ AS
       ELSE 
         BEGIN --The batch has not yet been created
 			--Seed the ETLBatchExecution table
-            EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId OUT,@SSISEnvironmentName = @SSISEnvironmentName,@SQLAgentJobName = @SQLAgentJobName,@ETLBatchId = @ETLBatchId,@StartDateTime = @CurrentDateTime,@EndDateTime = NULL,@ETLBatchStatusId = 1;
+            EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId OUT,@SSISEnvironmentName = @SSISEnvironmentName,@CallingJobName = @CallingJobName,@ETLBatchId = @ETLBatchId,@StartDateTime = @CurrentDateTime,@EndDateTime = NULL,@ETLBatchStatusId = 1;
 
             --Set ETLBatchPhaseId
 			SET @ETLBatchPhaseId = (SELECT ETLBatchPhaseId FROM dbo.func_GetMinIncompleteBatchExecutionPhase(@ETLBatchExecutionId));
@@ -111,7 +110,7 @@ AS
 
                   IF @EndETLBatchExecutionInd = 1
                     BEGIN
-                        SET @ETLBatchStatusId = @ETLBatchTimeOutStatusId;
+                        SET @ETLBatchExecutionStatusId = @ETLBatchExecutionTimeOutStatusId;
 
                         RETURN;
                     END
@@ -129,7 +128,7 @@ AS
 
                   IF @EndETLBatchExecutionInd = 1
                     BEGIN
-                        SET @ETLBatchStatusId = @ETLBatchTimeOutStatusId;
+                        SET @ETLBatchExecutionStatusId = @ETLBatchExecutionTimeOutStatusId;
 
                         RETURN;
                     END
@@ -138,17 +137,17 @@ AS
 
       --The batch is in progress. Run all packages ready for execution.
       IF @ETLBatchExecutionId IS NOT NULL
-         AND @ETLBatchStatusId <> @ETLBatchCompleteStatusId
+         AND @ETLBatchExecutionStatusId <> @ETLBatchExecutionCompleteStatusId
         BEGIN
             SET @EventDescription = 'Identifying packages to execute';
 
             EXEC [log].InsertETLBatchEvent 2,@ETLBatchExecutionId,NULL,@EventDescription;
 
             --Execute packages that are ready
-            EXEC [ctl].[ExecuteETLPackagesForBatch] @ETLBatchExecutionId,@SSISEnvironmentName;
+            EXEC [ctl].[ExecuteETLPackagesForBatchExecution] @ETLBatchExecutionId,@SSISEnvironmentName;
         END --End: Run all packages ready for execution
 
-      SET @ETLBatchStatusId = ( dbo.func_GetETLBatchStatusId(@ETLBatchExecutionId) );
+      SET @ETLBatchExecutionStatusId = ( dbo.func_GetETLBatchStatusId(@ETLBatchExecutionId) );
 
   END TRY
 
@@ -165,7 +164,7 @@ AS
       THROW
   END CATCH
 
-  IF @ETLBatchStatusId NOT IN (5,8,9)
+  IF @ETLBatchExecutionStatusId NOT IN (5,8,9)
 			WAITFOR DELAY @PollingDelay;
 
   END

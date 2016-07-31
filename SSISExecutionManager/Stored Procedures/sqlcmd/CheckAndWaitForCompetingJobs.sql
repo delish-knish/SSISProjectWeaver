@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [sqlcmd].[CheckAndWaitForCompetingJobs] @SQLAgentJobName          VARCHAR(128),
-                                                         @SQLAgentJobNameToWaitFor VARCHAR(128),
+﻿CREATE PROCEDURE [sqlcmd].[CheckAndWaitForCompetingJobs] @CallingJobName          VARCHAR(128),
+                                                         @CallingJobNameToWaitFor VARCHAR(128),
                                                          @ETLBatchId               INT,
 														 @EndETLBatchExecutionInd BIT OUT
 AS
@@ -11,18 +11,18 @@ AS
             @BatchDayOfWeekName        VARCHAR(10),
             @BatchStartDateTime        DATETIME2,
             @ETLBatchTimeOutStatusId   INT = 8,
-            @TimeoutEmailSubject       VARCHAR(MAX) = @@SERVERNAME + ' ' + @SQLAgentJobName + ' Timed Out';
+            @TimeoutEmailSubject       VARCHAR(MAX) = @@SERVERNAME + ' ' + @CallingJobName + ' Timed Out';
 
     --Get running ETLBatch
     SELECT
       @BatchDayOfWeekName = DayOfWeekName
       ,@BatchStartDateTime = StartDateTime
     FROM
-      [dbo].[func_GetRunningETLBatch] (@BatchStartedWithinMinutes, @SQLAgentJobName) eb
+      [dbo].[func_GetRunningETLBatchExecution] (@BatchStartedWithinMinutes, @CallingJobName) eb
 
-    WHILE [dbo].[func_IsSQLAgentJobRunning](@SQLAgentJobNameToWaitFor) = 1
+    WHILE [dbo].[func_IsSQLAgentJobRunning](@CallingJobNameToWaitFor) = 1
       BEGIN
-          SET @EventDescription = 'Waiting for [' + @SQLAgentJobNameToWaitFor + '] job to complete. Wait interval ' + @PollingDelay;
+          SET @EventDescription = 'Waiting for [' + @CallingJobNameToWaitFor + '] job to complete. Wait interval ' + @PollingDelay;
 
           EXEC [log].InsertETLBatchEvent 10,@ETLBatchId,NULL,@EventDescription;
 

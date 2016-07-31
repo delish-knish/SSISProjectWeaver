@@ -1,7 +1,6 @@
 ﻿CREATE PROCEDURE [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId                      INT OUTPUT,
                                       @SSISEnvironmentName                               VARCHAR(128),
-                                      @SQLAgentJobName                                   VARCHAR(128) = NULL,
-                                      --@Periodicity                                            CHAR(2) = NULL,
+                                      @CallingJobName                                   VARCHAR(128) = NULL,
                                       @ETLBatchId										 INT = NULL,
                                       @StartDateTime                                     DATETIME2 = NULL,
                                       @EndDateTime                                       DATETIME2 = NULL,
@@ -16,8 +15,7 @@ AS
     USING (SELECT
              @ETLBatchExecutionId
              ,@SSISEnvironmentName
-             ,@SQLAgentJobName
-             --,@Periodicity
+             ,@CallingJobName
              ,@ETLBatchId
              ,@StartDateTime
              ,@EndDateTime
@@ -27,14 +25,13 @@ AS
              ,@TotalRemainingETLPackageCount
              ,@ETLBatchStatusId
 			 ,@ETLBatchPhaseId
-          ) AS source (ETLBatchExecutionId, SSISEnvironmentName, SQLAgentJobName, ETLBatchId, StartDateTime, EndDateTime, TotalEntryPointPackageCount, TotalRemainingEntryPointPackageCount, TotalETLPackageCount, TotalRemainingETLPackageCount, 
+          ) AS source (ETLBatchExecutionId, SSISEnvironmentName, CallingJobName, ETLBatchId, StartDateTime, EndDateTime, TotalEntryPointPackageCount, TotalRemainingEntryPointPackageCount, TotalETLPackageCount, TotalRemainingETLPackageCount, 
 		  ETLBatchStatusId, ETLBatchPhaseId
           )
     ON target.[ETLBatchExecutionId] = source.[ETLBatchExecutionId]
     WHEN Matched THEN
       UPDATE SET SSISEnvironmentName = ISNULL(source.SSISEnvironmentName, target.SSISEnvironmentName)
-                 ,SQLAgentJobName = ISNULL(source.SQLAgentJobName, target.SQLAgentJobName)
-                 --,Periodicity = ISNULL(source.Periodicity, target.Periodicity)
+                 ,CallingJobName = ISNULL(source.CallingJobName, target.CallingJobName)
                  ,ETLBatchId = ISNULL(source.ETLBatchId, target.[ETLBatchId])
                  ,EndDateTime = ISNULL(source.EndDateTime, target.EndDateTime)
                  ,TotalEntryPointPackageCount = ISNULL(source.TotalEntryPointPackageCount, target.TotalEntryPointPackageCount)
@@ -47,8 +44,7 @@ AS
                  ,[LastUpdatedUser] = SUSER_SNAME()
     WHEN NOT MATCHED THEN
       INSERT (SSISEnvironmentName
-              ,SQLAgentJobName
-              --,Periodicity
+              ,CallingJobName
               ,ETLBatchId
               ,StartDateTime
               ,EndDateTime
@@ -60,8 +56,7 @@ AS
 			  ,ETLBatchPhaseId
     )
       VALUES(source.SSISEnvironmentName
-             ,source.SQLAgentJobName
-             --,source.Periodicity
+             ,source.CallingJobName
              ,source.ETLBatchId
              ,source.StartDateTime
              ,source.EndDateTime

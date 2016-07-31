@@ -1,4 +1,4 @@
-﻿CREATE FUNCTION [dbo].[func_GetETLPackagesForBatch] (@ETLBatchExecutionId INT)
+﻿CREATE FUNCTION [dbo].[func_GetETLPackagesForBatchExecution] (@ETLBatchExecutionId INT)
 RETURNS TABLE
 AS
     --This TVF is intended to return all packages that are part of the batch, not just entry-point packages.
@@ -13,10 +13,11 @@ AS
                  ,pes.EndDateTime
                  ,pes.ETLExecutionStatusId
                  ,pes.ETLPackageExecutionStatusId
-                 ,pes.ETLPackageFirstErrorMessage
-                 ,pes.ETLPackageLastMessage
+                 --,pes.ETLPackageFirstErrorMessage
+                 --,pes.ETLPackageLastMessage
                  ,pes.SSISDBExecutionId
                  ,pes.MissingSSISDBExecutablesEntryInd
+				 ,bp.PhaseExecutionOrderNo
                FROM
                  [ctl].ETLPackage ep WITH (NOLOCK)
                  CROSS JOIN (SELECT
@@ -29,15 +30,16 @@ AS
                                [ctl].[ETLBatchExecution] WITH (NOLOCK)
                              WHERE
                               [ETLBatchExecutionId] = @ETLBatchExecutionId) eb
-				LEFT JOIN (SELECT 
-								epeps.[ETLBatchId]
-								,ebpspep.ETLPackageId
-						   FROM
-								ctl.[ETLBatchPhase_ETLPackage] ebpspep 
-								LEFT JOIN ctl.[ETLBatch_ETLBatchPhase] epeps
-									ON ebpspep.[ETLBatchPhaseId] = epeps.ETLBatchPhaseId) bp ON
-							ep.ETLPackageId = bp.ETLPackageId
-							AND eb.[ETLBatchId] = bp.[ETLBatchId]
+				JOIN (SELECT 
+							epeps.[ETLBatchId]
+							,ebpspep.ETLPackageId
+							,epeps.PhaseExecutionOrderNo
+						FROM
+							ctl.[ETLBatchPhase_ETLPackage] ebpspep 
+							JOIN ctl.[ETLBatch_ETLBatchPhase] epeps
+								ON ebpspep.[ETLBatchPhaseId] = epeps.ETLBatchPhaseId) bp ON
+						ep.ETLPackageId = bp.ETLPackageId
+						AND eb.[ETLBatchId] = bp.[ETLBatchId]
                  --Get the last execution id of the package during the batch. Executables aren't logged until complete so if none found, check the event_messages table.
                  OUTER APPLY (SELECT TOP 1
                                 *
@@ -101,12 +103,13 @@ AS
                        OR  ExecuteSaturdayInd = IIF(eb.DayOfWeekName = 'Saturday', 1, NULL)))
       SELECT
          pkg.ETLBatchId							 AS ETLBatchId
+		 ,pkg.PhaseExecutionOrderNo			     AS PhaseExecutionOrderNo
 		 ,pkg.ETLPackageId                       AS ETLPackageId
          ,pkg.StartDateTime                      AS StartDateTime
          ,pkg.EndDateTime                        AS EndDateTime
          ,pkg.ETLExecutionStatusId               AS ETLExecutionStatusId
-         ,pkg.ETLPackageFirstErrorMessage        AS ETLPackageFirstErrorMessage
-         ,pkg.ETLPackageLastMessage              AS ETLPackageLastMessage
+         --,pkg.ETLPackageFirstErrorMessage        AS ETLPackageFirstErrorMessage
+         --,pkg.ETLPackageLastMessage              AS ETLPackageLastMessage
          ,pkg.SSISDBExecutionId                  AS SSISDBExecutionId
          ,pkg.MissingSSISDBExecutablesEntryInd   AS MissingSSISDBExecutablesEntryInd
          ,CASE

@@ -2,7 +2,7 @@
 AS
   SELECT TOP 10000
     eb.[ETLBatchExecutionId]
-    ,eb.SQLAgentJobName
+    ,eb.[CallingJobName]
     ,eps.[ETLBatchName]
     --,eb.Periodicity
     ,eb.DayOfWeekName
@@ -32,7 +32,7 @@ AS
                  FROM
                    ctl.[ETLBatchExecution] b
                  WHERE
-                  eb.SQLAgentJobName = b.SQLAgentJobName
+                  eb.[CallingJobName] = b.[CallingJobName]
                   --AND eb.Periodicity = b.Periodicity
                   AND eb.[ETLBatchId] = b.[ETLBatchId]
                  ORDER  BY

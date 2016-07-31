@@ -5,7 +5,7 @@ AS
     ,ex.[SSISDBExecutionId]
     ,ex.[ETLPackageId]
     ,ex.[ETLBatchId]
-    ,eb.SQLAgentJobName
+    ,eb.[CallingJobName]
     --,eb.Periodicity
     ,ep.SSISDBProjectName
     ,ep.SSISDBPackageName

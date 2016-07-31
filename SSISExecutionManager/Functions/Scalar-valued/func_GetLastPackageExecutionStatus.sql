@@ -1,5 +1,4 @@
 ﻿CREATE FUNCTION [dbo].[func_GetLastPackageExecutionStatus] (@SSISDBPackageName VARCHAR (260)
-                                                            --@Periodicity            CHAR(2)
 															)
 RETURNS VARCHAR(50)
 AS
@@ -10,7 +9,6 @@ AS
            rpt.ETLPackagesForLatestBatch
          WHERE
           SSISDBPackageName = @SSISDBPackageName
-          --AND Periodicity = @Periodicity
 		  )
 
       RETURN @ReturnValue

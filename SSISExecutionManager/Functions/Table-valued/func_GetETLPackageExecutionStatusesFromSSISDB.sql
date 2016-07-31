@@ -2,22 +2,7 @@
 RETURNS TABLE
 AS
     RETURN (
-      WITH EventMessage
-           AS (SELECT
-                 om.operation_id                    AS ExecutionId
-                 ,em.package_name                   AS PackageName
-                 ,om.message                        AS [Message]
-                 ,om.message_type                   AS MessageType
-                 ,o.status                          AS ETLExecutionStatusId
-                 ,om.message_time					AS MessageDateTime
-               FROM
-                 [$(SSISDB)].internal.event_messages em (NOLOCK)
-                 JOIN [$(SSISDB)].internal.operation_messages om (NOLOCK)
-                   ON em.operation_id = om.operation_id
-                 JOIN [$(SSISDB)].catalog.operations o (NOLOCK)
-                   ON em.operation_id = o.operation_id
-               WHERE
-                em.operation_id = @ExecutionId)
+      
       SELECT
          ep.ETLPackageId                                                AS ETLPackageId
          ,@ExecutionId                                                  AS SSISDBExecutionId
@@ -33,8 +18,8 @@ AS
                  AND eme.MessageDateTime IS NOT NULL THEN 1 --The package started and there is no result but there is an error message (most likely validation error)
             ELSE es.execution_result
           END                                                           AS ETLPackageExecutionStatusId
-         ,emf.Message                                                   AS ETLPackageLastMessage
-         ,eme.Message                                                   AS ETLPackageFirstErrorMessage
+         --,emf.Message                                                   AS ETLPackageLastMessage
+         --,eme.Message                                                   AS ETLPackageFirstErrorMessage
          ,CAST(IIF(es.execution_result IS NULL, 1, 0) AS BIT)           AS MissingSSISDBExecutablesEntryInd
        FROM
          [ctl].ETLPackage ep WITH (NOLOCK)
@@ -49,31 +34,35 @@ AS
          LEFT JOIN [$(SSISDB)].catalog.executable_statistics es WITH (NOLOCK)
                 ON e.executable_id = es.executable_id
                    AND e.execution_id = es.execution_id
-         CROSS APPLY (SELECT TOP 1
-                        MessageDateTime
-                      FROM
-                        EventMessage em
-                      WHERE
-                       ep.SSISDBPackageName = em.PackageName
-                      ORDER  BY
-                       em.MessageDateTime ASC) ems --first message for the package
-         CROSS APPLY (SELECT TOP 1
-                        MessageDateTime
-                        ,[Message]
-                      FROM
-                        EventMessage em
-                      WHERE
-                       ep.SSISDBPackageName = em.PackageName
-                      ORDER  BY
-                       em.MessageDateTime DESC) emf --last message for the package
-         OUTER APPLY (SELECT TOP 1
-                        MessageDateTime
-                        ,[Message]
-                      FROM
-                        EventMessage em
-                      WHERE
-                       ep.SSISDBPackageName = em.PackageName
-                       AND em.MessageType = 120 --Error
-                      ORDER  BY
-                       em.MessageDateTime ASC) eme --first error message for the package
+         JOIN (select * from (SELECT
+                 em.package_name                   AS PackageName
+                 ,em.message_time					AS MessageDateTime
+				 ,ROW_NUMBER() OVER (PARTITION BY em.package_name ORDER BY em.message_time) rownum
+               FROM
+                 [$(SSISDB)].catalog.event_messages em (NOLOCK)
+               WHERE
+                em.operation_id = @ExecutionId) t
+				where rownum = 1) ems ON ep.SSISDBPackageName = ems.PackageName --first message for the package
+		--JOIN (select * from (SELECT
+  --               em.package_name                   AS PackageName
+  --               ,em.message_time					AS MessageDateTime
+		--		 ,em.message
+		--		 ,ROW_NUMBER() OVER (PARTITION BY em.package_name ORDER BY em.message_time DESC) rownum
+  --             FROM
+  --               [$(SSISDB)].catalog.event_messages em (NOLOCK)
+  --             WHERE
+  --              em.operation_id = @ExecutionId) t
+		--		where rownum = 1) emf ON ep.SSISDBPackageName = emf.PackageName --last message for the package
+		LEFT JOIN (select * from (SELECT
+                 em.package_name                   AS PackageName
+                 ,em.message_time					AS MessageDateTime
+				 ,em.message
+				 ,ROW_NUMBER() OVER (PARTITION BY em.package_name ORDER BY em.message_time ) rownum
+               FROM
+                 [$(SSISDB)].catalog.event_messages em (NOLOCK)
+               WHERE
+                em.operation_id = @ExecutionId
+				AND em.message_type = 120 --Error
+				) t
+				where rownum = 1) eme ON ep.SSISDBPackageName = eme.PackageName --frist error message for the package
       ) 

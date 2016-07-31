@@ -10,7 +10,7 @@ AS
          ,bp.DependenciesNotMetCount
          ,ep.Use32BitDtExecInd
        FROM
-         dbo.func_GetETLPackagesForBatch(@ETLBatchExecutionId) bp
+         dbo.[func_GetETLPackagesForBatchExecution](@ETLBatchExecutionId) bp
          JOIN [ctl].ETLPackage ep
            ON bp.ETLPackageId = ep.ETLPackageId
 		 JOIN ctl.ETLBatch eb 
@@ -28,5 +28,5 @@ AS
         AND ep.ReadyForExecutionInd = 1
         AND ( bp.DependenciesNotMetCount = 0
                OR ep.IgnoreDependenciesInd = 1 ) --All dependencies met or we are going to ignore them
-		AND ebebp.PhaseExecutionOrderNo = mp.ETLBatchPhaseId --get packages from the minimum incomplete phase(s)   	   
+		AND ebebp.PhaseExecutionOrderNo = mp.PhaseExecutionOrderNo --get packages from the minimum incomplete phase(s)   	   
 		) 

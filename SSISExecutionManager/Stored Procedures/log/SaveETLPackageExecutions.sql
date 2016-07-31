@@ -21,12 +21,14 @@ AS
              ,ep.StartDateTime
              ,ep.EndDateTime
              ,ep.ETLPackageExecutionStatusId
-             ,ep.ETLPackageFirstErrorMessage
+             --,ep.ETLPackageFirstErrorMessage
              ,ep.MissingSSISDBExecutablesEntryInd
            FROM
-             dbo.func_GetETLPackagesForBatch(@ETLBatchExecutionId) ep
+             dbo.[func_GetETLPackagesForBatchExecution](@ETLBatchExecutionId) ep
            WHERE
-            ep.SSISDBExecutionId IS NOT NULL) AS source (SSISDBExecutionId, ETLBatchId, ETLPackageId, StartDateTime, EndDateTime, ETLPackageStatusId, ETLPackageErrorMessage, MissingSSISDBExecutablesEntryInd)
+            ep.SSISDBExecutionId IS NOT NULL) AS source (SSISDBExecutionId, ETLBatchId, ETLPackageId, StartDateTime, EndDateTime, ETLPackageStatusId,
+			-- ETLPackageErrorMessage,
+			 MissingSSISDBExecutablesEntryInd)
     ON target.SSISDBExecutionId = source.SSISDBExecutionId
        AND target.ETLPackageId = source.ETLPackageId
     WHEN Matched THEN
@@ -36,7 +38,7 @@ AS
                  ,StartDateTime = source.StartDateTime
                  ,EndDateTime = source.EndDateTime
                  ,ETLPackageExecutionStatusId = source.ETLPackageStatusId
-                 ,ErrorMessage = source.ETLPackageErrorMessage
+                 --,ErrorMessage = source.ETLPackageErrorMessage
 				 ,MissingSSISDBExecutablesEntryInd = source.MissingSSISDBExecutablesEntryInd
                  ,[LastUpdatedDate] = GETDATE()
                  ,[LastUpdatedUser] = SUSER_SNAME()
@@ -47,7 +49,7 @@ AS
               ,StartDateTime
               ,EndDateTime
               ,ETLPackageExecutionStatusId
-              ,ErrorMessage
+              --,ErrorMessage
 			  ,MissingSSISDBExecutablesEntryInd)
       VALUES(source.SSISDBExecutionId
              ,source.ETLBatchId
@@ -55,7 +57,7 @@ AS
              ,source.StartDateTime
              ,source.EndDateTime
              ,source. ETLPackageStatusId
-             ,source.ETLPackageErrorMessage
+             --,source.ETLPackageErrorMessage
 			 ,source.MissingSSISDBExecutablesEntryInd);
 
     RETURN 0 

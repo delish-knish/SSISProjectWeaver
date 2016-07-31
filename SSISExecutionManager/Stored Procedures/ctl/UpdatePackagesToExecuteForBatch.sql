@@ -3,7 +3,7 @@ AS
     UPDATE [ctl].ETLPackage
     SET    ReadyForExecutionInd = 1
     FROM   [ctl].ETLPackage
-           JOIN dbo.func_GetETLPackagesForBatch(@ETLBatchExecutionId) pkg
+           JOIN dbo.[func_GetETLPackagesForBatchExecution](@ETLBatchExecutionId) pkg
              ON [ctl].ETLPackage.ETLPackageId = pkg.ETLPackageId
     WHERE
       EntryPointPackageInd = 1

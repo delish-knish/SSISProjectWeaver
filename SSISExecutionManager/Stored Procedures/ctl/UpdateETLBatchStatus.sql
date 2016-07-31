@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [ctl].[UpdateETLBatchStatus] @ETLBatchExecutionId INT, @ETLBatchStatusId INT OUTPUT, @ETLBatchPhaseId INT OUTPUT
+﻿CREATE PROCEDURE [ctl].[UpdateETLBatchStatus] @ETLBatchExecutionId INT, @ETLBatchExecutionStatusId INT OUTPUT, @ETLBatchPhaseId INT OUTPUT
 AS
     DECLARE @EndDateTime                                       DATETIME2 = NULL,
             @TotalEntryPointPackageCount                       SMALLINT = NULL,
@@ -13,17 +13,17 @@ AS
       ,@TotalRemainingETLPackageCount = epb.TotalRemainingETLPackageCount
       ,@TotalETLPackageCount = epb.TotalETLPackageCount
       ,@TotalRemainingETLPackageCount = epb.TotalRemainingETLPackageCount
-      ,@ETLBatchStatusId = epb.ETLBatchStatusId
+      ,@ETLBatchExecutionStatusId = epb.ETLBatchExecutionStatusId
 	  ,@ETLBatchPhaseId = bp.ETLBatchPhaseId
     FROM
-      [dbo].[func_GetETLBatchStatus] (@ETLBatchExecutionId) epb
+      [dbo].[func_GetETLBatchExecutionStatus] (@ETLBatchExecutionId) epb
 	  OUTER APPLY [dbo].[func_GetMinIncompleteBatchExecutionPhase] (@ETLBatchExecutionId) bp
 
     --If the batch has just completed, get the EndDateTime
     SET @EndDateTime = IIF(@EndDateTime IS NULL
-                           AND @ETLBatchStatusId = 5, GETDATE(), NULL)
+                           AND @ETLBatchExecutionStatusId = 5, GETDATE(), NULL)
 
     --Update the ETLBatch table
-    EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId OUT,@EndDateTime = @EndDateTime,@TotalEntryPointPackageCount = @TotalEntryPointPackageCount,@TotalRemainingEntryPointPackageCount = @TotalRemainingEntryPointPackageCount,@TotalETLPackageCount = @TotalETLPackageCount,@TotalRemainingETLPackageCount = @TotalRemainingETLPackageCount,@ETLBatchStatusId = @ETLBatchStatusId,@SSISEnvironmentName = NULL, @ETLBatchPhaseId = @ETLBatchPhaseId
+    EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId OUT,@EndDateTime = @EndDateTime,@TotalEntryPointPackageCount = @TotalEntryPointPackageCount,@TotalRemainingEntryPointPackageCount = @TotalRemainingEntryPointPackageCount,@TotalETLPackageCount = @TotalETLPackageCount,@TotalRemainingETLPackageCount = @TotalRemainingETLPackageCount,@ETLBatchStatusId = @ETLBatchExecutionStatusId,@SSISEnvironmentName = NULL, @ETLBatchPhaseId = @ETLBatchPhaseId
 
     RETURN 0 

@@ -1,9 +1,9 @@
-﻿CREATE VIEW [rpt].[ETLPackagesForLatestBatch]
+﻿CREATE VIEW [rpt].[ETLPackageExecutionStatuses]
 AS
-  SELECT TOP 1000
-    eb.[ETLBatchExecutionId]
-    --,eb.Periodicity
+  SELECT TOP 10000
+    ebe.[ETLBatchExecutionId]
     ,eps.[ETLBatchName]
+	,pkg.PhaseExecutionOrderNo
     ,ep.[ETLPackageId]
     ,pkg.SSISDBExecutionId
     ,ep.[SSISDBProjectName]
@@ -13,34 +13,21 @@ AS
     ,DATEDIFF(MINUTE, pkg.StartDateTime, ISNULL(pkg.EndDateTime, GETDATE())) AS ExecutionDurationInMinutes
     ,rpes.ETLPackageExecutionStatus                                          AS PackageExecutionStatus
     ,rees.ETLExecutionStatus                                                 AS SSISParentExecutionStatus
-    ,pkg.ETLPackageFirstErrorMessage                                         AS ErrorMessage
-    ,pkg.ETLPackageLastMessage
+    --,pkg.ETLPackageFirstErrorMessage                                         AS ErrorMessage
+    --,pkg.ETLPackageLastMessage
     ,ep.[EntryPointPackageInd]
     ,ep.[ReadyForExecutionInd] --entry point packages only
   FROM
-    [ctl].[ETLPackage] ep
-    --Get the id of the last batch executed for NA and EU
-    CROSS JOIN (SELECT
-                  [ETLBatchExecutionId]
-                  ,[ETLBatchId]
-                  --,Periodicity
-                  ,ROW_NUMBER()
-                     OVER (
-                       PARTITION BY [ETLBatchId]
-                       ORDER BY StartDateTime DESC) rnk
-                FROM
-                  [ctl].[ETLBatchExecution] WITH (NOLOCK)
-               ) eb
-    CROSS APPLY [dbo].[func_GetETLPackagesForBatch] (eb.[ETLBatchExecutionId]) pkg
+    ctl.[ETLBatchExecution] ebe
+    CROSS APPLY [dbo].[func_GetETLPackagesForBatchExecution] (ebe.[ETLBatchExecutionId]) pkg
+	JOIN ctl.[ETLPackage] ep ON pkg.ETLPackageId = ep.ETLPackageId
     JOIN ctl.[ETLBatch] eps
-      ON eb.[ETLBatchId] = eps.[ETLBatchId]
+      ON ebe.[ETLBatchId] = eps.[ETLBatchId]
     LEFT JOIN ref.ETLPackageExecutionStatus rpes
            ON pkg.ETLPackageExecutionStatusId = rpes.ETLPackageExecutionStatusId
     LEFT JOIN ref.ETLExecutionStatus rees 
            ON pkg.ETLExecutionStatusId = rees.ETLExecutionStatusId
-  WHERE
-    ep.ETLPackageId = pkg.ETLPackageId
-    AND rnk = 1
   ORDER  BY
-    [SSISDBProjectName]
-    ,ExecutionStartDateTime 
+	pkg.PhaseExecutionOrderNo
+    ,ep.[SSISDBProjectName]
+    ,pkg.StartDateTime

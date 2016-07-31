@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [ctl].[ETLBatchExecution]
   (
      [ETLBatchExecutionId]								  INT IDENTITY(1, 1) NOT NULL
-     ,[SQLAgentJobName]                                   VARCHAR(250) NOT NULL
+     ,[CallingJobName]                                    VARCHAR(250) NOT NULL
      ,[SSISEnvironmentName]                               VARCHAR(128)
      ,[ETLBatchId]										  INT CONSTRAINT [DF_ETLBatchExecution_ETLBatchId] DEFAULT (0) NOT NULL
      ,[StartDateTime]                                     DATETIME2 CONSTRAINT [DF_ETLBatchExecution_StartDateTime] DEFAULT (GETDATE()) NOT NULL

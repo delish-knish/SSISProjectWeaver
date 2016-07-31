@@ -6,6 +6,7 @@ AS
     ,eps.[ETLBatchName]
     ,b.[ETLBatchPhaseId]
     ,ep.[ETLBatchPhase]
+	,b.[PhaseExecutionOrderNo]
   FROM
     [ctl].[ETLBatch_ETLBatchPhase] b
     JOIN ctl.[ETLBatch] eps

@@ -1,10 +1,9 @@
-﻿CREATE PROCEDURE [ctl].[SendErrorNotificationsForETLBatch](@ETLBatchId           INT,
+﻿CREATE PROCEDURE [ctl].[SendErrorNotificationsForETLBatchExecution](@ETLBatchId           INT,
                                                            @ErrorEmailRecipients VARCHAR(MAX))
 AS
     DECLARE @SSISDBEventMessageId   BIGINT,
-            @SQLAgentJobName        NVARCHAR(MAX),
+            @CallingJobName        NVARCHAR(MAX),
             @SSISEnvironmentName    NVARCHAR(MAX),
-            --@Periodicity                 NVARCHAR(MAX),
             @ETLPackageId           INT,
             @SSISDBFolderName       NVARCHAR(MAX),
             @SSISDBProjectName      NVARCHAR(MAX),
@@ -17,9 +16,8 @@ AS
     DECLARE PackageCursor CURSOR FAST_FORWARD FOR
       SELECT
         err.SSISDBEventMessageId
-        ,eb.SQLAgentJobName
+        ,eb.[CallingJobName]
         ,eb.SSISEnvironmentName
-        --,eb.Periodicity
         ,err.ETLPackageId
         ,ep.SSISDBFolderName
         ,ep.SSISDBProjectName
@@ -33,7 +31,7 @@ AS
         --Limit errors to the first error per package for the batch 
 		--** This logic is flawed when a package is executed multiple times and has failures mutliple times. It will not get the "new" error.
         JOIN (SELECT
-                ETLBatchId
+                [ETLBatchExecutionId]
                 ,ETLPackageId
                 ,SSISDBExecutionId
                 ,epee.ETLPackageExecutionErrorTypeId
@@ -43,18 +41,18 @@ AS
               WHERE
                EmailNotificationSentDateTime IS NULL
               GROUP  BY
-               ETLBatchId
+               [ETLBatchExecutionId]
                ,ETLPackageId
                ,epee.ETLPackageExecutionErrorTypeId
                ,SSISDBExecutionId) minerr
-          ON err.ETLBatchId = minerr.ETLBatchId
+          ON err.[ETLBatchExecutionId] = minerr.[ETLBatchExecutionId]
              AND err.ETLPackageId = minerr.ETLPackageId
              AND ( ( err.SSISDBEventMessageId = minerr.SSISDBEventMessageId
                       OR ( err.SSISDBEventMessageId IS NULL
                            AND err.SSISDBExecutionId = minerr.SSISDBExecutionId ) )
                     OR minerr.ETLPackageExecutionErrorTypeId = 3 )
         JOIN ctl.[ETLBatchExecution] eb
-          ON err.ETLBatchId = eb.[ETLBatchExecutionId]
+          ON err.[ETLBatchExecutionId] = eb.[ETLBatchExecutionId]
         JOIN ctl.ETLPackage ep
           ON err.ETLPackageId = ep.ETLPackageId
         JOIN ref.SupportSeverityLevel rssl
@@ -65,7 +63,7 @@ AS
 
     OPEN PackageCursor
 
-    FETCH NEXT FROM PackageCursor INTO @SSISDBEventMessageId, @SQLAgentJobName, @SSISEnvironmentName, @ETLPackageId, @SSISDBFolderName, @SSISDBProjectName, @SSISDBPackageName, @SupportSeverityLevelId, @SupportSeverityLevelCd, @ErrorDateTime, @ErrorMessage
+    FETCH NEXT FROM PackageCursor INTO @SSISDBEventMessageId, @CallingJobName, @SSISEnvironmentName, @ETLPackageId, @SSISDBFolderName, @SSISDBProjectName, @SSISDBPackageName, @SupportSeverityLevelId, @SupportSeverityLevelCd, @ErrorDateTime, @ErrorMessage
 
     WHILE @@FETCH_STATUS = 0
       BEGIN
@@ -77,7 +75,7 @@ AS
             @MailBody = @@SERVERNAME + @CRLF + 
 			N'Severity Level=' + @SupportSeverityLevelCd + @CRLF + 
 			@SSISDBPackageName + @CRLF + 
-			@SSISDBProjectName + '.' + @SSISDBPackageName + ', configured for SSIS Environment [' + @SSISEnvironmentName + '],  under SQL Agent job [' + @SQLAgentJobName + '] failed with error message ["' + @ErrorMessage + '] The error was logged at ' + CAST(CONVERT(VARCHAR(30), @ErrorDateTime) AS NVARCHAR(MAX)) + '.'
+			@SSISDBProjectName + '.' + @SSISDBPackageName + ', configured for SSIS Environment [' + @SSISEnvironmentName + '],  under SQL Agent job [' + @CallingJobName + '] failed with error message ["' + @ErrorMessage + '] The error was logged at ' + CAST(CONVERT(VARCHAR(30), @ErrorDateTime) AS NVARCHAR(MAX)) + '.'
 
           EXEC msdb.dbo.sp_send_dbmail @recipients = @ErrorEmailRecipients,@subject = 'Open Incident',@body = @MailBody,@importance = 'High'
 
@@ -85,10 +83,10 @@ AS
           UPDATE [log].ETLPackageExecutionError
           SET    EmailNotificationSentDateTime = GETDATE()
           WHERE
-            ETLBatchId = @ETLBatchId
+            [ETLBatchExecutionId] = @ETLBatchId
             AND ETLPackageId = @ETLPackageId
 
-          FETCH NEXT FROM PackageCursor INTO @SSISDBEventMessageId, @SQLAgentJobName, @SSISEnvironmentName, @ETLPackageId, @SSISDBFolderName, @SSISDBProjectName, @SSISDBPackageName, @SupportSeverityLevelId, @SupportSeverityLevelCd, @ErrorDateTime, @ErrorMessage
+          FETCH NEXT FROM PackageCursor INTO @SSISDBEventMessageId, @CallingJobName, @SSISEnvironmentName, @ETLPackageId, @SSISDBFolderName, @SSISDBProjectName, @SSISDBPackageName, @SupportSeverityLevelId, @SupportSeverityLevelCd, @ErrorDateTime, @ErrorMessage
       END
 
     CLOSE PackageCursor

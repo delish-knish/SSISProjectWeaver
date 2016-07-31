@@ -1,4 +1,4 @@
-﻿CREATE FUNCTION [dbo].[func_GetLatestETLBatch] (@ETLPackageSetId INT)
+﻿CREATE FUNCTION [dbo].[func_GetLatestETLBatchExecution] (@ETLBatchId INT)
 RETURNS TABLE
 AS
     RETURN
@@ -14,6 +14,6 @@ AS
           FROM
             [ctl].[ETLBatchExecution]
           WHERE
-           [ETLBatchId] = @ETLPackageSetId) t
+           [ETLBatchId] = @ETLBatchId) t
        WHERE
         t.rownum = 1) 

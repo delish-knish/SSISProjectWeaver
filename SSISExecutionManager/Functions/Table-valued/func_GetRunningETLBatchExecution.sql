@@ -1,5 +1,5 @@
-﻿CREATE FUNCTION [dbo].[func_GetRunningETLBatch] (@BatchStartedWithinMinutes SMALLINT,
-                                                 @SQLAgentJobName           VARCHAR(128))
+﻿CREATE FUNCTION [dbo].[func_GetRunningETLBatchExecution] (@BatchStartedWithinMinutes SMALLINT,
+															@CallingJobName           VARCHAR(128))
 RETURNS TABLE
 AS
     RETURN
@@ -15,4 +15,4 @@ AS
        WHERE
         DATEDIFF(MINUTE, StartDateTime, GETDATE()) <= @BatchStartedWithinMinutes
         AND EndDateTime IS NULL
-        AND SQLAgentJobName = @SQLAgentJobName) 
+        AND CallingJobName = @CallingJobName) 

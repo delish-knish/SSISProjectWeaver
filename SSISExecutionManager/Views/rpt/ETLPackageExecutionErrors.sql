@@ -2,7 +2,7 @@
 AS
   SELECT TOP 1000
     eb.[ETLBatchExecutionId]                    AS [ETLBatchId]
-    ,eb.SQLAgentJobName              AS [SQLAgentJobName]
+    ,eb.[CallingJobName]              AS [CallingJobName]
     --,eb.Periodicity                  AS [Periodicity]
     ,p.SSISDBProjectName             AS [SSISDBProjectName]
     ,p.SSISDBPackageName             AS [SSISDBPackageName]
@@ -19,7 +19,7 @@ AS
     JOIN ctl.ETLPackage p
       ON eper.ETLPackageId = p.ETLPackageId
     JOIN ctl.[ETLBatchExecution] eb
-      ON eper.ETLBatchId = eb.[ETLBatchExecutionId]
+      ON eper.[ETLBatchExecutionId] = eb.[ETLBatchExecutionId]
     JOIN ref.ETLPackageExecutionErrorType et
       ON eper.[ETLPackageExecutionErrorTypeId] = et.[ETLPackageExecutionErrorTypeId]
   ORDER  BY

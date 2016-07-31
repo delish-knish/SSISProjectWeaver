@@ -6,7 +6,7 @@ RETURN(
 		ebp.ETLBatchPhaseId
 		,ebebp.PhaseExecutionOrderNo
 	FROM 
-		[dbo].[func_GetETLPackagesForBatch] (@ETLBatchExecutionId) pkg
+		[dbo].[func_GetETLPackagesForBatchExecution] (@ETLBatchExecutionId) pkg
 		JOIN ctl.ETLBatch eb 
 		  ON pkg.ETLBatchId = eb.ETLBatchId
 		JOIN ctl.ETLBatch_ETLBatchPhase ebebp 

@@ -1,18 +1,17 @@
 ﻿CREATE VIEW [rpt].[ETLBatchExecutionEvents]
 AS
   SELECT TOP 1000000
-    eb.[ETLBatchExecutionId]           AS ETLBatchId
-    ,eb.SQLAgentJobName     AS SQLAgentJobName
-    --,eb.Periodicity              AS Periodicity
+    eb.[ETLBatchExecutionId]			AS [ETLBatchExecutionId]
+    ,eb.[CallingJobName]					AS CallingJobName
     ,eps.[ETLBatchName]
-    ,p.ETLPackageId         AS ETLPackageId
-    ,p.SSISDBFolderName     AS FolderName
-    ,p.SSISDBProjectName    AS ProjectName
-    ,p.SSISDBPackageName    AS PackageName
-    ,be.[ETLBatchExecutionEventId]     AS ETLBatchEventId
-    ,ebet.[ETLBatchExecutionEventType] AS ETLBatchEventType
-    ,be.EventDateTime       AS EventDateTime
-    ,be.[Description]       AS [Description]
+    ,p.ETLPackageId						AS ETLPackageId
+    ,p.SSISDBFolderName					AS FolderName
+    ,p.SSISDBProjectName				AS ProjectName
+    ,p.SSISDBPackageName				AS PackageName
+    ,be.[ETLBatchExecutionEventId]		AS ETLBatchEventId
+    ,ebet.[ETLBatchExecutionEventType]	AS ETLBatchEventType
+    ,be.EventDateTime					AS EventDateTime
+    ,be.[Description]					AS [Description]
   FROM
     [log].[ETLBatchExecutionEvent] be
     LEFT JOIN ctl.ETLPackage p

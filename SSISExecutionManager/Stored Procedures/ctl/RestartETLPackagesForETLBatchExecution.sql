@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [ctl].[RestartETLPackagesForETLBatch] @ETLBatchId           INT,
+﻿CREATE PROCEDURE [ctl].[RestartETLPackagesForETLBatchExecution] @ETLBatchId           INT,
                                                        @ErrorEmailRecipients VARCHAR(MAX)
 AS
     /*This stored procedure will set the ReadyForExecutionInd flag on any package in the given batch that has ended unexpectedly	*/
@@ -22,7 +22,7 @@ AS
       WHERE
         e.ETLPackageExecutionErrorTypeId = 2 --unexpected termination
         AND e.ETLPackageRestartDateTime IS NULL
-		AND e.ETLBatchId = @ETLBatchId
+		AND e.[ETLBatchExecutionId] = @ETLBatchId
 
     OPEN UnexpectedErrorCursor
 
@@ -30,10 +30,6 @@ AS
 
     WHILE @@FETCH_STATUS = 0
       BEGIN
-          ---------------------------------------------------------------------------------------------------------
-          --If the failure is the item master main, set ReadyForExecutionInd = 1 and update the error record
-          ---------------------------------------------------------------------------------------------------------
-          IF @SSISDBPackageName = 'Item_Master.Item_Master_main.MAIN.dtsx'
             BEGIN
                 EXEC sup.RestartPackageForETLBatch @SSISDBFolderName,@SSISDBProjectName,@SSISDBPackageName,0,0
 
@@ -46,7 +42,7 @@ AS
                 SET    [ETLPackageRestartDateTime] = GETDATE()
                 WHERE
                   ETLPackageExecutionErrorTypeId = 2 --unexpected termination
-                  AND ETLBatchId = @ETLBatchId
+                  AND [ETLBatchExecutionId] = @ETLBatchId
                   AND ETLPackageId = @ETLPackageId
                   AND [SSISDBExecutionId] = @SSISDBExecutionId;
 

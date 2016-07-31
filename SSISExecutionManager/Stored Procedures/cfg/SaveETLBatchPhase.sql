@@ -11,10 +11,8 @@ AS
                  ,[LastUpdatedDate] = GETDATE()
                  ,[LastUpdatedUser] = SUSER_SNAME()
     WHEN NOT MATCHED THEN
-      INSERT (ETLBatchPhaseId
-              ,ETLBatchPhase )
-      VALUES( source.ETLBatchPhaseId
-              ,source.ETLBatchPhase );
+      INSERT (ETLBatchPhase )
+      VALUES( source.ETLBatchPhase );
 
 
     RETURN 0 

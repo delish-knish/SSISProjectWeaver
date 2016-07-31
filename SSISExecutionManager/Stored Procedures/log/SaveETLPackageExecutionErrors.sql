@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [log].SaveETLPackageExecutionErrors @ETLBatchId                       INT,
+﻿CREATE PROCEDURE [log].SaveETLPackageExecutionErrors @ETLBatchExecutionId              INT,
                                                      @ErrorsRequiringNotificationCount INT OUT,
                                                      @ETLPackagesRequiringRestartCount INT OUT
 AS
@@ -6,7 +6,7 @@ AS
     INSERT INTO [log].ETLPackageExecutionError
                 ([SSISDBExecutionId]
                  ,[SSISDBEventMessageId]
-                 ,[ETLBatchId]
+                 ,[ETLBatchExecutionId]
                  ,[ETLPackageId]
                  ,[ErrorDateTime]
                  ,[ErrorMessage]
@@ -28,7 +28,7 @@ AS
            AND e.project_name = p.SSISDBProjectName
            AND e.package_name = p.SSISDBPackageName
     WHERE
-      ebe.[ETLBatchExecutionId] = @ETLBatchId
+      ebe.[ETLBatchExecutionId] = @ETLBatchExecutionId
       AND [status] = 6
       AND p.ETLPackageId NOT IN (SELECT
                                    ETLPackageId
@@ -36,26 +36,26 @@ AS
                                    [log].ETLPackageExecutionError
                                  WHERE
                                   ETLPackageExecutionErrorTypeId = 2
-								  AND ETLBatchId = @ETLBatchId);
+								  AND [ETLBatchExecutionId] = @ETLBatchExecutionId);
 
     --Insert or update packages stats based on SSISDB errors
     MERGE [log].ETLPackageExecutionError AS Target
     USING (SELECT
              err.[SSISDBExecutionId]
              ,err.[EventMessageId]
-             ,err.[ETLBatchId]
+             ,err.[ETLBatchExecutionId]
              ,err.[ETLPackageId]
              ,err.[ErrorDateTime]
              ,err.[ErrorMessage]
              ,1 AS [ETLPackageExecutionErrorTypeId] --SSISDB
            FROM
-             dbo.func_GetETLPackageExecutionErrorsForBatch(@ETLBatchId) err) AS source ([SSISDBExecutionId], [SSISDBEventMessageId], [ETLBatchId], [ETLPackageId], [ErrorDateTime], [ErrorMessage], [ETLPackageExecutionErrorTypeId])
+             dbo.[func_GetETLPackageExecutionErrorsForBatchExecution](@ETLBatchExecutionId) err) AS source ([SSISDBExecutionId], [SSISDBEventMessageId], [ETLBatchId], [ETLPackageId], [ErrorDateTime], [ErrorMessage], [ETLPackageExecutionErrorTypeId])
     ON target.[SSISDBEventMessageId] = source.[SSISDBEventMessageId]
        AND target.ETLPackageId = source.ETLPackageId
     WHEN Matched THEN
       UPDATE SET [SSISDBExecutionId] = source.[SSISDBExecutionId]
                  ,[SSISDBEventMessageId] = source.[SSISDBEventMessageId]
-                 ,ETLBatchId = source.ETLBatchId
+                 ,[ETLBatchExecutionId] = source.ETLBatchId
                  ,ETLPackageId = source.ETLPackageId
                  ,[ErrorDateTime] = source.[ErrorDateTime]
                  ,[ErrorMessage] = source.[ErrorMessage]
@@ -65,7 +65,7 @@ AS
     WHEN NOT MATCHED THEN
       INSERT ([SSISDBExecutionId]
               ,[SSISDBEventMessageId]
-              ,ETLBatchId
+              ,[ETLBatchExecutionId]
               ,ETLPackageId
               ,[ErrorDateTime]
               ,[ErrorMessage]
@@ -84,13 +84,13 @@ AS
                                                [log].ETLPackageExecutionError
                                              WHERE
                                               EmailNotificationSentDateTime IS NULL
-                                              AND ETLBatchId = @ETLBatchId)
+                                              AND [ETLBatchExecutionId] = @ETLBatchExecutionId)
     SET @ETLPackagesRequiringRestartCount = (SELECT
                                                COUNT(*)
                                              FROM
                                                [log].ETLPackageExecutionError
                                              WHERE
                                               ETLPackageRestartDateTime IS NULL
-                                              AND ETLBatchId = @ETLBatchId)
+                                              AND [ETLBatchExecutionId] = @ETLBatchExecutionId)
 
     RETURN 0 

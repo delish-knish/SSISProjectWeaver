@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [ctl].[EndETLBatch] @ETLBatchExecutionId	INT,
+﻿CREATE PROCEDURE [ctl].[EndETLBatchExecution] @ETLBatchExecutionId	INT,
                                      @ETLBatchStatusId		INT
 AS
     UPDATE ctl.[ETLBatchExecution]

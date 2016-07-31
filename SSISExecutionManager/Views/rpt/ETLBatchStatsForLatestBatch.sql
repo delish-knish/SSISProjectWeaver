@@ -6,16 +6,16 @@ AS
     ,CAST(eb.[ETLBatchExecutionId] AS VARCHAR(50)) AS Value
   FROM
     ctl.[ETLBatchExecution] eb
-    JOIN [dbo].[func_GetLatestETLBatch] (1) leb
+    JOIN [dbo].[func_GetLatestETLBatchExecution] (1) leb
       ON eb.[ETLBatchExecutionId] = leb.[ETLBatchExecutionId]
   UNION ALL
   SELECT
     --eb.Periodicity,
     'SQL Agent Job Name'
-    ,eb.SQLAgentJobName
+    ,eb.[CallingJobName]
   FROM
     ctl.[ETLBatchExecution] eb
-    JOIN [dbo].[func_GetLatestETLBatch] (1) leb
+    JOIN [dbo].[func_GetLatestETLBatchExecution] (1) leb
       ON eb.[ETLBatchExecutionId] = leb.[ETLBatchExecutionId]
   UNION ALL
   SELECT
@@ -24,7 +24,7 @@ AS
     ,CAST(eb.DayOfWeekName AS VARCHAR(50))
   FROM
     ctl.[ETLBatchExecution] eb
-    JOIN [dbo].[func_GetLatestETLBatch] (1) leb
+    JOIN [dbo].[func_GetLatestETLBatchExecution] (1) leb
       ON eb.[ETLBatchExecutionId] = leb.[ETLBatchExecutionId]
   UNION ALL
   SELECT
@@ -33,7 +33,7 @@ AS
     ,CAST(ISNULL(eb.ExecutionDurationInMinutes, DATEDIFF(minute, eb.StartDateTime, GETDATE())) AS VARCHAR(19))
   FROM
     ctl.[ETLBatchExecution] eb
-    JOIN [dbo].[func_GetLatestETLBatch] (1) leb
+    JOIN [dbo].[func_GetLatestETLBatchExecution] (1) leb
       ON eb.[ETLBatchExecutionId] = leb.[ETLBatchExecutionId]
   UNION ALL
   SELECT
@@ -42,7 +42,7 @@ AS
     ,CAST(eb.StartDateTime AS VARCHAR(50))
   FROM
     ctl.[ETLBatchExecution] eb
-    JOIN [dbo].[func_GetLatestETLBatch] (1) leb
+    JOIN [dbo].[func_GetLatestETLBatchExecution] (1) leb
       ON eb.[ETLBatchExecutionId] = leb.[ETLBatchExecutionId]
   UNION ALL
   SELECT
@@ -51,7 +51,7 @@ AS
     ,CAST(eb.EndDateTime AS VARCHAR(50))
   FROM
     ctl.[ETLBatchExecution] eb
-    JOIN [dbo].[func_GetLatestETLBatch] (1) leb
+    JOIN [dbo].[func_GetLatestETLBatchExecution] (1) leb
       ON eb.[ETLBatchExecutionId] = leb.[ETLBatchExecutionId]
   UNION ALL
   SELECT
@@ -60,7 +60,7 @@ AS
     ,CAST(ebs.ETLBatchStatus AS VARCHAR(50))
   FROM
     ctl.[ETLBatchExecution] eb
-    JOIN [dbo].[func_GetLatestETLBatch] (1) leb
+    JOIN [dbo].[func_GetLatestETLBatchExecution] (1) leb
       ON eb.[ETLBatchExecutionId] = leb.[ETLBatchExecutionId]
     JOIN ref.ETLBatchStatus ebs
       ON eb.ETLBatchStatusId = ebs.ETLBatchStatusId
@@ -71,7 +71,7 @@ AS
     ,CAST(eb.TotalETLPackageCount AS VARCHAR(50))
   FROM
     ctl.[ETLBatchExecution] eb
-    JOIN [dbo].[func_GetLatestETLBatch] (1) leb
+    JOIN [dbo].[func_GetLatestETLBatchExecution] (1) leb
       ON eb.[ETLBatchExecutionId] = leb.[ETLBatchExecutionId]
   UNION ALL
   SELECT
@@ -80,7 +80,7 @@ AS
     ,CAST(eb.TotalRemainingETLPackageCount AS VARCHAR(50))
   FROM
     ctl.[ETLBatchExecution] eb
-    JOIN [dbo].[func_GetLatestETLBatch] (1) leb
+    JOIN [dbo].[func_GetLatestETLBatchExecution] (1) leb
       ON eb.[ETLBatchExecutionId] = leb.[ETLBatchExecutionId]
   UNION ALL
   SELECT
@@ -89,11 +89,11 @@ AS
     ,CAST(COUNT(1) AS VARCHAR(50))
   FROM
     log.ETLPackageExecutionError pee
-    JOIN [dbo].[func_GetLatestETLBatch] (1) leb
-      ON pee.ETLBatchId = leb.[ETLBatchExecutionId]
+    JOIN [dbo].[func_GetLatestETLBatchExecution] (1) leb
+      ON pee.[ETLBatchExecutionId] = leb.[ETLBatchExecutionId]
     JOIN ctl.[ETLBatchExecution] eb
-      ON pee.ETLBatchId = eb.[ETLBatchExecutionId]
+      ON pee.[ETLBatchExecutionId] = eb.[ETLBatchExecutionId]
   GROUP  BY
-    pee.ETLBatchId
+    pee.[ETLBatchExecutionId]
     --eb.Periodicity
      

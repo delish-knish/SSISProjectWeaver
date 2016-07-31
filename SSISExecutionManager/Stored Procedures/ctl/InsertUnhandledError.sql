@@ -4,7 +4,7 @@ AS
     INSERT INTO [log].ETLPackageExecutionError
                 ([SSISDBExecutionId]
                  ,[SSISDBEventMessageId]
-                 ,[ETLBatchId]
+                 ,[ETLBatchExecutionId]
                  ,[ETLPackageId]
                  ,[ErrorDateTime]
                  ,[ErrorMessage]

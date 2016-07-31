@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [ctl].[ExecuteETLPackagesForBatch] @ETLBatchExecutionId INT,
+﻿CREATE PROCEDURE [ctl].[ExecuteETLPackagesForBatchExecution] @ETLBatchExecutionId INT,
                                                     --@Periodicity         CHAR(2),
                                                     @SSISEnvironmentName VARCHAR(128)
 AS

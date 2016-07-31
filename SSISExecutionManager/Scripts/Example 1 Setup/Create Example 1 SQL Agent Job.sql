@@ -28,7 +28,7 @@ EXEC msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'Execute [ctl].[Execute
 		@retry_interval=0, 
 		@os_run_priority=0, @subsystem=N'TSQL', 
 		@command=N'EXEC	[ctl].[ExecuteETLBatch]
-			@SQLAgentJobName = N''SSISExecutionManagerExample1'',
+			@CallingJobName = N''SSISExecutionManagerExample1'',
 			@SSISEnvironmentName = N''SSISExecutionManagerExample1'',
 			@ETLBatchId = 1;'
 	, 

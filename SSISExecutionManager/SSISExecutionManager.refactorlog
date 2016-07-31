@@ -42,4 +42,95 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[ETLBatchExecutionEventTypeId]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="0497c7ce-c671-4115-b09e-761865e1070f" ChangeDateTime="07/22/2016 18:56:56">
+    <Property Name="ElementName" Value="[dbo].[func_GetETLBatchStatus]" />
+    <Property Name="ElementType" Value="SqlInlineTableValuedFunction" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[func_GetETLBatchExecutionStatus]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4aa165f4-14f9-41ab-90a7-e65eb5c859d5" ChangeDateTime="07/22/2016 18:57:17">
+    <Property Name="ElementName" Value="[dbo].[func_GetETLPackageExecutionErrorsForBatch]" />
+    <Property Name="ElementType" Value="SqlInlineTableValuedFunction" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[func_GetETLPackageExecutionErrorsForBatchExecution]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="679ab18b-16ed-4eb8-bd0f-d4b0be733481" ChangeDateTime="07/22/2016 18:58:24">
+    <Property Name="ElementName" Value="[dbo].[func_GetETLPackagesForBatch]" />
+    <Property Name="ElementType" Value="SqlInlineTableValuedFunction" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[func_GetETLPackagesForBatchExecution]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="6170e4b3-d3d7-44fd-a59f-fe0638731df7" ChangeDateTime="07/22/2016 18:59:03">
+    <Property Name="ElementName" Value="[dbo].[func_GetLatestETLBatch]" />
+    <Property Name="ElementType" Value="SqlInlineTableValuedFunction" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[func_GetLatestETLBatchExecution]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="bdd81f27-ba6a-43e0-9b2f-c46b601e6890" ChangeDateTime="07/22/2016 18:59:24">
+    <Property Name="ElementName" Value="[dbo].[func_GetRunningETLBatch]" />
+    <Property Name="ElementType" Value="SqlInlineTableValuedFunction" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[func_GetRunningETLBatchExecution]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="7904cf07-332e-42f8-9a63-fffeda661700" ChangeDateTime="07/22/2016 20:57:16">
+    <Property Name="ElementName" Value="[ctl].[EndETLBatch]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[ctl]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[EndETLBatchExecution]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="69717afe-6939-404d-8599-ba468333011e" ChangeDateTime="07/22/2016 20:57:34">
+    <Property Name="ElementName" Value="[ctl].[DeleteETLBatch]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[ctl]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[DeleteETLBatchExecution]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5e837363-b9ed-4f6f-8de3-c668efa3db03" ChangeDateTime="07/22/2016 20:58:35">
+    <Property Name="ElementName" Value="[ctl].[SendErrorNotificationsForETLBatch]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[ctl]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[SendErrorNotificationsForETLBatchExecution]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b924d35e-3571-46ab-8bc1-b23be7394b90" ChangeDateTime="07/22/2016 20:59:19">
+    <Property Name="ElementName" Value="[ctl].[RestartETLPackagesForETLBatch]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[ctl]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[RestartETLPackagesForETLBatchExecution]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f1b74b17-b646-4f2b-b938-90db8f350b49" ChangeDateTime="07/22/2016 20:59:56">
+    <Property Name="ElementName" Value="[ctl].[ExecuteETLPackagesForBatch]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[ctl]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[ExecuteETLPackagesForBatchExecution]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8089dbc8-9a1a-474e-8e6f-6243e63660e9" ChangeDateTime="07/22/2016 21:03:46">
+    <Property Name="ElementName" Value="[log].[ETLPackageExecutionError].[ETLBatchId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[log].[ETLPackageExecutionError]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ETLBatchExecutionId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="09ebb99f-f940-4044-850c-b377d4c2ee57" ChangeDateTime="07/22/2016 22:21:49">
+    <Property Name="ElementName" Value="[ctl].[ETLBatchExecution].[CallingJobName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[ctl].[ETLBatchExecution]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[CallingJobName]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="6556edbe-4d8b-46c6-a58b-e0eca439cbc7" ChangeDateTime="07/23/2016 01:57:58">
+    <Property Name="ElementName" Value="[ctl].[ETLBatchExecution].[SQLAgentJobName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[ctl].[ETLBatchExecution]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[CallingJobName]" />
+  </Operation>
 </Operations>

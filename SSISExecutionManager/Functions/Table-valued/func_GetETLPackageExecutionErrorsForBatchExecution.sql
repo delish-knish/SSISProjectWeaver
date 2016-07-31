@@ -1,9 +1,9 @@
-﻿CREATE FUNCTION [dbo].[func_GetETLPackageExecutionErrorsForBatch] (@ETLBatchId INT)
+﻿CREATE FUNCTION [dbo].[func_GetETLPackageExecutionErrorsForBatchExecution] (@ETLBatchId INT)
 RETURNS TABLE
 AS
     RETURN
       (SELECT
-         ebe.[ETLBatchExecutionId]                                AS [ETLBatchId]
+         ebe.[ETLBatchExecutionId]                       AS [ETLBatchExecutionId]
          ,ISNULL(err.[ETLPackageId], ebe.[ETLPackageId]) AS [ETLPackageId]
          ,ebe.[SSISDBExecutionId]                        AS [SSISDBExecutionId]
          ,err.[EventMessageId]                           AS [EventMessageId]

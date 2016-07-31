@@ -2,7 +2,7 @@
 AS
   SELECT TOP 1000
     dwx.[ETLBatchExecutionId]           AS ETLBatchId
-    ,eb.SQLAgentJobName      AS SQLAgentJobName
+    ,eb.[CallingJobName]      AS CallingJobName
     --,eb.Periodicity          AS Periodicity
     ,p.ETLPackageId          AS ETLPackageId
     ,x.folder_name           AS FolderName

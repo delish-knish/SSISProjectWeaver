@@ -1,4 +1,4 @@
-﻿CREATE FUNCTION [dbo].[func_GetETLBatchStatus] (@ETLBatchExecutionId INT)
+﻿CREATE FUNCTION [dbo].[func_GetETLBatchExecutionStatus] (@ETLBatchExecutionId INT)
 RETURNS TABLE
 AS
     RETURN
@@ -10,7 +10,7 @@ AS
          ,TotalRemainingEntryPointPackageCount = SUM(CAST(ep.EntryPointPackageInd AS TINYINT)) - SUM(IIF(epb.ETLPackageExecutionStatusId IN ( 0, 2 )
                                                                                                          AND ep.EntryPointPackageInd = 1, 1, 0))
          ,PackagesReadyToExecuteCount = SUM(CAST(ep.ReadyForExecutionInd AS TINYINT))
-         ,ETLBatchStatusId = CASE
+         ,ETLBatchExecutionStatusId = CASE
                                WHEN SUM(CAST(ep.EntryPointPackageInd AS TINYINT)) - SUM(IIF(epb.ETLPackageExecutionStatusId IN ( 0, 2 )
                                                                                             AND ep.EntryPointPackageInd = 1, 1, 0)) = 0 THEN 5 --Completed (we use entry point packages to determine completeness because it is possible to have acceptable child package failures)
                                WHEN COUNT(*) - SUM(IIF(epb.ETLPackageExecutionStatusId IN ( 0, 2 ), 1, 0)) > 0
@@ -18,7 +18,7 @@ AS
 							   WHEN COUNT(*) - SUM(IIF(epb.ETLPackageExecutionStatusId IN ( 0, 2 ), 1, 0)) > 0 THEN 6
                              END
        FROM
-         [dbo].[func_GetETLPackagesForBatch] (@ETLBatchExecutionId) epb
+         [dbo].[func_GetETLPackagesForBatchExecution] (@ETLBatchExecutionId) epb
          JOIN ctl.[ETLBatchExecution] eb
            ON @ETLBatchExecutionId = eb.[ETLBatchExecutionId]
          JOIN [ctl].ETLPackage ep

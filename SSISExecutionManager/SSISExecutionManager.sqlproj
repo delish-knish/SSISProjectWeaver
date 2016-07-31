@@ -85,19 +85,19 @@
   <ItemGroup>
     <Build Include="Functions\Scalar-valued\func_GetConfigurationValue.sql" />
     <Build Include="Functions\Scalar-valued\func_GetETLBatchStatusId.sql" />
-    <Build Include="Functions\Scalar-valued\func_GetLastPackageExecutionStatus.sql" />
+    <None Include="Functions\Scalar-valued\func_GetLastPackageExecutionStatus.sql" />
     <Build Include="Functions\Scalar-valued\func_GetSQLAgentJobNextRunDateTime.sql" />
     <Build Include="Functions\Scalar-valued\func_GetSSISDBPackageId.sql" />
     <Build Include="Functions\Scalar-valued\func_IsSQLAgentJobRunning.sql" />
     <Build Include="Functions\Table-valued\ops\func_GetSSISPackageExecutionMessages.sql" />
-    <Build Include="Functions\Table-valued\func_GetETLBatchStatus.sql" />
-    <Build Include="Functions\Table-valued\func_GetETLPackageExecutionErrorsForBatch.sql" />
+    <Build Include="Functions\Table-valued\func_GetETLBatchExecutionStatus.sql" />
+    <Build Include="Functions\Table-valued\func_GetETLPackageExecutionErrorsForBatchExecution.sql" />
     <Build Include="Functions\Table-valued\func_GetETLPackageExecutionErrorsFromSSISDB.sql" />
     <Build Include="Functions\Table-valued\func_GetETLPackageExecutionStatusesFromSSISDB.sql" />
-    <Build Include="Functions\Table-valued\func_GetETLPackagesForBatch.sql" />
+    <Build Include="Functions\Table-valued\func_GetETLPackagesForBatchExecution.sql" />
     <Build Include="Functions\Table-valued\func_GetETLPackagesToExecute.sql" />
-    <Build Include="Functions\Table-valued\func_GetLatestETLBatch.sql" />
-    <Build Include="Functions\Table-valued\func_GetRunningETLBatch.sql" />
+    <Build Include="Functions\Table-valued\func_GetLatestETLBatchExecution.sql" />
+    <Build Include="Functions\Table-valued\func_GetRunningETLBatchExecution.sql" />
     <None Include="Scripts\Populate Reference Data.sql" />
     <None Include="Scripts\Sync Configurations.sql" />
     <Build Include="Stored Procedures\cfg\AddSSISDBProjectToETLBatchPhase.sql" />
@@ -108,17 +108,17 @@
     <Build Include="Stored Procedures\cfg\SaveETLPackage_ETLPackageDependency.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLBatch.sql" />
     <Build Include="Stored Procedures\cfg\SaveSQLCommand.sql" />
-    <Build Include="Stored Procedures\ctl\DeleteETLBatch.sql" />
-    <Build Include="Stored Procedures\ctl\EndETLBatch.sql" />
+    <Build Include="Stored Procedures\ctl\DeleteETLBatchExecution.sql" />
+    <Build Include="Stored Procedures\ctl\EndETLBatchExecution.sql" />
     <Build Include="Stored Procedures\ctl\ExecuteETLBatch.sql" />
     <Build Include="Stored Procedures\ctl\ExecuteETLPackage.sql" />
-    <Build Include="Stored Procedures\ctl\ExecuteETLPackagesForBatch.sql" />
+    <Build Include="Stored Procedures\ctl\ExecuteETLPackagesForBatchExecution.sql" />
     <Build Include="Stored Procedures\ctl\ExecuteETLBatchPhaseSQLCommands.sql" />
     <Build Include="Stored Procedures\ctl\InsertETLBatchSSISDBExecution.sql" />
     <Build Include="Stored Procedures\ctl\InsertUnhandledError.sql" />
-    <Build Include="Stored Procedures\ctl\RestartETLPackagesForETLBatch.sql" />
-    <Build Include="Stored Procedures\ctl\SaveETLBatch.sql" />
-    <Build Include="Stored Procedures\ctl\SendErrorNotificationsForETLBatch.sql" />
+    <Build Include="Stored Procedures\ctl\RestartETLPackagesForETLBatchExecution.sql" />
+    <Build Include="Stored Procedures\ctl\SaveETLBatchExecution.sql" />
+    <Build Include="Stored Procedures\ctl\SendErrorNotificationsForETLBatchExecution.sql" />
     <Build Include="Stored Procedures\ctl\UpdateETLBatchStatus.sql" />
     <Build Include="Stored Procedures\ctl\UpdatePackagesToExecuteForBatch.sql" />
     <Build Include="Stored Procedures\log\InsertETLBatchEvent.sql" />
@@ -162,14 +162,14 @@
     <Build Include="Tables\ref\SupportSeverityLevel.sql" />
     <Build Include="Views\rpt\ETLBatchExecutions.sql" />
     <Build Include="Views\rpt\ETLBatchExecutionEvents.sql" />
-    <Build Include="Views\rpt\ETLBatchStatsForLatestBatch.sql" />
+    <None Include="Views\rpt\ETLBatchStatsForLatestBatch.sql" />
     <Build Include="Views\rpt\ETLPackageDependencies.sql" />
     <Build Include="Views\rpt\ETLPackageExecutionErrors.sql" />
     <Build Include="Views\rpt\ETLPackageExecutionHistory.sql" />
     <Build Include="Views\rpt\ETLPackageLongRunningNotifications.sql" />
     <Build Include="Views\rpt\ETLPackagesDisabled.sql" />
     <Build Include="Views\rpt\ETLBatchesETLBatchPhases.sql" />
-    <Build Include="Views\rpt\ETLPackagesForLatestBatch.sql" />
+    <Build Include="Views\rpt\ETLPackageExecutionStatuses.sql" />
     <Build Include="Views\rpt\ETLPackagesSQLCommandTriggers.sql" />
     <Build Include="Views\rpt\SSISDBErrorMessages.sql" />
     <Build Include="Tables\ctl\ETLBatchPhase.sql" />
@@ -203,6 +203,8 @@
     <None Include="Scripts\Example 1 Setup\Configure SSIS Catalog and Deploy Example1 Projects.sql" />
     <None Include="Scripts\Example 1 Setup\Populate Example1 Metadata.sql" />
     <None Include="Scripts\Example 1 Setup\Deploy Example1 SSIS Projects.bat" />
+    <None Include="AzurePOC.publish.xml" />
+    <None Include="TriCore POC.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
