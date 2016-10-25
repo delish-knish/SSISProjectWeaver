@@ -39,7 +39,8 @@ AS
 							JOIN ctl.[ETLBatch_ETLBatchPhase] epeps
 								ON ebpspep.[ETLBatchPhaseId] = epeps.ETLBatchPhaseId
 						WHERE
-							ebpspep.EnabledInd = 1) bp ON
+							ebpspep.EnabledInd = 1
+							AND epeps.EnabledInd = 1) bp ON
 						ep.ETLPackageId = bp.ETLPackageId
 						AND eb.[ETLBatchId] = bp.[ETLBatchId]
                  --Get the last execution id of the package during the batch. Executables aren't logged until complete so if none found, check the event_messages table.

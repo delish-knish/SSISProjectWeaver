@@ -85,7 +85,7 @@
   <ItemGroup>
     <Build Include="Functions\Scalar-valued\func_GetConfigurationValue.sql" />
     <Build Include="Functions\Scalar-valued\func_GetETLBatchStatusId.sql" />
-    <None Include="Functions\Scalar-valued\func_GetLastPackageExecutionStatus.sql" />
+    <Build Include="Functions\Scalar-valued\func_GetLastPackageExecutionStatus.sql" />
     <Build Include="Functions\Scalar-valued\func_GetSQLAgentJobNextRunDateTime.sql" />
     <Build Include="Functions\Scalar-valued\func_GetSSISDBPackageId.sql" />
     <Build Include="Functions\Scalar-valued\func_IsSQLAgentJobRunning.sql" />

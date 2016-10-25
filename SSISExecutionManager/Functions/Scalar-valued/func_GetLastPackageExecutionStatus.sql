@@ -1,15 +1,27 @@
-﻿CREATE FUNCTION [dbo].[func_GetLastPackageExecutionStatus] (@SSISDBPackageName VARCHAR (260)
-															)
-RETURNS VARCHAR(50)
+﻿CREATE FUNCTION [dbo].[func_GetLastPackageExecutionStatus] (@ETLBatchExecutionId INT,
+                                                            @ETLPackageId        INT)
+RETURNS INT
 AS
   BEGIN
-      DECLARE @ReturnValue VARCHAR(50) = (SELECT
-           PackageExecutionStatus
-         FROM
-           rpt.ETLPackagesForLatestBatch
-         WHERE
-          SSISDBPackageName = @SSISDBPackageName
-		  )
+      DECLARE @ReturnValue        INT
+              ,@SSISDBExecutionId BIGINT
+
+      SELECT TOP 1
+        @SSISDBExecutionId = [SSISDBExecutionId]
+      FROM
+        [ctl].[ETLBatchSSISDBExecutions]
+      WHERE
+        [ETLBatchExecutionId] = @ETLBatchExecutionId
+        AND ETLPackageId = @ETLPackageId
+      ORDER  BY
+        CreatedDate DESC
+
+      SET @ReturnValue = (SELECT
+                            ETLPackageExecutionStatusId
+                          FROM
+                            [dbo].[func_GetETLPackageExecutionStatusesFromSSISDB] (@SSISDBExecutionId)
+                          WHERE
+                           etlpackageid = @ETLPackageId)
 
       RETURN @ReturnValue
   END 

@@ -10,19 +10,19 @@ AS
     SET @tableHTML = N'<H1>Row Level Errors Logged in Past ' + CAST(@TimeIntervalInHours AS VARCHAR) + ' Hours </H1>'
                      + N'<table border="1">'
                      + N'<tr>
-                           <th>Table</th>'
+                           <th>Process</th>'
                        + N'<th>Description</th>
 						   <th>Date/Time</th>'
                      + CAST ( ( SELECT 
-									td = LookupTableName, '', 
-									td = Comment, '', 
+									td = ParentProcessName, '', 
+									td = [Description], '', 
 									td = ErrorDateTime, '' 
 								FROM ( 
 								
 									SELECT 
-											err.LookupTableName, 
-											err.ErrorDateTime,
-											err.Comment
+											ISNULL(err.ParentProcessName, '') AS ParentProcessName, 
+											ISNULL(err.ErrorDateTime, '') AS ErrorDateTime,
+											ISNULL(err.[Description], '') AS [Description]
 									FROM 
 										[log].[ETLPackageExecutionRowLevelError] err
 									WHERE 

@@ -16,7 +16,7 @@ AS
     MERGE [log].ETLPackageExecution AS Target
     USING (SELECT
              ep.SSISDBExecutionId
-             ,@ETLBatchExecutionId
+             ,ep.ETLBatchId
              ,ep.ETLPackageId
              ,ep.StartDateTime
              ,ep.EndDateTime

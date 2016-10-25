@@ -11,7 +11,8 @@ AS
             @SupportSeverityLevelId NVARCHAR(MAX),
             @SupportSeverityLevelCd NVARCHAR(MAX),
             @ErrorDateTime          DATETIME2,
-            @ErrorMessage           NVARCHAR(MAX)
+            @ErrorMessage           NVARCHAR(MAX),
+			@RemainingRetryAttempts INT
 
     DECLARE PackageCursor CURSOR FAST_FORWARD FOR
       SELECT
@@ -26,6 +27,7 @@ AS
         ,rssl.SupportSeverityLevelCd
         ,err.ErrorDateTime
         ,err.ErrorMessage
+		,ISNULL(epp.RemainingRetryAttempts, ep.RemainingRetryAttempts) AS RemainingRetryAttempts
       FROM
         [log].[ETLPackageExecutionError] err
         --Limit errors to the first error per package for the batch 
@@ -57,13 +59,15 @@ AS
           ON err.ETLPackageId = ep.ETLPackageId
         JOIN ref.SupportSeverityLevel rssl
           ON ep.SupportSeverityLevelId = rssl.SupportSeverityLevelId
+		JOIN ctl.ETLPackage epp
+          ON ep.EntryPointETLPackageId = epp.ETLPackageId
       WHERE
         eb.[ETLBatchExecutionId] = @ETLBatchId
         AND err.EmailNotificationSentDateTime IS NULL
 
     OPEN PackageCursor
 
-    FETCH NEXT FROM PackageCursor INTO @SSISDBEventMessageId, @CallingJobName, @SSISEnvironmentName, @ETLPackageId, @SSISDBFolderName, @SSISDBProjectName, @SSISDBPackageName, @SupportSeverityLevelId, @SupportSeverityLevelCd, @ErrorDateTime, @ErrorMessage
+    FETCH NEXT FROM PackageCursor INTO @SSISDBEventMessageId, @CallingJobName, @SSISEnvironmentName, @ETLPackageId, @SSISDBFolderName, @SSISDBProjectName, @SSISDBPackageName, @SupportSeverityLevelId, @SupportSeverityLevelCd, @ErrorDateTime, @ErrorMessage, @RemainingRetryAttempts
 
     WHILE @@FETCH_STATUS = 0
       BEGIN
@@ -73,9 +77,10 @@ AS
 
           SELECT
             @MailBody = @@SERVERNAME + @CRLF + 
-			N'Severity Level=' + @SupportSeverityLevelCd + @CRLF + 
-			@SSISDBPackageName + @CRLF + 
-			@SSISDBProjectName + '.' + @SSISDBPackageName + ', configured for SSIS Environment [' + @SSISEnvironmentName + '],  under SQL Agent job [' + @CallingJobName + '] failed with error message ["' + @ErrorMessage + '] The error was logged at ' + CAST(CONVERT(VARCHAR(30), @ErrorDateTime) AS NVARCHAR(MAX)) + '.'
+			N'Severity Level: ' + @SupportSeverityLevelCd + @CRLF + 
+			N'Package Name:' + @SSISDBPackageName + @CRLF + 
+			N'Number of Retry Attempts Remaining: ' + CAST(@RemainingRetryAttempts AS VARCHAR(10)) + @CRLF +
+			N'Description: ' + @SSISDBProjectName + '.' + @SSISDBPackageName + ', configured for SSIS Environment [' + @SSISEnvironmentName + '],  under SQL Agent job [' + @CallingJobName + '] failed with error message ["' + @ErrorMessage + '] The error was logged at ' + CAST(CONVERT(VARCHAR(30), @ErrorDateTime) AS NVARCHAR(MAX)) + '.'
 
           EXEC msdb.dbo.sp_send_dbmail @recipients = @ErrorEmailRecipients,@subject = 'Open Incident',@body = @MailBody,@importance = 'High'
 
@@ -86,7 +91,7 @@ AS
             [ETLBatchExecutionId] = @ETLBatchId
             AND ETLPackageId = @ETLPackageId
 
-          FETCH NEXT FROM PackageCursor INTO @SSISDBEventMessageId, @CallingJobName, @SSISEnvironmentName, @ETLPackageId, @SSISDBFolderName, @SSISDBProjectName, @SSISDBPackageName, @SupportSeverityLevelId, @SupportSeverityLevelCd, @ErrorDateTime, @ErrorMessage
+          FETCH NEXT FROM PackageCursor INTO @SSISDBEventMessageId, @CallingJobName, @SSISEnvironmentName, @ETLPackageId, @SSISDBFolderName, @SSISDBProjectName, @SSISDBPackageName, @SupportSeverityLevelId, @SupportSeverityLevelCd, @ErrorDateTime, @ErrorMessage, @RemainingRetryAttempts
       END
 
     CLOSE PackageCursor

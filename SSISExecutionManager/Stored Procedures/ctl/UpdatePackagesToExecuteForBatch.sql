@@ -2,6 +2,7 @@
 AS
     UPDATE [ctl].ETLPackage
     SET    ReadyForExecutionInd = 1
+          ,RemainingRetryAttempts = MaximumRetryAttempts
     FROM   [ctl].ETLPackage
            JOIN dbo.[func_GetETLPackagesForBatchExecution](@ETLBatchExecutionId) pkg
              ON [ctl].ETLPackage.ETLPackageId = pkg.ETLPackageId
