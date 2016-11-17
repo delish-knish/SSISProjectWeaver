@@ -196,6 +196,7 @@
     <Build Include="Stored Procedures\cfg\SaveETLBatchPhase_SQLCommand.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLPackage_SQLCommandTrigger.sql" />
     <Build Include="Stored Procedures\ops\SendRowLevelErrorsEmail.sql" />
+    <Build Include="Views\rpt\ETLBatchPhaseExecutions.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="References\SSISDB.dacpac" />

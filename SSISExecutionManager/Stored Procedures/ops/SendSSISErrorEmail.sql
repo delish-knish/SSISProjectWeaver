@@ -33,7 +33,7 @@ AS
           SET @EmailBody = @HTMLTable
       END
     ELSE
-      SET @EmailBody = N'<p>' + @EmailBodyHeader + '</p><b>No error messages available.<b>';
+      SET @EmailBody = N'<p>' + @EmailBodyHeader + '</p><b>No errors found.<b>';
 
 
     EXEC msdb.dbo.sp_send_dbmail @recipients = @EmailRecipients,@subject = @EmailSubject,@body = @EmailBody,@body_format = 'HTML',@importance = 'High';

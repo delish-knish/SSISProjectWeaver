@@ -21,7 +21,7 @@ AS
                           FROM
                             [dbo].[func_GetETLPackageExecutionStatusesFromSSISDB] (@SSISDBExecutionId)
                           WHERE
-                           etlpackageid = @ETLPackageId)
+                           ETLPackageId = @ETLPackageId)
 
       RETURN @ReturnValue
   END 

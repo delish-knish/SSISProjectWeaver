@@ -7,13 +7,13 @@
   DTS:CreatorName=""
   DTS:DTSID="{F5BD8504-B980-43D1-9332-2E03D5EAC70F}"
   DTS:ExecutableType="SSIS.Package.3"
-  DTS:LastModifiedProductVersion="13.0.1601.5"
+  DTS:LastModifiedProductVersion="13.0.2164.0"
   DTS:LocaleID="1033"
   DTS:ObjectName="ProjectB_Extract1"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
   DTS:VersionBuild="9"
-  DTS:VersionGUID="{B9CED730-BB90-4005-8EC0-6C673784E59F}">
+  DTS:VersionGUID="{FCDCD68D-BEEE-4DDF-946F-5344439B1FF4}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">6</DTS:Property>
   <DTS:Variables />
