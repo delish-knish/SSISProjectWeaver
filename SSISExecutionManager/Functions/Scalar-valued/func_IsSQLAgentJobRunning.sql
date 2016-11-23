@@ -7,10 +7,10 @@ AS
       IF EXISTS(SELECT
                   job.[name]
                 FROM
-                  msdb.dbo.sysjobs_view job
-                  JOIN msdb.dbo.sysjobactivity activity
+                  msdb.dbo.sysjobs_view job WITH (NOLOCK)
+                  JOIN msdb.dbo.sysjobactivity activity WITH (NOLOCK)
                     ON job.job_id = activity.job_id
-                  JOIN msdb.dbo.syssessions sess
+                  JOIN msdb.dbo.syssessions sess WITH (NOLOCK)
                     ON sess.session_id = activity.session_id
                   JOIN (SELECT
                           MAX(agent_start_date) AS max_agent_start_date

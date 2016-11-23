@@ -12,7 +12,7 @@ AS
                  PARTITION BY [ETLBatchId]
                  ORDER BY StartDateTime DESC) rownum
           FROM
-            [ctl].[ETLBatchExecution]
+            [ctl].[ETLBatchExecution] WITH (NOLOCK)
           WHERE
            [ETLBatchId] = @ETLBatchId) t
        WHERE

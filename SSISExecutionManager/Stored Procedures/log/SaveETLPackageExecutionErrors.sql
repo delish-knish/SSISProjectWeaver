@@ -81,8 +81,8 @@ AS
 	--If a package that has a failure logged is still in a failed state then mark it as Ready For Execution and decrease the Remaining Retry Attempts by one
 	--ToDo: make this sql statement more straightforward
     UPDATE up
-    SET    RemainingRetryAttempts = IIF(IIF(pp.etlpackageid is not null, pp.RemainingRetryAttempts, p.RemainingRetryAttempts) > 0, IIF(pp.etlpackageid is not null, pp.RemainingRetryAttempts, p.RemainingRetryAttempts) - 1, 0)
-          ,ReadyForExecutionInd = IIF(IIF(pp.etlpackageid is not null, pp.RemainingRetryAttempts, p.RemainingRetryAttempts) > 0, 1, 0)
+    SET    RemainingRetryAttempts = IIF(IIF(pp.ETLPackageId is not null, pp.RemainingRetryAttempts, p.RemainingRetryAttempts) > 0, IIF(pp.ETLPackageId is not null, pp.RemainingRetryAttempts, p.RemainingRetryAttempts) - 1, 0)
+          ,ReadyForExecutionInd = IIF(IIF(pp.ETLPackageId is not null, pp.RemainingRetryAttempts, p.RemainingRetryAttempts) > 0, 1, 0)
     FROM   [log].[ETLPackageExecutionError] e
            JOIN ctl.ETLPackage p
              ON e.ETLPackageId = p.ETLPackageId
@@ -91,6 +91,7 @@ AS
 		   JOIN ctl.ETLPackage up ON up.ETLPackageId = ISNULL(pp.ETLPackageId, p.ETLPackageId)
     WHERE
       ETLBatchExecutionId = @ETLBatchExecutionId
+	  AND p.RemainingRetryAttempts > 0
       AND up.ETLPackageId = ISNULL(pp.ETLPackageId, s.ETLPackageId)
       AND s.ETLPackageExecutionStatusId = 1
 	  AND [dbo].[func_GetLastPackageExecutionStatus] (@ETLBatchExecutionId, ISNULL(pp.ETLPackageId, s.ETLPackageId)) <> 5 ;

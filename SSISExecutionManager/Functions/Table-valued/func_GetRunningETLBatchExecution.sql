@@ -11,7 +11,7 @@ AS
 		 ,ETLBatchId
 		 ,ETLBatchPhaseId
        FROM
-         ctl.[ETLBatchExecution]
+         ctl.[ETLBatchExecution] WITH (NOLOCK)
        WHERE
         DATEDIFF(MINUTE, StartDateTime, GETDATE()) <= @BatchStartedWithinMinutes
         AND EndDateTime IS NULL

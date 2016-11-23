@@ -18,14 +18,14 @@ AS
     ,ep.[EntryPointPackageInd]
     ,ep.[ReadyForExecutionInd] --entry point packages only
   FROM
-    ctl.[ETLBatchExecution] ebe
+    ctl.[ETLBatchExecution] ebe WITH (NOLOCK)
     CROSS APPLY [dbo].[func_GetETLPackagesForBatchExecution] (ebe.[ETLBatchExecutionId]) pkg
-	JOIN ctl.[ETLPackage] ep ON pkg.ETLPackageId = ep.ETLPackageId
-    JOIN ctl.[ETLBatch] eps
+	JOIN ctl.[ETLPackage] ep WITH (NOLOCK) ON pkg.ETLPackageId = ep.ETLPackageId
+    JOIN ctl.[ETLBatch] eps WITH (NOLOCK)
       ON ebe.[ETLBatchId] = eps.[ETLBatchId]
-    LEFT JOIN ref.ETLPackageExecutionStatus rpes
+    LEFT JOIN ref.ETLPackageExecutionStatus rpes WITH (NOLOCK)
            ON pkg.ETLPackageExecutionStatusId = rpes.ETLPackageExecutionStatusId
-    LEFT JOIN ref.ETLExecutionStatus rees 
+    LEFT JOIN ref.ETLExecutionStatus rees WITH (NOLOCK)
            ON pkg.ETLExecutionStatusId = rees.ETLExecutionStatusId
   ORDER  BY
 	pkg.PhaseExecutionOrderNo

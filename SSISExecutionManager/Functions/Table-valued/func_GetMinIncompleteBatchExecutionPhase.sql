@@ -7,13 +7,13 @@ RETURN(
 		,ebebp.PhaseExecutionOrderNo
 	FROM 
 		[dbo].[func_GetETLPackagesForBatchExecution] (@ETLBatchExecutionId) pkg
-		JOIN ctl.ETLBatch eb 
+		JOIN ctl.ETLBatch eb WITH (NOLOCK)
 		  ON pkg.ETLBatchId = eb.ETLBatchId
-		JOIN ctl.ETLBatch_ETLBatchPhase ebebp 
+		JOIN ctl.ETLBatch_ETLBatchPhase ebebp WITH (NOLOCK)
 		  ON eb.ETLBatchId = ebebp.ETLBatchId
-		JOIN ctl.ETLBatchPhase ebp 
+		JOIN ctl.ETLBatchPhase ebp WITH (NOLOCK)
 		  ON ebebp.ETLBatchPhaseId = ebp.ETLBatchPhaseId
-		JOIN ctl.ETLBatchPhase_ETLPackage ebpep 
+		JOIN ctl.ETLBatchPhase_ETLPackage ebpep WITH (NOLOCK)
 		  ON ebp.ETLBatchPhaseId = ebpep.ETLBatchPhaseId and ebpep.ETLPackageId = pkg.ETLPackageId
 	GROUP BY 
 		ebp.ETLBatchPhaseId

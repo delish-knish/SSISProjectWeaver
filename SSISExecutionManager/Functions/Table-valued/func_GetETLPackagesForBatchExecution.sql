@@ -35,8 +35,8 @@ AS
 							,ebpspep.ETLPackageId
 							,epeps.PhaseExecutionOrderNo
 						FROM
-							ctl.[ETLBatchPhase_ETLPackage] ebpspep 
-							JOIN ctl.[ETLBatch_ETLBatchPhase] epeps
+							ctl.[ETLBatchPhase_ETLPackage] ebpspep WITH (NOLOCK)
+							JOIN ctl.[ETLBatch_ETLBatchPhase] epeps WITH (NOLOCK)
 								ON ebpspep.[ETLBatchPhaseId] = epeps.ETLBatchPhaseId
 						WHERE
 							ebpspep.EnabledInd = 1

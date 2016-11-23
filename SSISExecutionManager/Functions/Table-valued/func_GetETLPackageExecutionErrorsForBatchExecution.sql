@@ -10,7 +10,7 @@ AS
          ,err.[ErrorDateTime]                            AS [ErrorDateTime]
          ,err.[ErrorMessage]                             AS [ErrorMessage]
        FROM
-         ctl.ETLBatchSSISDBExecutions ebe
+         ctl.ETLBatchSSISDBExecutions ebe WITH (NOLOCK)
          CROSS APPLY dbo.func_GetETLPackageExecutionErrorsFromSSISDB(ebe.SSISDBExecutionId) err
        WHERE
         ebe.[ETLBatchExecutionId] = @ETLBatchId) 

@@ -12,7 +12,7 @@ BEGIN
 	SELECT 
 		@ReturnValue = COUNT(*) 
 	FROM 
-		ctl.ETLBatchPhase_SQLCommand
+		ctl.ETLBatchPhase_SQLCommand WITH (NOLOCK)
 	WHERE
 		ETLBatchPhaseId = @ETLBatchPhaseId
 		AND (NULLIF(ExecuteAtBeginningOfPhaseInd, 0) = @ExecuteAtBeginningOfPhaseInd

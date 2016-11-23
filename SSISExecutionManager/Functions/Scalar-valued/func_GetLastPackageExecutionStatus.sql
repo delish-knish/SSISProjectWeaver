@@ -9,7 +9,7 @@ AS
       SELECT TOP 1
         @SSISDBExecutionId = [SSISDBExecutionId]
       FROM
-        [ctl].[ETLBatchSSISDBExecutions]
+        [ctl].[ETLBatchSSISDBExecutions] WITH (NOLOCK)
       WHERE
         [ETLBatchExecutionId] = @ETLBatchExecutionId
         AND ETLPackageId = @ETLPackageId

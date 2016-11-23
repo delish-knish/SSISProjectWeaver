@@ -8,10 +8,10 @@ AS
         (SELECT
            pkg.package_id
          FROM
-           [$(SSISDB)].catalog.packages pkg
-           JOIN [$(SSISDB)].catalog.projects prj
+           [$(SSISDB)].catalog.packages pkg WITH (NOLOCK)
+           JOIN [$(SSISDB)].catalog.projects prj WITH (NOLOCK)
              ON pkg.project_id = prj.project_id
-           JOIN [$(SSISDB)].catalog.folders fld
+           JOIN [$(SSISDB)].catalog.folders fld WITH (NOLOCK)
              ON prj.folder_id = fld.folder_id
          WHERE
           pkg.name = @SSISDBPackageName
