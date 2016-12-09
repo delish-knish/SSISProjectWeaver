@@ -6,7 +6,6 @@ AS
     ,ex.[ETLPackageId]
     ,ex.[ETLBatchId]
     ,eb.[CallingJobName]
-    --,eb.Periodicity
     ,ep.SSISDBProjectName
     ,ep.SSISDBPackageName
     ,ex.[StartDateTime] AS PackageStartDateTime
@@ -15,8 +14,9 @@ AS
     ,ex.[ErrorMessage]
   FROM
     [log].[ETLPackageExecution] ex
+	JOIN [ctl].[ETLBatchSSISDBExecutions] dbex ON ex.SSISDBExecutionId = dbex.SSISDBExecutionId
     JOIN [ctl].[ETLBatchExecution] eb
-      ON ex.ETLBatchId = eb.[ETLBatchExecutionId]
+      ON dbex.ETLBatchExecutionId = eb.[ETLBatchExecutionId]
     JOIN [ctl].ETLPackage ep
       ON ex.ETLPackageId = ep.ETLPackageId
     JOIN ref.ETLBatchStatus rbs

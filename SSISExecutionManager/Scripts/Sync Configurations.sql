@@ -15,5 +15,6 @@ WHEN NOT MATCHED BY TARGET THEN
           ,ConfigurationValue)
   VALUES (ConfigurationName
           ,ConfigurationValue)
-WHEN NOT MATCHED BY SOURCE THEN
-  DELETE; 
+--WHEN NOT MATCHED BY SOURCE THEN
+--  DELETE
+  ; 

@@ -12,7 +12,8 @@ AS
             @AverageExecutionTime INT,
             @EMailBody            VARCHAR(4000),
             @CRLF                 CHAR(2) = CHAR(13) + CHAR(10),
-            @ETLPackageRunTime    INT
+            @ETLPackageRunTime    INT,
+			@MinimumPackageRunTimeToIncl SMALLINT = 45
 
   BEGIN
       ---------------------------------------------------------------------------------
@@ -63,7 +64,7 @@ AS
                                        [log].ETLPackageExecutionLongRunning epelr)) a
         WHERE
           ( package_run_time > Average_Execution_Time_With_Lift )
-          AND ( package_run_time > 45/*Minutes*/ )
+          AND ( package_run_time > @MinimumPackageRunTimeToIncl )
 
       OPEN MY_CURSOR
 
@@ -76,7 +77,7 @@ AS
 					N'Severity Level=2' + @CRLF +
 					@SSISDBPackageName + ' has been running for ' + CONVERT(VARCHAR(4000), @ETLPackageRunTime) + ' minutes.  The average execution time is ' + CONVERT(VARCHAR(4000), @AverageExecutionTime) + ' minutes.  The execution event started at ' + CONVERT(VARCHAR(30), @StartTime) + '.'
 
-            EXEC msdb.dbo.sp_send_dbmail @recipients = @EmailRecipients,@subject = 'Open Incident',@body = @EMailBody
+            EXEC msdb.dbo.sp_send_dbmail @recipients = @EmailRecipients,@subject = 'Slow Running SSIS Package',@body = @EMailBody
 
             INSERT INTO [log].ETLPackageExecutionLongRunning
                         (SSISDBExecutionId

@@ -32,7 +32,7 @@
      CONSTRAINT [PK_ETLPackage] PRIMARY KEY CLUSTERED ([ETLPackageId] ASC),
      CONSTRAINT [FK_ETLPackage_EntryPointETLPackageId] FOREIGN KEY ([EntryPointETLPackageId]) REFERENCES [ctl].[ETLPackage] ([ETLPackageId]),
      CONSTRAINT [FK_ETLPackage_SupportSeverityLevel] FOREIGN KEY ([SupportSeverityLevelId]) REFERENCES [ref].[SupportSeverityLevel] ([SupportSeverityLevelId]),
-     CONSTRAINT [AK_ETLPackage_Folder_Project_Package] UNIQUE NONCLUSTERED ([SSISDBFolderName] ASC, [SSISDBProjectName] ASC, [SSISDBPackageName] ASC)
+     CONSTRAINT [AK_ETLPackage_SSISDBPackageName] UNIQUE NONCLUSTERED ([SSISDBPackageName] ASC) --ToDo: Needed to limit this to the package due to a possible bug related to joining on only package name and not on folder, project, and package.
   );
 
 GO

@@ -26,12 +26,15 @@ AS
           DELETE FROM [log].ETLPackageExecution
           WHERE  ETLPackageId = @ETLPackageId;
 
+		  DELETE FROM [log].ETLPackageExecutionError
+          WHERE  ETLPackageId = @ETLPackageId;
+
           DELETE FROM ctl.[ETLBatchPhase_ETLPackage]
           WHERE  ETLPackageId = @ETLPackageId;
 
           DELETE FROM ctl.[ETLPackage_SQLCommandTrigger]
           WHERE  ETLPackageId = @ETLPackageId;
-
+		  
           DELETE FROM ctl.ETLPackage
           WHERE  ETLPackageId = @ETLPackageId;
       END

@@ -165,7 +165,7 @@
     <None Include="Views\rpt\ETLBatchStatsForLatestBatch.sql" />
     <Build Include="Views\rpt\ETLPackageDependencies.sql" />
     <Build Include="Views\rpt\ETLPackageExecutionErrors.sql" />
-    <Build Include="Views\rpt\ETLPackageExecutionHistory.sql" />
+    <Build Include="Views\rpt\ETLPackageExecutions.sql" />
     <Build Include="Views\rpt\ETLPackageLongRunningNotifications.sql" />
     <Build Include="Views\rpt\ETLPackagesDisabled.sql" />
     <Build Include="Views\rpt\ETLBatchesETLBatchPhases.sql" />
@@ -198,6 +198,8 @@
     <Build Include="Stored Procedures\ops\SendRowLevelErrorsEmail.sql" />
     <Build Include="Views\rpt\ETLBatchPhaseExecutions.sql" />
     <Build Include="Stored Procedures\ops\SendCompleteBatchExecutionStatistics.sql" />
+    <None Include="Tables\ctl\DropCreateIndexesTable.sql" />
+    <None Include="Tables\ctl\ETLPackage_DropCreateIndexesTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="References\SSISDB.dacpac" />

@@ -39,7 +39,7 @@ AS
                  ,TotalETLPackageCount = ISNULL(source.TotalETLPackageCount, target.TotalETLPackageCount)
                  ,TotalRemainingETLPackageCount = ISNULL(source.TotalRemainingETLPackageCount, target.TotalRemainingETLPackageCount)
                  ,ETLBatchStatusId = ISNULL(source.ETLBatchStatusId, target.ETLBatchStatusId)
-				 ,ETLBatchPhaseId = ISNULL(source.ETLBatchPhaseId, target.ETLBatchPhaseId)
+				 --,ETLBatchPhaseId = ISNULL(source.ETLBatchPhaseId, target.ETLBatchPhaseId)
                  ,[LastUpdatedDate] = GETDATE()
                  ,[LastUpdatedUser] = SUSER_SNAME()
     WHEN NOT MATCHED THEN
@@ -53,7 +53,7 @@ AS
               ,TotalETLPackageCount
               ,TotalRemainingETLPackageCount
               ,ETLBatchStatusId
-			  ,ETLBatchPhaseId
+			  --,ETLBatchPhaseId
     )
       VALUES(source.SSISEnvironmentName
              ,source.CallingJobName
@@ -65,16 +65,16 @@ AS
              ,source.TotalETLPackageCount
              ,source.TotalRemainingETLPackageCount
              ,1 --Created/Ready: Always set to ready on insert
-			 ,source.ETLBatchPhaseId
+			 --,source.ETLBatchPhaseId
     );
 
     SET @ETLBatchExecutionId = ISNULL(@ETLBatchExecutionId, SCOPE_IDENTITY())
 
-	--TODO: Clean this up
+	/*TODO: Clean this up
 	IF SCOPE_IDENTITY() IS NOT NULL
 	BEGIN
 		DECLARE @NewETLBatchPhaseId INT = (SELECT ETLBatchPhaseId FROM dbo.func_GetMinIncompleteBatchExecutionPhase(@ETLBatchExecutionId));
-		UPDATE ctl.ETLBatchExecution SET ETLBatchPhaseId = @NewETLBatchPhaseId;
-	END
+		UPDATE ctl.ETLBatchExecution SET ETLBatchPhaseId = @NewETLBatchPhaseId WHERE ETLBatchExecutionId = @ETLBatchExecutionId;
+	END */
 
     RETURN 0 

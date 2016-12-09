@@ -7,6 +7,8 @@
 	 ,[ExecuteAtEndOfPhaseInd]			BIT CONSTRAINT [DF_ETLBatchPhase_SQLCommand_SQLCommand_ExecuteAtEndOfPhaseInd] DEFAULT (0) NOT NULL
      ,[FailBatchOnFailureInd]			BIT CONSTRAINT [DF_ETLBatchPhase_SQLCommand_SQLCommand_FailBatchOnFailureInd] DEFAULT (0) NOT NULL
 	 ,[ExecutionOrder]					SMALLINT CONSTRAINT [DF_ETLBatchPhase_SQLCommand_SQLCommand_ExecutionOrder] DEFAULT (0) NOT NULL
+     ,[EnabledInd]						BIT CONSTRAINT [DF_ETLBatchPhase_SQLCommand_EnabledInd] DEFAULT (0) NOT NULL
+	 ,[Comments]						VARCHAR (MAX) NULL
 	 ,[CreatedDate]						DATETIME2 (7) CONSTRAINT [DF_ETLBatchPhase_SQLCommand_SQLCommand_CreatedDate] DEFAULT (GETDATE()) NOT NULL
      ,[CreatedUser]						VARCHAR (50) CONSTRAINT [DF_ETLBatchPhase_SQLCommand_SQLCommand_CreatedUser] DEFAULT (SUSER_SNAME()) NOT NULL
      ,[LastUpdatedDate]					DATETIME2 (7) CONSTRAINT [DF_ETLBatchPhase_SQLCommand_LastUpdatedDate] DEFAULT (GETDATE()) NOT NULL

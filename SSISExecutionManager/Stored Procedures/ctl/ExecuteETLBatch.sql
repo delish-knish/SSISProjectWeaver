@@ -16,7 +16,7 @@ AS
     --Set up batch variables
     DECLARE @ETLBatchExecutionId				INT,
             @PreviousETLBatchExecutionStatusId	INT,
-			@PreviousETLBatchPhaseId			INT,
+			--@PreviousETLBatchPhaseId			INT,
 			@ETLBatchExecutionStatusId			INT = 0,
 			@ETLBatchPhaseId					INT;
 
@@ -35,11 +35,11 @@ AS
       SELECT
         @ETLBatchExecutionId = [ETLBatchExecutionId]
         ,@PreviousETLBatchExecutionStatusId = ETLBatchStatusId
-		,@PreviousETLBatchPhaseId = ETLBatchPhaseId
+		--,@PreviousETLBatchPhaseId = ETLBatchPhaseId
       FROM
         [dbo].[func_GetRunningETLBatchExecution] (@BatchStartedWithinMinutes, @CallingJobName) eb;
 
-	  SET @PreviousETLBatchPhaseId = ISNULL(@PreviousETLBatchPhaseId,-1);
+	  --SET @PreviousETLBatchPhaseId = ISNULL(@PreviousETLBatchPhaseId,-1);
 
       --The batch is already running
       IF @ETLBatchExecutionId IS NOT NULL
@@ -95,6 +95,7 @@ AS
         END --End: Create Batch
 
 	  --Run SQLCommands
+	  /*TODO: This is invalid because there could be multiple batch phases
 	  IF @PreviousETLBatchPhaseId <> @ETLBatchPhaseId
 	  BEGIN
 		DECLARE @SQLCommandCount SMALLINT;
@@ -133,7 +134,7 @@ AS
                         RETURN;
                     END
               END 
-	  END
+	  END */
 
       --The batch is in progress. Run all packages ready for execution.
       IF @ETLBatchExecutionId IS NOT NULL
