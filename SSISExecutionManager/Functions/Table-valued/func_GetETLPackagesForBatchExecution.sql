@@ -13,8 +13,7 @@ AS
                       pes.ETLExecutionStatusId,
                       pes.ETLPackageExecutionStatusId,
                       pes.SSISDBExecutionId,
-                      pes.MissingSSISDBExecutablesEntryInd,
-                      bp.PhaseExecutionOrderNo
+                      pes.MissingSSISDBExecutablesEntryInd
                FROM   [ctl].ETLPackage ep WITH (NOLOCK)
                       CROSS JOIN (SELECT [ETLBatchId],
                                          DayOfWeekName,
@@ -24,11 +23,10 @@ AS
                                   FROM   [ctl].[ETLBatchExecution] WITH (NOLOCK)
                                   WHERE  [ETLBatchExecutionId] = @ETLBatchExecutionId) eb
                       JOIN (SELECT epeps.[ETLBatchId],
-                                   ebpspep.ETLPackageId,
-                                   epeps.PhaseExecutionOrderNo
-                            FROM   ctl.[ETLBatchPhase_ETLPackage] ebpspep WITH (NOLOCK)
-                                   JOIN ctl.[ETLBatch_ETLBatchPhase] epeps WITH (NOLOCK)
-                                     ON ebpspep.[ETLBatchPhaseId] = epeps.ETLBatchPhaseId
+                                   ebpspep.ETLPackageId
+                            FROM   ctl.[ETLPackageGroup_ETLPackage] ebpspep WITH (NOLOCK)
+                                   JOIN ctl.[ETLBatch_ETLPackageGroup] epeps WITH (NOLOCK)
+                                     ON ebpspep.[ETLPackageGroupId] = epeps.[ETLPackageGroupId]
                             WHERE  ebpspep.EnabledInd = 1
                                    AND epeps.EnabledInd = 1) bp
                         ON ep.ETLPackageId = bp.ETLPackageId
@@ -78,7 +76,6 @@ AS
                              OR ExecuteFridayInd = Iif(eb.DayOfWeekName = 'Friday', 1, NULL)
                              OR ExecuteSaturdayInd = Iif(eb.DayOfWeekName = 'Saturday', 1, NULL) ))
       SELECT pkg.ETLBatchId                         AS ETLBatchId,
-             pkg.PhaseExecutionOrderNo              AS PhaseExecutionOrderNo,
              pkg.ETLPackageId                       AS ETLPackageId,
              pkg.StartDateTime                      AS StartDateTime,
              pkg.EndDateTime                        AS EndDateTime,

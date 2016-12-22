@@ -1,15 +1,14 @@
-﻿CREATE VIEW [rpt].[ETLBatchesETLBatchPhases]
+﻿CREATE VIEW [rpt].[ETLBatchesETLPackageGroups]
 AS
   SELECT
-    b.[ETLBatch_ETLBatchPhaseId]
+    b.[ETLBatch_ETLPackageGroup]
     ,b.[ETLBatchId]
     ,eps.[ETLBatchName]
-    ,b.[ETLBatchPhaseId]
-    ,ep.[ETLBatchPhase]
-	,b.[PhaseExecutionOrderNo]
+    ,b.[ETLPackageGroupId]
+    ,ep.[ETLPackageGroup]
   FROM
-    [ctl].[ETLBatch_ETLBatchPhase] b
+    [ctl].[ETLBatch_ETLPackageGroup] b
     JOIN ctl.[ETLBatch] eps
       ON b.[ETLBatchId] = eps.[ETLBatchId]
-    JOIN ctl.[ETLBatchPhase] ep
-      ON b.[ETLBatchPhaseId] = ep.[ETLBatchPhaseId] 
+    JOIN ctl.[ETLPackageGroup] ep
+      ON b.[ETLPackageGroupId] = ep.[ETLPackageGroupId] 

@@ -11,32 +11,32 @@ AS
     SET @tableHTML = N'<H1>' + 'Batch Id: ' + CAST(@ETLBatchExecutionId AS VARCHAR) + ' - ' + @ETLBatchName + '</H1>'
                      + N'<table cellspacing="0" style="border: 1px solid black;>'
                      + N'<tr style="border: 1px solid black;>
-                           <th style="border: 1px solid black;background-color: yellow;">Phase</th>
+                           <th style="border: 1px solid black;background-color: yellow;">Group</th>
 						   <th style="border: 1px solid black;background-color: yellow;">Start</th>
 						   <th style="border: 1px solid black;background-color: yellow;">End</th>
 						   <th style="border: 1px solid black;background-color: yellow;">Duration</th>
 						   <th style="border: 1px solid black;background-color: yellow;">Packages Executed</th>'
                      + CAST ( ( SELECT 
-									td = [ETLBatchPhase], '',
+									td = [ETLPackageGroup], '',
 									td = StartTime, '', 
 									td = EndTime, '' , 
 									td = Duration, '', 
 									td = [PackagesExecutedNo], ''
 								FROM ( 								
-									SELECT [ETLBatchPhase],
-										   Format([PhaseStartDateTime], 'MM/dd/yyyy h:mm tt', 'en-US')     AS StartTime,
-										   Format([PhaseEndDateTime], 'MM/dd/yyyy h:mm tt', 'en-US')       AS EndTime,
-										   IIF(PhaseExecutionDurationInMinutes > 59, CONCAT(Cast([PhaseExecutionDurationInMinutes] / 60 AS VARCHAR), 'h ', Cast([PhaseExecutionDurationInMinutes]%60 AS VARCHAR), 'm'), Concat(Cast([PhaseExecutionDurationInMinutes] AS VARCHAR), 'm')) AS Duration,
+									SELECT [ETLPackageGroup],
+										   Format([GroupStartDateTime], 'MM/dd/yyyy h:mm tt', 'en-US')     AS StartTime,
+										   Format([GroupEndDateTime], 'MM/dd/yyyy h:mm tt', 'en-US')       AS EndTime,
+										   IIF(GroupExecutionDurationInMinutes > 59, CONCAT(Cast([GroupExecutionDurationInMinutes] / 60 AS VARCHAR), 'h ', Cast([GroupExecutionDurationInMinutes]%60 AS VARCHAR), 'm'), Concat(Cast([GroupExecutionDurationInMinutes] AS VARCHAR), 'm')) AS Duration,
 										   [PackagesExecutedNo]
-									FROM   [rpt].[ETLBatchPhaseExecutions]
+									FROM   [rpt].[ETLPackageGroupExecutions]
 									WHERE  ETLBatchExecutionId = @ETLBatchExecutionId
 									UNION ALL
-									SELECT 'Total' AS [ETLBatchPhase],
-										   Format(Min([PhaseStartDateTime]), 'MM/dd/yyyy h:mm tt', 'en-US')                                                                            AS StartTime,
-										   Format(Max([PhaseEndDateTime]), 'MM/dd/yyyy h:mm tt', 'en-US')                                                                              AS EndTime,
-										   Concat(Cast(DATEDIFF(MINUTE,Min([PhaseStartDateTime]),MAX([PhaseEndDateTime])) / 60 AS VARCHAR), 'h ', Cast(DATEDIFF(MINUTE,Min([PhaseStartDateTime]),MAX([PhaseEndDateTime]))%60 AS VARCHAR), 'm') AS Duration,
+									SELECT 'Total' AS [ETLPackageGroup],
+										   Format(Min([GroupStartDateTime]), 'MM/dd/yyyy h:mm tt', 'en-US')                                                                            AS StartTime,
+										   Format(Max([GroupEndDateTime]), 'MM/dd/yyyy h:mm tt', 'en-US')                                                                              AS EndTime,
+										   Concat(Cast(DATEDIFF(MINUTE,Min([GroupStartDateTime]),MAX([GroupEndDateTime])) / 60 AS VARCHAR), 'h ', Cast(DATEDIFF(MINUTE,Min([GroupStartDateTime]),MAX([GroupEndDateTime]))%60 AS VARCHAR), 'm') AS Duration,
 										   Sum([PackagesExecutedNo])                                                                                                                   AS [PackagesExecutedNo]
-									FROM   [rpt].[ETLBatchPhaseExecutions]
+									FROM   [rpt].[ETLPackageGroupExecutions]
 									WHERE  [ETLBatchExecutionId] = @ETLBatchExecutionId ) t 
 								FOR XML PATH('tr'), TYPE ) AS NVARCHAR(MAX) )
                      + N'</table>';

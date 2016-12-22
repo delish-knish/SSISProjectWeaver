@@ -1,7 +1,7 @@
-﻿CREATE PROCEDURE [ctl].[ExecuteETLBatchPhaseSQLCommands]	@ETLBatchExecutionId			INT,
-															@ETLBatchPhaseId				INT,
-															@ExecuteAtBeginningOfPhaseInd	BIT,
-															@ExecuteAtEndOfPhaseInd			BIT,
+﻿CREATE PROCEDURE [ctl].[ExecuteETLPackageGroupSQLCommands]	@ETLBatchExecutionId			INT,
+															@ETLPackageGroupId				INT,
+															@ExecuteAtBeginningOfGroupInd	BIT,
+															@ExecuteAtEndOfGroupInd			BIT,
 															@EndETLBatchExecutionInd		BIT OUT
 AS
     DECLARE @SQLCommand                               NVARCHAR(MAX),
@@ -20,12 +20,12 @@ AS
         ,FailBatchOnFailureInd
       FROM
         ctl.SQLCommand sc
-        JOIN ctl.ETLBatchPhase_SQLCommand ebpsc
+        JOIN ctl.[ETLPackageGroup_SQLCommand] ebpsc
           ON sc.SQLCommandId = ebpsc.SQLCommandId
       WHERE
-        ebpsc.ETLBatchPhaseId = @ETLBatchPhaseId
-        AND (NULLIF(ebpsc.ExecuteAtBeginningOfPhaseInd, 0) = @ExecuteAtBeginningOfPhaseInd
-				OR NULLIF(ebpsc.ExecuteAtEndOfPhaseInd, 0) = @ExecuteAtEndOfPhaseInd)
+        ebpsc.[ETLPackageGroupId] = @ETLPackageGroupId
+        AND (NULLIF(ebpsc.[ExecuteAtBeginningOfGroupInd], 0) = @ExecuteAtBeginningOfGroupInd
+				OR NULLIF(ebpsc.[ExecuteAtEndOfGroupInd], 0) = @ExecuteAtEndOfGroupInd)
       ORDER  BY
         ExecutionOrder;
 

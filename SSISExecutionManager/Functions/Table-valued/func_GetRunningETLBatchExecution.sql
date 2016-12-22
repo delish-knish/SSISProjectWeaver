@@ -9,7 +9,6 @@ AS
          ,DayOfWeekName
          ,StartDateTime
 		 ,ETLBatchId
-		 --,ETLBatchPhaseId
        FROM
          ctl.[ETLBatchExecution] WITH (NOLOCK)
        WHERE

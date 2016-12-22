@@ -16,9 +16,7 @@ AS
     --Set up batch variables
     DECLARE @ETLBatchExecutionId				INT,
             @PreviousETLBatchExecutionStatusId	INT,
-			--@PreviousETLBatchPhaseId			INT,
-			@ETLBatchExecutionStatusId			INT = 0,
-			@ETLBatchPhaseId					INT;
+			@ETLBatchExecutionStatusId			INT = 0;
 
 	--Set up Batch behavior variables
     DECLARE @EndETLBatchExecutionInd BIT = 0;
@@ -35,17 +33,14 @@ AS
       SELECT
         @ETLBatchExecutionId = [ETLBatchExecutionId]
         ,@PreviousETLBatchExecutionStatusId = ETLBatchStatusId
-		--,@PreviousETLBatchPhaseId = ETLBatchPhaseId
       FROM
         [dbo].[func_GetRunningETLBatchExecution] (@BatchStartedWithinMinutes, @CallingJobName) eb;
-
-	  --SET @PreviousETLBatchPhaseId = ISNULL(@PreviousETLBatchPhaseId,-1);
 
       --The batch is already running
       IF @ETLBatchExecutionId IS NOT NULL
         BEGIN
             --Update the batch with statuses that have changed since the last execution of this proc
-            EXEC [ctl].[UpdateETLBatchStatus] @ETLBatchExecutionId = @ETLBatchExecutionId,@ETLBatchExecutionStatusId = @ETLBatchExecutionStatusId OUT, @ETLBatchPhaseId = @ETLBatchPhaseId OUT;
+            EXEC [ctl].[UpdateETLBatchStatus] @ETLBatchExecutionId = @ETLBatchExecutionId,@ETLBatchExecutionStatusId = @ETLBatchExecutionStatusId OUT;
 
             --Log any errors found in the SSISDB
             DECLARE @ErrorsRequiringNotificationCount INT,
@@ -83,9 +78,6 @@ AS
 			--Seed the ETLBatchExecution table
             EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId OUT,@SSISEnvironmentName = @SSISEnvironmentName,@CallingJobName = @CallingJobName,@ETLBatchId = @ETLBatchId,@StartDateTime = @CurrentDateTime,@EndDateTime = NULL,@ETLBatchStatusId = 1;
 
-            --Set ETLBatchPhaseId
-			SET @ETLBatchPhaseId = (SELECT ETLBatchPhaseId FROM dbo.func_GetMinIncompleteBatchExecutionPhase(@ETLBatchExecutionId));
-			
             SET @EventDescription = 'Batch created';
 
             EXEC [log].InsertETLBatchEvent 1,@ETLBatchExecutionId,NULL,@EventDescription;
@@ -95,17 +87,17 @@ AS
         END --End: Create Batch
 
 	  --Run SQLCommands
-	  /*TODO: This is invalid because there could be multiple batch phases
-	  IF @PreviousETLBatchPhaseId <> @ETLBatchPhaseId
+	  /*TODO: This is invalid because there could be multiple batch pha$es
+	  IF @PreviousETLBatchPha$eId <> @ETLBatchPha$eId
 	  BEGIN
 		DECLARE @SQLCommandCount SMALLINT;
-		--If there are "end" SQLCommands for this phase then execute them
-		SET @SQLCommandCount = [dbo].[func_GetSQLCommandCountForETLBatchPhase](@PreviousETLBatchPhaseId, NULL, 1);
+		--If there are "end" SQLCommands for this pha$e then execute them
+		SET @SQLCommandCount = [dbo].[func_GetSQLCommandCountForETLBatchPha$e](@PreviousETLBatchPha$eId, NULL, 1);
 		IF @SQLCommandCount > 0
               BEGIN
-                  EXEC [ctl].[ExecuteETLBatchPhaseSQLCommands] @ETLBatchExecutionId,@PreviousETLBatchPhaseId,NULL,1,@EndETLBatchExecutionInd OUT;
+                  EXEC [ctl].[ExecuteETLBatchPha$eSQLCommands] @ETLBatchExecutionId,@PreviousETLBatchPha$eId,NULL,1,@EndETLBatchExecutionInd OUT;
 
-                  SET @EventDescription = 'Executing end of [' + [dbo].[func_GetETLBatchPhaseName](@PreviousETLBatchPhaseId) + '] Phase SQL Commands';
+                  SET @EventDescription = 'Executing end of [' + [dbo].[func_GetETLBatchPha$eName](@PreviousETLBatchPha$eId) + '] Pha$e SQL Commands';
 
                   EXEC [log].InsertETLBatchEvent 16,@ETLBatchExecutionId,NULL,@EventDescription;
 
@@ -117,13 +109,13 @@ AS
                     END
               END 
 
-		--If there are "begin" SQLCommands for this phase then execute them
-		SET @SQLCommandCount = [dbo].[func_GetSQLCommandCountForETLBatchPhase](@ETLBatchPhaseId, 1, NULL);
+		--If there are "begin" SQLCommands for this pha$e then execute them
+		SET @SQLCommandCount = [dbo].[func_GetSQLCommandCountForETLBatchPha$e](@ETLBatchPha$eId, 1, NULL);
 		IF @SQLCommandCount > 0
               BEGIN
-                  EXEC [ctl].[ExecuteETLBatchPhaseSQLCommands] @ETLBatchExecutionId,@ETLBatchPhaseId,NULL,1,@EndETLBatchExecutionInd OUT;
+                  EXEC [ctl].[ExecuteETLBatchPha$eSQLCommands] @ETLBatchExecutionId,@ETLBatchPha$eId,NULL,1,@EndETLBatchExecutionInd OUT;
 
-                  SET @EventDescription = 'Executing begin of [' + [dbo].[func_GetETLBatchPhaseName](@ETLBatchPhaseId) + '] Phase SQL Commands';
+                  SET @EventDescription = 'Executing begin of [' + [dbo].[func_GetETLBatchPha$eName](@ETLBatchPha$eId) + '] Pha$e SQL Commands';
 
                   EXEC [log].InsertETLBatchEvent 16,@ETLBatchExecutionId,NULL,@EventDescription;
 

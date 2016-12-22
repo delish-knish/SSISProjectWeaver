@@ -1,14 +1,14 @@
-﻿CREATE VIEW [rpt].[ETLBatchPhasesETLPackages]
+﻿CREATE VIEW [rpt].[ETLPackageGroupETLPackages]
 AS
   SELECT
-    b.[ETLBatchPhaseId]
-	,ebp.ETLBatchPhase
+    b.[ETLPackageGroupId]
+	,ebp.[ETLPackageGroup]
 	,b.ETLPackageId
     ,ep.SSISDBPackageName
   FROM
-    [ctl].[ETLBatchPhase_ETLPackage] b
-    JOIN ctl.[ETLBatchPhase] ebp
-      ON b.[ETLBatchPhaseId] = ebp.[ETLBatchPhaseId] 
+    [ctl].[ETLPackageGroup_ETLPackage] b
+    JOIN ctl.[ETLPackageGroup] ebp
+      ON b.[ETLPackageGroupId] = ebp.[ETLPackageGroupId] 
 	JOIN ctl.ETLPackage ep
 	  ON b.ETLPackageId = ep.ETLPackageId
 

@@ -15,12 +15,13 @@ AS
            ON bp.ETLPackageId = ep.ETLPackageId
 		 JOIN ctl.ETLBatch eb WITH (NOLOCK)
 		   ON bp.ETLBatchId = eb.ETLBatchId
-		 JOIN ctl.ETLBatch_ETLBatchPhase ebebp WITH (NOLOCK) 
+		 JOIN ctl.[ETLBatch_ETLPackageGroup] ebebp WITH (NOLOCK) 
 		   ON eb.ETLBatchId = ebebp.ETLBatchId
-		 JOIN ctl.ETLBatchPhase_ETLPackage ebpep WITH (NOLOCK)
-		   ON ebebp.ETLBatchPhaseId = ebpep.ETLBatchPhaseId
+		 JOIN ctl.[ETLPackageGroup_ETLPackage] ebpep WITH (NOLOCK)
+		   ON ebebp.[ETLPackageGroupId] = ebpep.[ETLPackageGroupId]
 				AND ep.ETLPackageId = ebpep.ETLPackageId 
-		 CROSS APPLY [dbo].[func_GetMinIncompleteBatchExecutionPhase] (@ETLBatchExecutionId) mp
+		 --CROSS APPLY [dbo].[func_GetMinIncompleteBatchExecutionPhase] (@ETLBatchExecutionId) mp
+		 --CHECK PAKAGE GROUP DEPENDENCIES
 			
        WHERE
         ( ep.EntryPointPackageInd = 1
@@ -28,5 +29,6 @@ AS
         AND ep.ReadyForExecutionInd = 1
         AND ( bp.DependenciesNotMetCount = 0
                OR ep.IgnoreDependenciesInd = 1 ) --All dependencies met or we are going to ignore them
-		AND ebebp.PhaseExecutionOrderNo = mp.PhaseExecutionOrderNo --get packages from the minimum incomplete phase(s)   	   
+		--AND ebebp.PhaseExecutionOrderNo = mp.PhaseExecutionOrderNo --get packages from the minimum incomplete phase(s)   	   
+		--CHECK PAKAGE GROUP DEPENDENCIES
 		) 

@@ -8,7 +8,6 @@
      ,[EndDateTime]                                       DATETIME2 NULL
      ,[ExecutionDurationInMinutes] AS DATEDIFF(MINUTE, StartDateTime, EndDateTime)
      ,[DayOfWeekName] AS DATENAME (WEEKDAY, [StartDateTime])
-	 --,[ETLBatchPhaseId]									  INT NULL
      ,[ETLBatchStatusId]                                  INT NULL
      ,[TotalEntryPointPackageCount]                       SMALLINT NULL
      ,[TotalRemainingEntryPointPackageCount]              SMALLINT NULL
@@ -20,11 +19,10 @@
      ,[LastUpdatedUser]                                   VARCHAR (50) CONSTRAINT [DF_ETLBatchExecution_LastUpdatedUser] DEFAULT (SUSER_SNAME()) NOT NULL,
      CONSTRAINT [PK_ETLBatchExecution] PRIMARY KEY ([ETLBatchExecutionId]),
      CONSTRAINT [FK_ETLBatchExecution_ETLBatchStatus] FOREIGN KEY (ETLBatchStatusId) REFERENCES ref.ETLBatchStatus([ETLBatchStatusId]), 
-    CONSTRAINT [FK_ETLBatchExecution_ETLBatch] FOREIGN KEY ([ETLBatchId]) REFERENCES ctl.[ETLBatch]([ETLBatchId]), 
-    --CONSTRAINT [FK_ETLBatchExecution_ETLBatchPhase] FOREIGN KEY (ETLBatchPhaseId) REFERENCES ctl.ETLBatchPhase(ETLBatchPhaseId),
-  )
+    CONSTRAINT [FK_ETLBatchExecution_ETLBatch] FOREIGN KEY ([ETLBatchId]) REFERENCES ctl.[ETLBatch]([ETLBatchId])
+  );
 
 GO
 
 CREATE INDEX [IX_ETLBatch_ETLBatchStatusId]
-  ON [ctl].[ETLBatchExecution] (ETLBatchStatusId) 
+  ON [ctl].[ETLBatchExecution] (ETLBatchStatusId) ;

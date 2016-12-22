@@ -2,7 +2,6 @@
 AS
   SELECT ebe.[ETLBatchExecutionId],
                  eps.[ETLBatchName],
-                 pkg.PhaseExecutionOrderNo,
                  ep.[ETLPackageId],
                  pkg.SSISDBExecutionId,
                  ep.[SSISDBProjectName],

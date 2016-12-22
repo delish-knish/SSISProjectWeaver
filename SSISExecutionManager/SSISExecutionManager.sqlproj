@@ -100,9 +100,9 @@
     <Build Include="Functions\Table-valued\func_GetRunningETLBatchExecution.sql" />
     <None Include="Scripts\Populate Reference Data.sql" />
     <None Include="Scripts\Sync Configurations.sql" />
-    <Build Include="Stored Procedures\cfg\AddSSISDBProjectToETLBatchPhase.sql" />
+    <Build Include="Stored Procedures\cfg\AddSSISDBProjectToETLPackageGroup.sql" />
     <Build Include="Stored Procedures\cfg\DeleteETLPackage.sql" />
-    <Build Include="Stored Procedures\cfg\DeleteETLBatchPhase_ETLPackage.sql" />
+    <Build Include="Stored Procedures\cfg\DeleteETPackageGroup_ETLPackage.sql" />
     <Build Include="Stored Procedures\cfg\RemoveSSISDBProjecFromETLBatchPhase.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLPackage.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLPackage_ETLPackageDependency.sql" />
@@ -113,7 +113,7 @@
     <Build Include="Stored Procedures\ctl\ExecuteETLBatch.sql" />
     <Build Include="Stored Procedures\ctl\ExecuteETLPackage.sql" />
     <Build Include="Stored Procedures\ctl\ExecuteETLPackagesForBatchExecution.sql" />
-    <Build Include="Stored Procedures\ctl\ExecuteETLBatchPhaseSQLCommands.sql" />
+    <Build Include="Stored Procedures\ctl\ExecuteETLPackageGroupSQLCommands.sql" />
     <Build Include="Stored Procedures\ctl\InsertETLBatchSSISDBExecution.sql" />
     <Build Include="Stored Procedures\ctl\InsertUnhandledError.sql" />
     <Build Include="Stored Procedures\ctl\RestartETLPackagesForETLBatchExecution.sql" />
@@ -145,7 +145,7 @@
     <Build Include="Tables\ctl\ETLBatchExecution.sql" />
     <Build Include="Tables\ctl\ETLBatchSSISDBExecutions.sql" />
     <Build Include="Tables\ctl\ETLPackage.sql" />
-    <Build Include="Tables\ctl\ETLBatch_ETLBatchPhase.sql" />
+    <Build Include="Tables\ctl\ETLBatch_ETLPackageGroup.sql" />
     <Build Include="Tables\ctl\ETLPackage_SQLCommandTrigger.sql" />
     <Build Include="Tables\ctl\ETLPackage_ETLPackageDependency.sql" />
     <Build Include="Tables\ctl\ETLBatch.sql" />
@@ -172,44 +172,40 @@
     <Build Include="Views\rpt\ETLPackageExecutionStatuses.sql" />
     <Build Include="Views\rpt\ETLPackagesSQLCommandTriggers.sql" />
     <Build Include="Views\rpt\SSISDBErrorMessages.sql" />
-    <Build Include="Tables\ctl\ETLBatchPhase.sql" />
-    <Build Include="Tables\ctl\ETLBatchPhase_ETLPackage.sql" />
+    <Build Include="Tables\ctl\ETLPackageGroup.sql" />
+    <Build Include="Tables\ctl\ETLPackageGroup_ETLPackage.sql" />
     <Build Include="Views\rpt\ETLBatchPhasesETLPackages.sql" />
-    <Build Include="Tables\ctl\ETLBatchPhase_SQLCommand.sql" />
-    <Build Include="Functions\Table-valued\func_GetMinIncompleteBatchExecutionPhase.sql" />
-    <Build Include="Functions\Scalar-valued\func_GetSQLCommandCountForETLBatchPhase.sql" />
+    <Build Include="Tables\ctl\ETLPackageGroup_SQLCommand.sql" />
+    <None Include="Functions\Scalar-valued\func_GetSQLCommandCountForETLPackageGroup.sql" />
     <Build Include="Functions\Scalar-valued\func_GetETLBatchPhaseName.sql" />
     <None Include="Scripts\Sync ETLPackage Configurations.sql" />
     <Build Include="Stored Procedures\sqlcmd\SQLCommandTriggerExample.sql" />
     <Build Include="Tables\log\ETLPackageExecutionRowLevelError.sql" />
     <Build Include="Stored Procedures\log\InsertETLPackageExecutionRowLevelError.sql" />
     <Build Include="Stored Procedures\cfg\DeleteETLBatch.sql" />
-    <Build Include="Stored Procedures\cfg\DeleteETLBatch_ETLBatchPhase.sql" />
-    <Build Include="Stored Procedures\cfg\DeleteETLBatchPhase.sql" />
-    <Build Include="Stored Procedures\cfg\DeleteETLBatchPhase_SQLCommand.sql" />
+    <Build Include="Stored Procedures\cfg\DeleteETLBatch_ETLPackageGroup.sql" />
+    <Build Include="Stored Procedures\cfg\DeleteETLPackageGroup.sql" />
+    <Build Include="Stored Procedures\cfg\DeleteETLPackageGroup_SQLCommand.sql" />
     <Build Include="Stored Procedures\cfg\DeleteETLPackage_ETLPackageDependency.sql" />
     <Build Include="Stored Procedures\cfg\DeleteETLPackage_SQLCommandTrigger.sql" />
     <Build Include="Stored Procedures\cfg\DeleteSQLCommand.sql" />
-    <Build Include="Stored Procedures\cfg\SaveETLBatch_ETLBatchPhase.sql" />
-    <Build Include="Stored Procedures\cfg\SaveETLBatchPhase.sql" />
-    <Build Include="Stored Procedures\cfg\SaveETLBatchPhase_ETLPackage.sql" />
+    <Build Include="Stored Procedures\cfg\SaveETLBatch_ETLPackageGroup.sql" />
+    <Build Include="Stored Procedures\cfg\SaveETLPackageGroup.sql" />
+    <Build Include="Stored Procedures\cfg\SaveETLPackageGroup_ETLPackage.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLBatchPhase_SQLCommand.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLPackage_SQLCommandTrigger.sql" />
     <Build Include="Stored Procedures\ops\SendRowLevelErrorsEmail.sql" />
-    <Build Include="Views\rpt\ETLBatchPhaseExecutions.sql" />
+    <Build Include="Views\rpt\ETLPackageGroupExecutions.sql" />
     <Build Include="Stored Procedures\ops\SendCompleteBatchExecutionStatistics.sql" />
     <None Include="Tables\ctl\DropCreateIndexesTable.sql" />
     <None Include="Tables\ctl\ETLPackage_DropCreateIndexesTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="References\SSISDB.dacpac" />
-    <None Include="localhost.publish.xml" />
     <None Include="Scripts\Example 1 Setup\Create Example 1 SQL Agent Job.sql" />
     <None Include="Scripts\Example 1 Setup\Configure SSIS Catalog and Deploy Example1 Projects.sql" />
     <None Include="Scripts\Example 1 Setup\Populate Example1 Metadata.sql" />
     <None Include="Scripts\Example 1 Setup\Deploy Example1 SSIS Projects.bat" />
-    <None Include="AzurePOC.publish.xml" />
-    <None Include="TriCore POC.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />

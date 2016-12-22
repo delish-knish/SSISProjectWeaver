@@ -4,7 +4,6 @@ AS
     eb.[ETLBatchExecutionId]
     ,eb.[CallingJobName]
     ,eps.[ETLBatchName]
-    --,eb.Periodicity
     ,eb.DayOfWeekName
     ,eb.StartDateTime
     ,eb.EndDateTime
@@ -12,7 +11,6 @@ AS
          AND lb.StartDateTime > eb.StartDateTime, NULL, DATEDIFF(MINUTE, eb.StartDateTime, ISNULL(eb.EndDateTime, GETDATE()))) AS [ExecutionDurationInMinutes]
     ,IIF(eb.EndDateTime IS NULL
          AND lb.StartDateTime > eb.StartDateTime, 'Cancelled', rebs.ETLBatchStatus)                                            AS ETLBatchStatus
-    --,ebp.ETLBatchPhase
 	,eb.TotalEntryPointPackageCount
     ,eb.TotalRemainingEntryPointPackageCount
     ,eb.TotalETLPackageCount
@@ -24,8 +22,6 @@ AS
       ON eb.ETLBatchStatusId = rebs.ETLBatchStatusId
     JOIN ctl.[ETLBatch] eps
       ON eb.[ETLBatchId] = eps.[ETLBatchId]
-	--LEFT JOIN ctl.ETLBatchPhase ebp 
-	--  ON eb.ETLBatchPhaseId = ebp.ETLBatchPhaseId
     OUTER APPLY (SELECT TOP 1
                    b.[ETLBatchExecutionId]
                    ,b.StartDateTime

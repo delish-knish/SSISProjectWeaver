@@ -1,13 +1,13 @@
-﻿CREATE FUNCTION [dbo].[func_GetETLBatchPhaseName]
+﻿CREATE FUNCTION [dbo].[func_GetETLPackageGroupName]
 (
-	@ETLBatchPhaseId INT
+	@ETLPackageGroupId INT
 )
 RETURNS VARCHAR(50)
 AS
 BEGIN
 	DECLARE @ReturnValue VARCHAR(50);
 
-	SELECT @ReturnValue = [ETLBatchPhase] FROM ctl.ETLBatchPhase WHERE ETLBatchPhaseId = @ETLBatchPhaseId;
+	SELECT @ReturnValue = [ETLPackageGroup] FROM ctl.[ETLPackageGroup] WHERE [ETLPackageGroupId] = @ETLPackageGroupId;
 
 	RETURN @ReturnValue
 END

@@ -29,7 +29,7 @@ AS
 		  DELETE FROM [log].ETLPackageExecutionError
           WHERE  ETLPackageId = @ETLPackageId;
 
-          DELETE FROM ctl.[ETLBatchPhase_ETLPackage]
+          DELETE FROM ctl.[ETLPackageGroup_ETLPackage]
           WHERE  ETLPackageId = @ETLPackageId;
 
           DELETE FROM ctl.[ETLPackage_SQLCommandTrigger]

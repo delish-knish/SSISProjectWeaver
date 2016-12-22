@@ -1,13 +1,13 @@
-﻿CREATE PROCEDURE [cfg].[AddSSISDBProjectToETLBatchPhase] @SSISDBFolderName  VARCHAR(128),
+﻿CREATE PROCEDURE [cfg].[AddSSISDBProjectToETLPackageGroup] @SSISDBFolderName  VARCHAR(128),
                                                          @SSISDBProjectName VARCHAR(128),
-                                                         @ETLBatchPhaseId   INT
+                                                         @ETLPackageGroupId   INT
 AS
-    INSERT INTO [ctl].[ETLBatchPhase_ETLPackage]
+    INSERT INTO [ctl].[ETLPackageGroup_ETLPackage]
                 (ETLPackageId
-                 ,[ETLBatchPhaseId])
+                 ,[ETLPackageGroupId])
     SELECT
       ep.ETLPackageId
-      ,@ETLBatchPhaseId
+      ,@ETLPackageGroupId
     FROM
       ctl.ETLPackage ep
     WHERE

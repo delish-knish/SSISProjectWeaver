@@ -1,35 +1,35 @@
-﻿CREATE PROCEDURE [cfg].[SaveETLBatchPhase_SQLCommand]	@ETLBatchPhaseId				INT,
+﻿CREATE PROCEDURE [cfg].[SaveETLPackageGroup_SQLCommand]	@ETLPackageGroupId				INT,
 														@SQLCommandId					INT,
-														@ExecuteAtBeginningOfPhaseInd	BIT,
-														@ExecuteAtEndOfPhaseInd			BIT,
+														@ExecuteAtBeginningOfGroupInd	BIT,
+														@ExecuteAtEndOfGroupInd			BIT,
 														@FailBatchOnFailureInd			BIT
 AS
 
-          MERGE [ctl].[ETLBatchPhase_SQLCommand] AS Target
+          MERGE [ctl].[ETLPackageGroup_SQLCommand] AS Target
           USING (SELECT
-                   @ETLBatchPhaseId
+                   @ETLPackageGroupId
                    ,@SQLCommandId
-				   ,@ExecuteAtBeginningOfPhaseInd
-				   ,@ExecuteAtEndOfPhaseInd
-				   ,@FailBatchOnFailureInd) AS source (ETLBatchPhaseId, SQLCommandId, ExecuteAtBeginningOfPhaseInd, ExecuteAtEndOfPhaseInd, FailBatchOnFailureInd)
-          ON target.ETLBatchPhaseId = source.ETLBatchPhaseId
+				   ,@ExecuteAtBeginningOfGroupInd
+				   ,@ExecuteAtEndOfGroupInd
+				   ,@FailBatchOnFailureInd) AS source (ETLPackageGroupId, SQLCommandId, ExecuteAtBeginningOfGroupInd, ExecuteAtEndOfGroupInd, FailBatchOnFailureInd)
+          ON target.[ETLPackageGroupId] = source.ETLPackageGroupId
              AND target.SQLCommandId = source.SQLCommandId
           WHEN Matched THEN
-            UPDATE SET ExecuteAtBeginningOfPhaseInd = source.ExecuteAtBeginningOfPhaseInd
-						,ExecuteAtEndOfPhaseInd = source.ExecuteAtEndOfPhaseInd
+            UPDATE SET [ExecuteAtBeginningOfGroupInd] = source.ExecuteAtBeginningOfGroupInd
+						,[ExecuteAtEndOfGroupInd] = source.ExecuteAtEndOfGroupInd
 						,FailBatchOnFailureInd = source.FailBatchOnFailureInd
                        ,[LastUpdatedDate] = GETDATE()
                        ,[LastUpdatedUser] = SUSER_SNAME()
           WHEN NOT MATCHED THEN
-            INSERT (ETLBatchPhaseId
+            INSERT ([ETLPackageGroupId]
                     ,SQLCommandId
-                    ,ExecuteAtBeginningOfPhaseInd
-					,ExecuteAtEndOfPhaseInd
+                    ,[ExecuteAtBeginningOfGroupInd]
+					,[ExecuteAtEndOfGroupInd]
 					,FailBatchOnFailureInd )
-            VALUES( source.ETLBatchPhaseId
+            VALUES( source.ETLPackageGroupId
                     ,source.SQLCommandId
-                    ,source.ExecuteAtBeginningOfPhaseInd
-					,source.ExecuteAtEndOfPhaseInd
+                    ,source.ExecuteAtBeginningOfGroupInd
+					,source.ExecuteAtEndOfGroupInd
 					,source.FailBatchOnFailureInd ); 
 
     RETURN 0 

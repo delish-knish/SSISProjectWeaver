@@ -1,13 +1,13 @@
-﻿CREATE PROCEDURE [cfg].[RemoveSSISDBProjecFromETLBatchPhase] @SSISDBFolderName  VARCHAR(128),
+﻿CREATE PROCEDURE [cfg].[RemoveSSISDBProjecFromETLPackageGroup] @SSISDBFolderName  VARCHAR(128),
                                                              @SSISDBProjectName VARCHAR(128),
-                                                             @ETLBatchPhaseId INT
+                                                             @ETLPackageGroupId INT
 AS
     DELETE epeps
-    FROM   [ctl].[ETLBatchPhase_ETLPackage] epeps
+    FROM   [ctl].[ETLPackageGroup_ETLPackage] epeps
            JOIN ctl.ETLPackage ep
              ON epeps.ETLPackageId = ep.ETLPackageId
     WHERE  SSISDBFolderName = @SSISDBFolderName
            AND SSISDBProjectName = @SSISDBProjectName
-           AND [ETLBatchPhaseId] = @ETLBatchPhaseId
+           AND [ETLPackageGroupId] = @ETLPackageGroupId
 
     RETURN 0 
