@@ -103,7 +103,7 @@
     <Build Include="Stored Procedures\cfg\AddSSISDBProjectToETLPackageGroup.sql" />
     <Build Include="Stored Procedures\cfg\DeleteETLPackage.sql" />
     <Build Include="Stored Procedures\cfg\DeleteETPackageGroup_ETLPackage.sql" />
-    <Build Include="Stored Procedures\cfg\RemoveSSISDBProjecFromETLBatchPhase.sql" />
+    <Build Include="Stored Procedures\cfg\RemoveSSISDBProjecFromETLBatchGroup.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLPackage.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLPackage_ETLPackageDependency.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLBatch.sql" />
@@ -199,6 +199,10 @@
     <Build Include="Stored Procedures\ops\SendCompleteBatchExecutionStatistics.sql" />
     <None Include="Tables\ctl\DropCreateIndexesTable.sql" />
     <None Include="Tables\ctl\ETLPackage_DropCreateIndexesTable.sql" />
+    <Build Include="Tables\ctl\ETLPackageGroup_ETLPackageGroupDependency.sql" />
+    <Build Include="Stored Procedures\cfg\DeleteETLPackageGroup_ETLPackageGroupDependency.sql" />
+    <Build Include="Stored Procedures\cfg\SaveETLPackageGroup_ETLPackageGroupDependency.sql" />
+    <Build Include="Views\rpt\ETLPackageGroupDependencies.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="References\SSISDB.dacpac" />
