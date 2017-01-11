@@ -81,6 +81,7 @@
     <Folder Include="Views" />
     <Folder Include="Views\rpt" />
     <Folder Include="Scripts\Example 1 Setup" />
+    <Folder Include="Stored Procedures\etl" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Functions\Scalar-valued\func_GetConfigurationValue.sql" />
@@ -203,6 +204,11 @@
     <Build Include="Stored Procedures\cfg\DeleteETLPackageGroup_ETLPackageGroupDependency.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLPackageGroup_ETLPackageGroupDependency.sql" />
     <Build Include="Views\rpt\ETLPackageGroupDependencies.sql" />
+    <Build Include="Stored Procedures\etl\DisableForeignKeyConstraints.sql" />
+    <Build Include="Security\Schemas\etl.sql" />
+    <Build Include="Stored Procedures\etl\EnableForeignKeyConstraints.sql" />
+    <Build Include="Stored Procedures\etl\InsertForeignKeyConstraintViolations.sql" />
+    <Build Include="Tables\log\ForeignKeyConstraintViolation.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="References\SSISDB.dacpac" />

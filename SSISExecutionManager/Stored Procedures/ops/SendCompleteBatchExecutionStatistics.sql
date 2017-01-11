@@ -27,7 +27,8 @@ AS
 										   Format([GroupStartDateTime], 'MM/dd/yyyy h:mm tt', 'en-US')     AS StartTime,
 										   Format([GroupEndDateTime], 'MM/dd/yyyy h:mm tt', 'en-US')       AS EndTime,
 										   IIF(GroupExecutionDurationInMinutes > 59, CONCAT(Cast([GroupExecutionDurationInMinutes] / 60 AS VARCHAR), 'h ', Cast([GroupExecutionDurationInMinutes]%60 AS VARCHAR), 'm'), Concat(Cast([GroupExecutionDurationInMinutes] AS VARCHAR), 'm')) AS Duration,
-										   [PackagesExecutedNo]
+										   [PackagesExecutedNo],
+										   [GroupStartDateTime] AS SortOrder
 									FROM   [rpt].[ETLPackageGroupExecutions]
 									WHERE  ETLBatchExecutionId = @ETLBatchExecutionId
 									UNION ALL
@@ -35,9 +36,11 @@ AS
 										   Format(Min([GroupStartDateTime]), 'MM/dd/yyyy h:mm tt', 'en-US')                                                                            AS StartTime,
 										   Format(Max([GroupEndDateTime]), 'MM/dd/yyyy h:mm tt', 'en-US')                                                                              AS EndTime,
 										   Concat(Cast(DATEDIFF(MINUTE,Min([GroupStartDateTime]),MAX([GroupEndDateTime])) / 60 AS VARCHAR), 'h ', Cast(DATEDIFF(MINUTE,Min([GroupStartDateTime]),MAX([GroupEndDateTime]))%60 AS VARCHAR), 'm') AS Duration,
-										   Sum([PackagesExecutedNo])                                                                                                                   AS [PackagesExecutedNo]
+										   Sum([PackagesExecutedNo])                                                                                                                   AS [PackagesExecutedNo],
+										   '9999-12-31 11:59:59pm' AS SortOrder
 									FROM   [rpt].[ETLPackageGroupExecutions]
-									WHERE  [ETLBatchExecutionId] = @ETLBatchExecutionId ) t 
+									WHERE  [ETLBatchExecutionId] = @ETLBatchExecutionId	 ) t 
+									ORDER BY SortOrder
 								FOR XML PATH('tr'), TYPE ) AS NVARCHAR(MAX) )
                      + N'</table>';
 
