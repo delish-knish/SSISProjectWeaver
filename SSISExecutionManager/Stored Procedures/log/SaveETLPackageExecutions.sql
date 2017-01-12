@@ -14,21 +14,25 @@ AS
 
     --Insert or update packages stats
     MERGE [log].ETLPackageExecution AS Target
+	--ToDo: Determine better way to handle multiple occurrences of the same package (possibly store count of executions)
     USING (SELECT
              ep.SSISDBExecutionId
              ,ep.ETLBatchId
              ,ep.ETLPackageId
-             ,ep.StartDateTime
-             ,ep.EndDateTime
+             ,MIN(ep.StartDateTime)
+             ,MAX(ep.EndDateTime)
              ,ep.ETLPackageExecutionStatusId
-             --,ep.ETLPackageFirstErrorMessage
              ,ep.MissingSSISDBExecutablesEntryInd
            FROM
              dbo.[func_GetETLPackagesForBatchExecution](@ETLBatchExecutionId) ep
            WHERE
-            ep.SSISDBExecutionId IS NOT NULL) AS source (SSISDBExecutionId, ETLBatchId, ETLPackageId, StartDateTime, EndDateTime, ETLPackageStatusId,
-			-- ETLPackageErrorMessage,
-			 MissingSSISDBExecutablesEntryInd)
+            ep.SSISDBExecutionId IS NOT NULL
+		GROUP BY
+			ep.SSISDBExecutionId
+             ,ep.ETLBatchId
+             ,ep.ETLPackageId
+             ,ep.ETLPackageExecutionStatusId
+             ,ep.MissingSSISDBExecutablesEntryInd) AS source (SSISDBExecutionId, ETLBatchId, ETLPackageId, StartDateTime, EndDateTime, ETLPackageStatusId, MissingSSISDBExecutablesEntryInd)
     ON target.SSISDBExecutionId = source.SSISDBExecutionId
        AND target.ETLPackageId = source.ETLPackageId
     WHEN Matched THEN
@@ -38,7 +42,6 @@ AS
                  ,StartDateTime = source.StartDateTime
                  ,EndDateTime = source.EndDateTime
                  ,ETLPackageExecutionStatusId = source.ETLPackageStatusId
-                 --,ErrorMessage = source.ETLPackageErrorMessage
 				 ,MissingSSISDBExecutablesEntryInd = source.MissingSSISDBExecutablesEntryInd
                  ,[LastUpdatedDate] = GETDATE()
                  ,[LastUpdatedUser] = SUSER_SNAME()
@@ -49,7 +52,6 @@ AS
               ,StartDateTime
               ,EndDateTime
               ,ETLPackageExecutionStatusId
-              --,ErrorMessage
 			  ,MissingSSISDBExecutablesEntryInd)
       VALUES(source.SSISDBExecutionId
              ,source.ETLBatchId
@@ -57,7 +59,6 @@ AS
              ,source.StartDateTime
              ,source.EndDateTime
              ,source. ETLPackageStatusId
-             --,source.ETLPackageErrorMessage
 			 ,source.MissingSSISDBExecutablesEntryInd);
 
     RETURN 0 

@@ -2,7 +2,7 @@
 <RptDataSource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="SSISExecutionManager">
   <ConnectionProperties>
     <Extension>SQL</Extension>
-    <ConnectString>Data Source=PSMWPUREDW02;Initial Catalog=SSISExecutionManager</ConnectString>
+    <ConnectString>Data Source=NSMWPUREDW01;Initial Catalog=SSISExecutionManager</ConnectString>
     <IntegratedSecurity>true</IntegratedSecurity>
   </ConnectionProperties>
   <DataSourceID>cc59614c-fcd0-4bee-a57c-e0deb1ebbe40</DataSourceID>
