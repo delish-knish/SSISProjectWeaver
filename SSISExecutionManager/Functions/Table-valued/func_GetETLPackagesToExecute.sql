@@ -19,16 +19,11 @@ AS
 		   ON eb.ETLBatchId = ebebp.ETLBatchId
 		 JOIN ctl.[ETLPackageGroup_ETLPackage] ebpep WITH (NOLOCK)
 		   ON ebebp.[ETLPackageGroupId] = ebpep.[ETLPackageGroupId]
-				AND ep.ETLPackageId = ebpep.ETLPackageId 
-		 --CROSS APPLY [dbo].[func_GetMinIncompleteBatchExecutionPhase] (@ETLBatchExecutionId) mp
-		 --CHECK PAKAGE GROUP DEPENDENCIES
-			
+				AND ep.ETLPackageId = ebpep.ETLPackageId 			
        WHERE
         ( ep.EntryPointPackageInd = 1
            OR ep.BypassEntryPointInd = 1 )
         AND ep.ReadyForExecutionInd = 1
         AND ( bp.DependenciesNotMetCount = 0
                OR ep.IgnoreDependenciesInd = 1 ) --All dependencies met or we are going to ignore them
-		--AND ebebp.PhaseExecutionOrderNo = mp.PhaseExecutionOrderNo --get packages from the minimum incomplete phase(s)   	   
-		--CHECK PAKAGE GROUP DEPENDENCIES
 		) 

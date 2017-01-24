@@ -130,7 +130,7 @@ ORDER BY
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>13in</Width>
+                  <Width>12.73958in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -195,7 +195,7 @@ ORDER BY
                               <TablixBody>
                                 <TablixColumns>
                                   <TablixColumn>
-                                    <Width>13in</Width>
+                                    <Width>12.73958in</Width>
                                   </TablixColumn>
                                 </TablixColumns>
                                 <TablixRows>
@@ -231,7 +231,7 @@ ORDER BY
                                                       <Width>2in</Width>
                                                     </TablixColumn>
                                                     <TablixColumn>
-                                                      <Width>2in</Width>
+                                                      <Width>1.73958in</Width>
                                                     </TablixColumn>
                                                   </TablixColumns>
                                                   <TablixRows>
@@ -841,7 +841,7 @@ ORDER BY
                                                                 <Actions>
                                                                   <Action>
                                                                     <Drillthrough>
-                                                                      <ReportName>=IIF(Fields!PackageExecutionStatus.Value = "Failed", "ETL Package Execution Errors", "ETL Package Execution Details")</ReportName>
+                                                                      <ReportName>=IIF(Fields!PackageExecutionStatus.Value = "Failed", "ETL Package Execution Errors", "ETL Package Execution Messages")</ReportName>
                                                                       <Parameters>
                                                                         <Parameter Name="SSISDBExecutionId">
                                                                           <Value>=Fields!SSISDBExecutionId.Value</Value>
@@ -865,6 +865,7 @@ ORDER BY
                                                                 <PaddingBottom>2pt</PaddingBottom>
                                                               </Style>
                                                             </Textbox>
+                                                            <rd:Selected>true</rd:Selected>
                                                           </CellContents>
                                                         </TablixCell>
                                                         <TablixCell>
@@ -941,7 +942,7 @@ ORDER BY
                                                 </TablixRowHierarchy>
                                                 <DataSetName>ETLPackageExecutionStatuses</DataSetName>
                                                 <Height>0.64in</Height>
-                                                <Width>13in</Width>
+                                                <Width>12.73958in</Width>
                                                 <Style>
                                                   <FontFamily />
                                                   <FontSize>9pt</FontSize>
@@ -989,7 +990,7 @@ ORDER BY
                               </PageBreak>
                               <Top>0.7625in</Top>
                               <Height>0.64in</Height>
-                              <Width>13in</Width>
+                              <Width>12.73958in</Width>
                               <ZIndex>1</ZIndex>
                               <Style>
                                 <FontFamily />
@@ -1069,7 +1070,7 @@ ORDER BY
               <BreakLocation>End</BreakLocation>
             </PageBreak>
             <Height>1.4025in</Height>
-            <Width>13in</Width>
+            <Width>12.73958in</Width>
             <Style>
               <FontSize>14pt</FontSize>
             </Style>
@@ -1078,7 +1079,7 @@ ORDER BY
         <Height>1.4025in</Height>
         <Style />
       </Body>
-      <Width>13in</Width>
+      <Width>12.73958in</Width>
       <Page>
         <PageHeight>8.5in</PageHeight>
         <PageWidth>11in</PageWidth>

@@ -23,6 +23,7 @@
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
+    <Recovery>SIMPLE</Recovery>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -209,6 +210,8 @@
     <Build Include="Stored Procedures\etl\EnableForeignKeyConstraints.sql" />
     <Build Include="Stored Procedures\etl\InsertForeignKeyConstraintViolations.sql" />
     <Build Include="Tables\log\ForeignKeyConstraintViolation.sql" />
+    <Build Include="Stored Procedures\cfg\ClearHistory.sql" />
+    <Build Include="Views\rpt\ETLPackageExecutableStatistics.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="References\SSISDB.dacpac" />

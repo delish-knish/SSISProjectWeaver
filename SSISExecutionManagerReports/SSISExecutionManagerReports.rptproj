@@ -22,20 +22,20 @@
       <FullPath>ETL Batch Executions.rdl</FullPath>
     </ProjectItem>
     <ProjectItem>
-      <Name>ETL Package Execution Status.rdl</Name>
-      <FullPath>ETL Package Execution Status.rdl</FullPath>
-    </ProjectItem>
-    <ProjectItem>
-      <Name>ETL Package Performance Chart.rdl</Name>
-      <FullPath>ETL Package Performance Chart.rdl</FullPath>
+      <Name>ETL Package Execution Messages.rdl</Name>
+      <FullPath>ETL Package Execution Messages.rdl</FullPath>
     </ProjectItem>
     <ProjectItem>
       <Name>ETL Package Execution Errors.rdl</Name>
       <FullPath>ETL Package Execution Errors.rdl</FullPath>
     </ProjectItem>
     <ProjectItem>
-      <Name>ETL Package Execution Details.rdl</Name>
-      <FullPath>ETL Package Execution Details.rdl</FullPath>
+      <Name>ETL Package Execution Status.rdl</Name>
+      <FullPath>ETL Package Execution Status.rdl</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>ETL Package Performance Chart.rdl</Name>
+      <FullPath>ETL Package Performance Chart.rdl</FullPath>
     </ProjectItem>
   </Reports>
   <Configurations>

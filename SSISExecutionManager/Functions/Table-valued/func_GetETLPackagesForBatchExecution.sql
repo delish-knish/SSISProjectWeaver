@@ -27,7 +27,7 @@ AS
                                [ctl].[ETLBatchExecution] WITH (NOLOCK)
                              WHERE
                               [ETLBatchExecutionId] = @ETLBatchExecutionId) eb
-                 JOIN (SELECT
+                 INNER HASH JOIN (SELECT
                          epeps.[ETLBatchId]
                         ,ebpspep.ETLPackageId
                        FROM
@@ -48,10 +48,10 @@ AS
                                   ,1              AS PriorityRank
                                  FROM
                                    [$(SSISDB)].catalog.executables e WITH (NOLOCK)
-                                   JOIN [$(SSISDB)].catalog.executable_statistics es WITH (NOLOCK)
+                                   INNER HASH JOIN [$(SSISDB)].catalog.executable_statistics es WITH (NOLOCK)
                                      ON e.executable_id = es.executable_id
                                         AND e.execution_id = es.execution_id
-                                   JOIN (SELECT
+                                   INNER HASH JOIN (SELECT
                                            [ETLBatchExecutionId]
                                           ,ETLPackageId
                                           ,MAX(SSISDBExecutionId) AS SSISDBExecutionId
@@ -71,7 +71,7 @@ AS
                                   ,2               AS PriorityRank
                                  FROM
                                    [$(SSISDB)].catalog.event_messages em WITH (NOLOCK)
-                                   JOIN (SELECT
+                                   INNER HASH JOIN (SELECT
                                            [ETLBatchExecutionId]
                                           ,ETLPackageId
                                           ,MAX(SSISDBExecutionId) AS SSISDBExecutionId
@@ -134,10 +134,7 @@ AS
                 ON pkg.EntryPointETLPackageId = prnt.ETLPackageId
          LEFT HASH JOIN (SELECT
                       d.ETLPackageId
-                     --,COUNT(DISTINCT d.DependedOnETLPackageId)                                  AS TotalDependencyCount
-                     --,SUM(Iif(Isnull(bep.ETLPackageExecutionStatusId, -1) IN (0, 2), 1, 0))     AS DependenciesMetCount
                      ,SUM(Iif(Isnull(bep.ETLPackageExecutionStatusId, -1) NOT IN (0, 2), 1, 0)) AS DependenciesNotMetCount
-                    --,SUM(Iif(Isnull(bep.ETLPackageExecutionStatusId, -1) IN (1, 4), 1, 0))     AS DependenciesFailedCount
                     FROM
                       [ctl].[ETLPackage_ETLPackageDependency] d WITH (NOLOCK)
                       JOIN pkg bep
@@ -147,10 +144,7 @@ AS
                 ON pkg.ETLPackageId = epd.ETLPackageId
          LEFT HASH JOIN (SELECT
                       d.ETLPackageId
-                     --,COUNT(DISTINCT d.DependedOnETLPackageId)                                  AS TotalDependencyCount
-                     --,SUM(Iif(Isnull(bep.ETLPackageExecutionStatusId, -1) IN (0, 2), 1, 0))     AS DependenciesMetCount
                      ,SUM(Iif(Isnull(bep.ETLPackageExecutionStatusId, -1) NOT IN (0, 2), 1, 0)) AS DependenciesNotMetCount
-                    --,SUM(Iif(Isnull(bep.ETLPackageExecutionStatusId, -1) IN (1, 4), 1, 0))     AS DependenciesFailedCount
                     FROM
                       [ctl].[ETLPackage_ETLPackageDependency] d WITH (NOLOCK)
                       JOIN pkg bep
@@ -161,10 +155,7 @@ AS
          LEFT HASH JOIN (SELECT
                       ep.ETLPackageId
 					  ,bbg.ETLBatchId
-                     --,COUNT(DISTINCT d.DependedOnETLPackageId)                                  AS TotalDependencyCount
-                     --,SUM(Iif(Isnull(bep.ETLPackageExecutionStatusId, -1) IN (0, 2), 1, 0))     AS DependenciesMetCount
                      ,SUM(Iif(Isnull(bep.ETLPackageExecutionStatusId, -1) NOT IN (0, 2), 1, 0)) AS DependenciesNotMetCount
-                    --,SUM(Iif(Isnull(bep.ETLPackageExecutionStatusId, -1) IN (1, 4), 1, 0))     AS DependenciesFailedCount
                     FROM
                       ctl.ETLPackage ep
                       JOIN [ctl].ETLPackageGroup_ETLPackage bg
