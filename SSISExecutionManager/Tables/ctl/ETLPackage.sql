@@ -15,6 +15,7 @@
     ,[IgnoreDependenciesInd]  BIT CONSTRAINT [DF_ETLPackage_IgnoreDependenciesInd] DEFAULT ((0)) NOT NULL
     ,[MaximumRetryAttempts]   INT CONSTRAINT [DF_ETLPackage_MaximumRetryAttempts] DEFAULT ((0)) NOT NULL
     ,[RemainingRetryAttempts] INT CONSTRAINT [DF_ETLPackage_RemainingRetryAttempts] DEFAULT ((0)) NOT NULL
+    ,[SSISDBLoggingLevelId]   INT NULL
     ,[ExecuteSundayInd]       BIT CONSTRAINT [DF_ETLPackage_ExecuteSundayInd] DEFAULT ((0)) NOT NULL
     ,[ExecuteMondayInd]       BIT CONSTRAINT [DF_ETLPackage_ExecuteMondayInd] DEFAULT ((0)) NOT NULL
     ,[ExecuteTuesdayInd]      BIT CONSTRAINT [DF_ETLPackage_ExecuteTuesdayInd] DEFAULT ((0)) NOT NULL
@@ -33,6 +34,8 @@
      CONSTRAINT [FK_ETLPackage_EntryPointETLPackageId] FOREIGN KEY ([EntryPointETLPackageId]) REFERENCES [ctl].[ETLPackage] ([ETLPackageId]),
      CONSTRAINT [FK_ETLPackage_SupportSeverityLevel] FOREIGN KEY ([SupportSeverityLevelId]) REFERENCES [ref].[SupportSeverityLevel] ([SupportSeverityLevelId]),
      CONSTRAINT [AK_ETLPackage_SSISDBPackageName] UNIQUE NONCLUSTERED ([SSISDBPackageName] ASC) --ToDo: Needed to limit this to the package due to a possible bug related to joining on only package name and not on folder, project, and package.
+     ,
+     CONSTRAINT [FK_ETLPackage_SSISDBLoggingLevel] FOREIGN KEY (SSISDBLoggingLevelId) REFERENCES ref.SSISDBLoggingLevel(SSISDBLoggingLevelId)
   );
 
 GO

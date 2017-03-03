@@ -212,6 +212,7 @@
     <Build Include="Tables\log\ForeignKeyConstraintViolation.sql" />
     <Build Include="Stored Procedures\cfg\ClearHistory.sql" />
     <Build Include="Views\rpt\ETLPackageExecutableStatistics.sql" />
+    <Build Include="Tables\ref\SSISDBLoggingLevel.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="References\SSISDB.dacpac" />

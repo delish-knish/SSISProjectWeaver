@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [ctl].[ExecuteETLPackage] @ETLBatchId          INT,
                                            @ETLPackageId        INT,
-                                           --@Periodicity              NCHAR(2) = NULL,
                                            @SSISEnvironmentName VARCHAR(128) = NULL,
                                            @SSISExecutionId     BIGINT = NULL OUT
 AS
@@ -8,6 +7,7 @@ AS
             @SSISDBProjectName             NVARCHAR(128),
             @SSISDBFolderName              NVARCHAR(128),
             @Use32BitDtExecInd             BIT,
+			@SSISDBLoggingLevelId		INT,
             @EnvironmentReferenceId        INT = NULL
 
     --Get the package path values required by the create_execution stored procedure
@@ -17,6 +17,7 @@ AS
       ,@SSISDBFolderName = ep.SSISDBFolderName
       ,@Use32BitDtExecInd = ep.Use32BitDtExecInd
       ,@EnvironmentReferenceId = env.reference_id
+	  ,@SSISDBLoggingLevelId = ISNULL(ep.SSISDBLoggingLevelId, 1)
     FROM
       [ctl].ETLPackage ep
       JOIN [$(SSISDB)].[catalog].[packages] pkg
@@ -62,6 +63,13 @@ AS
                                                                      @parameter_name=N'Periodicity',--Parameter name
                                                                      @parameter_value= @PeriodicityParam
       END */
+
+
+    --Set the logging level
+	EXEC [$(SSISDB)].[catalog].[set_execution_parameter_value] @ExecutionId,-- The execution_id value we received by calling [create_execution]
+                                                                     @object_type=50,--30 is Package Parameters, you can also use 20 for Project parameters or 50 for Environment
+                                                                     @parameter_name=N'LOGGING_LEVEL',--Parameter name
+                                                                     @parameter_value= @SSISDBLoggingLevelId
 
     --Execute the package
     EXEC [$(SSISDB)].[catalog].[start_execution] @ExecutionId

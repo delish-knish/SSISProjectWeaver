@@ -8,6 +8,7 @@
                                         @BypassEntryPointInd         BIT,
                                         @IgnoreDependenciesInd       BIT,
                                         @MaximumRetryAttempts        INT,
+										@SSISDBLoggingLevelId		 INT,
                                         @ExecuteSundayInd            BIT,
                                         @ExecuteMondayInd            BIT,
                                         @ExecuteTuesdayInd           BIT,
@@ -80,6 +81,7 @@ AS
                   ,@BypassEntryPointInd
                   ,@IgnoreDependenciesInd
                   ,@MaximumRetryAttempts
+				  ,@SSISDBLoggingLevelId
                   ,@ExecuteSundayInd
                   ,@ExecuteMondayInd
                   ,@ExecuteTuesdayInd
@@ -88,7 +90,7 @@ AS
                   ,@ExecuteFridayInd
                   ,@ExecuteSaturdayInd
                   ,@Use32BitDtExecInd
-                  ,@SupportSeverityLevelId) AS source ( SSISDBPackageName, SSISDBProjectName, SSISDBFolderName, Comments, EntryPointETLPackageId, EnabledInd, ReadyForExecutionInd, BypassEntryPointInd, IgnoreDependenciesInd, MaximumRetryAttempts, ExecuteSundayInd, ExecuteMondayInd, ExecuteTuesdayInd, ExecuteWednesdayInd, ExecuteThursdayInd, ExecuteFridayInd, ExecuteSaturdayInd, Use32BitDtExecInd, SupportSeverityLevelId )
+                  ,@SupportSeverityLevelId) AS source ( SSISDBPackageName, SSISDBProjectName, SSISDBFolderName, Comments, EntryPointETLPackageId, EnabledInd, ReadyForExecutionInd, BypassEntryPointInd, IgnoreDependenciesInd, MaximumRetryAttempts, SSISDBLoggingLevelId, ExecuteSundayInd, ExecuteMondayInd, ExecuteTuesdayInd, ExecuteWednesdayInd, ExecuteThursdayInd, ExecuteFridayInd, ExecuteSaturdayInd, Use32BitDtExecInd, SupportSeverityLevelId )
           ON target.SSISDBPackageName = source.SSISDBPackageName
              AND target.SSISDBProjectName = source.SSISDBProjectName
              AND target.SSISDBFolderName = source.SSISDBFolderName
@@ -103,6 +105,7 @@ AS
                       ,BypassEntryPointInd = source.BypassEntryPointInd
                       ,IgnoreDependenciesInd = source.IgnoreDependenciesInd
                       ,MaximumRetryAttempts = source.MaximumRetryAttempts
+					  ,SSISDBLoggingLevelId = source.SSISDBLoggingLevelId
                       ,ExecuteSundayInd = source.ExecuteSundayInd
                       ,ExecuteMondayInd = source.ExecuteMondayInd
                       ,ExecuteTuesdayInd = source.ExecuteTuesdayInd
@@ -125,6 +128,7 @@ AS
                     ,BypassEntryPointInd
                     ,IgnoreDependenciesInd
                     ,MaximumRetryAttempts
+					,SSISDBLoggingLevelId
                     ,ExecuteSundayInd
                     ,ExecuteMondayInd
                     ,ExecuteTuesdayInd
@@ -144,6 +148,7 @@ AS
                    ,source.BypassEntryPointInd
                    ,source.IgnoreDependenciesInd
                    ,source.MaximumRetryAttempts
+				   ,source.SSISDBLoggingLevelId
                    ,source.ExecuteSundayInd
                    ,source.ExecuteMondayInd
                    ,source.ExecuteTuesdayInd

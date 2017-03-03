@@ -310,38 +310,38 @@ WHEN NOT MATCHED BY TARGET THEN
           ,Comments); 
 SET IDENTITY_INSERT ctl.ETLPackage OFF;
 
------------------------------------------------------------------------------------
-/*
+-------------------------------------------------------------------------------------
+
 IF EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.TABLES
-                  WHERE TABLE_NAME = N'Sync_ETLPackageSet')
-      DROP TABLE Sync_ETLPackageSet
+                  WHERE TABLE_NAME = N'Sync_SSISDBLoggingLevel')
+      DROP TABLE Sync_SSISDBLoggingLevel
       
-CREATE TABLE Sync_ETLPackageSet (
-    [ETLPackageSetId] INT NOT NULL 
-     ,[ETLPackageSetName]  VARCHAR(250) NULL
-	 ,[ETLPackageSetDescription] VARCHAR(250))
+CREATE TABLE Sync_SSISDBLoggingLevel (
+    [SSISDBLoggingLevelId] INT NOT NULL 
+     ,[SSISDBLoggingLevel]  VARCHAR(50) NULL)
 
-INSERT Sync_ETLPackageSet (
-     [ETLPackageSetId]
-	 ,[ETLPackageSetName] 
-	 ,[ETLPackageSetDescription])
+INSERT Sync_SSISDBLoggingLevel (
+     [SSISDBLoggingLevelId]
+	 ,[SSISDBLoggingLevel] )
 VALUES 
-	(0,	'Placeholder', 'Placeholder for pre-Package Set enhancement')
+	(0,	'None'),
+	(1, 'Basic'),
+	(2, 'Performance'),
+	(3, 'Verbose'),
+	(4, 'Runtime lineage'),
+	(100, 'Custom logging level')
 
-SET IDENTITY_INSERT ctl.ETLPackageSet ON;
-
-MERGE ctl.ETLPackageSet AS Target
-USING Sync_ETLPackageSet AS Source ON (Target.[ETLPackageSetId] = Source.[ETLPackageSetId])
+MERGE ref.SSISDBLoggingLevel AS Target
+USING Sync_SSISDBLoggingLevel AS Source ON (Target.[SSISDBLoggingLevelId] = Source.[SSISDBLoggingLevelId])
 WHEN MATCHED THEN
-UPDATE SET Target.[ETLPackageSetName] = Source.[ETLPackageSetName]
-	,Target.[ETLPackageSetDescription] = Source.[ETLPackageSetDescription]
+UPDATE SET Target.[SSISDBLoggingLevel] = Source.[SSISDBLoggingLevel]
 WHEN NOT MATCHED BY TARGET THEN 
-    INSERT ([ETLPackageSetId], [ETLPackageSetName], [ETLPackageSetDescription])
-    VALUES ([ETLPackageSetId], [ETLPackageSetName], [ETLPackageSetDescription]);
+    INSERT ([SSISDBLoggingLevelId], [SSISDBLoggingLevel])
+    VALUES ([SSISDBLoggingLevelId], [SSISDBLoggingLevel])
 
-SET IDENTITY_INSERT ctl.ETLPackageSet OFF;
+WHEN NOT MATCHED BY SOURCE THEN DELETE;
 
-DROP TABLE Sync_ETLPackageSet;
-*/
+DROP TABLE Sync_SSISDBLoggingLevel;
 --------------------------------------------------
+
 PRINT 'Completed populating reference tables'
