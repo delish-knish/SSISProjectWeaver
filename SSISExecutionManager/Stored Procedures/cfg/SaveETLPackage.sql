@@ -8,7 +8,7 @@
                                         @BypassEntryPointInd         BIT,
                                         @IgnoreDependenciesInd       BIT,
                                         @MaximumRetryAttempts        INT,
-										@SSISDBLoggingLevelId		 INT,
+										@OverrideSSISDBLoggingLevelId		 INT,
                                         @ExecuteSundayInd            BIT,
                                         @ExecuteMondayInd            BIT,
                                         @ExecuteTuesdayInd           BIT,
@@ -65,6 +65,10 @@ AS
 		 IF @EntryPointSSISDBPackageName IS NOT NULL
              AND @MaximumRetryAttempts > 0
             THROW 50005, 'Only entry-point packages can be configured for retry attempts.', 1;
+
+		IF @EntryPointSSISDBPackageName IS NOT NULL
+             AND @OverrideSSISDBLoggingLevelId IS NOT NULL
+            THROW 50006, 'Only entry-point packages can have their logging level overridden.', 1;
       END
 
     ELSE --Save the ETLPackage row
@@ -81,7 +85,7 @@ AS
                   ,@BypassEntryPointInd
                   ,@IgnoreDependenciesInd
                   ,@MaximumRetryAttempts
-				  ,@SSISDBLoggingLevelId
+				  ,@OverrideSSISDBLoggingLevelId
                   ,@ExecuteSundayInd
                   ,@ExecuteMondayInd
                   ,@ExecuteTuesdayInd
@@ -90,7 +94,7 @@ AS
                   ,@ExecuteFridayInd
                   ,@ExecuteSaturdayInd
                   ,@Use32BitDtExecInd
-                  ,@SupportSeverityLevelId) AS source ( SSISDBPackageName, SSISDBProjectName, SSISDBFolderName, Comments, EntryPointETLPackageId, EnabledInd, ReadyForExecutionInd, BypassEntryPointInd, IgnoreDependenciesInd, MaximumRetryAttempts, SSISDBLoggingLevelId, ExecuteSundayInd, ExecuteMondayInd, ExecuteTuesdayInd, ExecuteWednesdayInd, ExecuteThursdayInd, ExecuteFridayInd, ExecuteSaturdayInd, Use32BitDtExecInd, SupportSeverityLevelId )
+                  ,@SupportSeverityLevelId) AS source ( SSISDBPackageName, SSISDBProjectName, SSISDBFolderName, Comments, EntryPointETLPackageId, EnabledInd, ReadyForExecutionInd, BypassEntryPointInd, IgnoreDependenciesInd, MaximumRetryAttempts, OverrideSSISDBLoggingLevelId, ExecuteSundayInd, ExecuteMondayInd, ExecuteTuesdayInd, ExecuteWednesdayInd, ExecuteThursdayInd, ExecuteFridayInd, ExecuteSaturdayInd, Use32BitDtExecInd, SupportSeverityLevelId )
           ON target.SSISDBPackageName = source.SSISDBPackageName
              AND target.SSISDBProjectName = source.SSISDBProjectName
              AND target.SSISDBFolderName = source.SSISDBFolderName
@@ -105,7 +109,7 @@ AS
                       ,BypassEntryPointInd = source.BypassEntryPointInd
                       ,IgnoreDependenciesInd = source.IgnoreDependenciesInd
                       ,MaximumRetryAttempts = source.MaximumRetryAttempts
-					  ,SSISDBLoggingLevelId = source.SSISDBLoggingLevelId
+					  ,OverrideSSISDBLoggingLevelId = source.OverrideSSISDBLoggingLevelId
                       ,ExecuteSundayInd = source.ExecuteSundayInd
                       ,ExecuteMondayInd = source.ExecuteMondayInd
                       ,ExecuteTuesdayInd = source.ExecuteTuesdayInd
@@ -128,7 +132,7 @@ AS
                     ,BypassEntryPointInd
                     ,IgnoreDependenciesInd
                     ,MaximumRetryAttempts
-					,SSISDBLoggingLevelId
+					,OverrideSSISDBLoggingLevelId
                     ,ExecuteSundayInd
                     ,ExecuteMondayInd
                     ,ExecuteTuesdayInd
@@ -148,7 +152,7 @@ AS
                    ,source.BypassEntryPointInd
                    ,source.IgnoreDependenciesInd
                    ,source.MaximumRetryAttempts
-				   ,source.SSISDBLoggingLevelId
+				   ,source.OverrideSSISDBLoggingLevelId
                    ,source.ExecuteSundayInd
                    ,source.ExecuteMondayInd
                    ,source.ExecuteTuesdayInd

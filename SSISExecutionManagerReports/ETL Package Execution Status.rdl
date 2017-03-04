@@ -36,8 +36,7 @@ FROM   [rpt].[ETLPackageExecutionStatuses] p
 JOIN [rpt].[ETLBatchExecutions] b ON p.[ETLBatchExecutionId] = b.[ETLBatchExecutionId]
 WHERE p.[ETLBatchExecutionId] = @ETLBatchExecutionId
 ORDER  BY Isnull([ExecutionStartDateTime], '9999-12-31') , [SSISDBProjectName]
-
-OPTION (HASH GROUP)</CommandText>
+</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
@@ -130,7 +129,7 @@ ORDER BY
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>12.73958in</Width>
+                  <Width>11.93751in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -195,7 +194,7 @@ ORDER BY
                               <TablixBody>
                                 <TablixColumns>
                                   <TablixColumn>
-                                    <Width>12.73958in</Width>
+                                    <Width>11.93751in</Width>
                                   </TablixColumn>
                                 </TablixColumns>
                                 <TablixRows>
@@ -210,33 +209,36 @@ ORDER BY
                                                 <TablixBody>
                                                   <TablixColumns>
                                                     <TablixColumn>
-                                                      <Width>1.62501in</Width>
+                                                      <Width>1.48959in</Width>
                                                     </TablixColumn>
                                                     <TablixColumn>
-                                                      <Width>2.87499in</Width>
+                                                      <Width>2.68749in</Width>
                                                     </TablixColumn>
                                                     <TablixColumn>
-                                                      <Width>0.6875in</Width>
+                                                      <Width>0.65625in</Width>
                                                     </TablixColumn>
                                                     <TablixColumn>
-                                                      <Width>1.54167in</Width>
+                                                      <Width>1.35417in</Width>
                                                     </TablixColumn>
                                                     <TablixColumn>
-                                                      <Width>1.48958in</Width>
+                                                      <Width>1.29167in</Width>
                                                     </TablixColumn>
                                                     <TablixColumn>
-                                                      <Width>0.78125in</Width>
+                                                      <Width>0.70833in</Width>
                                                     </TablixColumn>
                                                     <TablixColumn>
-                                                      <Width>2in</Width>
+                                                      <Width>1.86458in</Width>
                                                     </TablixColumn>
                                                     <TablixColumn>
-                                                      <Width>1.73958in</Width>
+                                                      <Width>0.88542in</Width>
+                                                    </TablixColumn>
+                                                    <TablixColumn>
+                                                      <Width>1in</Width>
                                                     </TablixColumn>
                                                   </TablixColumns>
                                                   <TablixRows>
                                                     <TablixRow>
-                                                      <Height>0.43in</Height>
+                                                      <Height>0.21in</Height>
                                                       <TablixCells>
                                                         <TablixCell>
                                                           <CellContents>
@@ -250,7 +252,7 @@ ORDER BY
                                                                       <Value>Project Name</Value>
                                                                       <Style>
                                                                         <FontFamily />
-                                                                        <FontSize>9pt</FontSize>
+                                                                        <FontSize>8pt</FontSize>
                                                                         <FontWeight>Bold</FontWeight>
                                                                         <Color>#666666</Color>
                                                                       </Style>
@@ -289,7 +291,7 @@ ORDER BY
                                                                       <Value>Package Name</Value>
                                                                       <Style>
                                                                         <FontFamily />
-                                                                        <FontSize>9pt</FontSize>
+                                                                        <FontSize>8pt</FontSize>
                                                                         <FontWeight>Bold</FontWeight>
                                                                         <Color>#666666</Color>
                                                                       </Style>
@@ -325,10 +327,10 @@ ORDER BY
                                                                 <Paragraph>
                                                                   <TextRuns>
                                                                     <TextRun>
-                                                                      <Value>SSISDB Exec Id</Value>
+                                                                      <Value>Execution</Value>
                                                                       <Style>
                                                                         <FontFamily />
-                                                                        <FontSize>9pt</FontSize>
+                                                                        <FontSize>8pt</FontSize>
                                                                         <FontWeight>Bold</FontWeight>
                                                                         <Color>#666666</Color>
                                                                       </Style>
@@ -370,7 +372,7 @@ ORDER BY
                                                                       <Value>Start Date </Value>
                                                                       <Style>
                                                                         <FontFamily />
-                                                                        <FontSize>9pt</FontSize>
+                                                                        <FontSize>8pt</FontSize>
                                                                         <FontWeight>Bold</FontWeight>
                                                                         <Color>#666666</Color>
                                                                       </Style>
@@ -397,6 +399,7 @@ ORDER BY
                                                                 <PaddingBottom>2pt</PaddingBottom>
                                                               </Style>
                                                             </Textbox>
+                                                            <rd:Selected>true</rd:Selected>
                                                           </CellContents>
                                                         </TablixCell>
                                                         <TablixCell>
@@ -411,7 +414,7 @@ ORDER BY
                                                                       <Value>End Date</Value>
                                                                       <Style>
                                                                         <FontFamily />
-                                                                        <FontSize>9pt</FontSize>
+                                                                        <FontSize>8pt</FontSize>
                                                                         <FontWeight>Bold</FontWeight>
                                                                         <Color>#666666</Color>
                                                                       </Style>
@@ -449,10 +452,10 @@ ORDER BY
                                                                 <Paragraph>
                                                                   <TextRuns>
                                                                     <TextRun>
-                                                                      <Value>Duration (mins)</Value>
+                                                                      <Value>Duration</Value>
                                                                       <Style>
                                                                         <FontFamily />
-                                                                        <FontSize>9pt</FontSize>
+                                                                        <FontSize>8pt</FontSize>
                                                                         <FontWeight>Bold</FontWeight>
                                                                         <Color>#666666</Color>
                                                                       </Style>
@@ -494,7 +497,7 @@ ORDER BY
                                                                       <Value>Status</Value>
                                                                       <Style>
                                                                         <FontFamily />
-                                                                        <FontSize>9pt</FontSize>
+                                                                        <FontSize>8pt</FontSize>
                                                                         <FontWeight>Bold</FontWeight>
                                                                         <Color>#666666</Color>
                                                                       </Style>
@@ -523,17 +526,17 @@ ORDER BY
                                                         </TablixCell>
                                                         <TablixCell>
                                                           <CellContents>
-                                                            <Textbox Name="textbox9">
+                                                            <Textbox Name="Textbox11">
                                                               <CanGrow>true</CanGrow>
                                                               <KeepTogether>true</KeepTogether>
                                                               <Paragraphs>
                                                                 <Paragraph>
                                                                   <TextRuns>
                                                                     <TextRun>
-                                                                      <Value>Parent Status</Value>
+                                                                      <Value>Performance</Value>
                                                                       <Style>
                                                                         <FontFamily />
-                                                                        <FontSize>9pt</FontSize>
+                                                                        <FontSize>8pt</FontSize>
                                                                         <FontWeight>Bold</FontWeight>
                                                                         <Color>#666666</Color>
                                                                       </Style>
@@ -542,7 +545,7 @@ ORDER BY
                                                                   <Style />
                                                                 </Paragraph>
                                                               </Paragraphs>
-                                                              <rd:DefaultName>textbox9</rd:DefaultName>
+                                                              <rd:DefaultName>Textbox11</rd:DefaultName>
                                                               <Style>
                                                                 <Border>
                                                                   <Color>LightGrey</Color>
@@ -551,7 +554,44 @@ ORDER BY
                                                                   <Style>Solid</Style>
                                                                 </BottomBorder>
                                                                 <BackgroundColor>Silver</BackgroundColor>
-                                                                <FontFamily />
+                                                                <PaddingLeft>2pt</PaddingLeft>
+                                                                <PaddingRight>2pt</PaddingRight>
+                                                                <PaddingTop>2pt</PaddingTop>
+                                                                <PaddingBottom>2pt</PaddingBottom>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="Textbox14">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value>Details</Value>
+                                                                      <Style>
+                                                                        <FontFamily />
+                                                                        <FontSize>8pt</FontSize>
+                                                                        <FontWeight>Bold</FontWeight>
+                                                                        <Color>#666666</Color>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style />
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>Textbox14</rd:DefaultName>
+                                                              <Style>
+                                                                <Border>
+                                                                  <Color>LightGrey</Color>
+                                                                </Border>
+                                                                <BottomBorder>
+                                                                  <Style>Solid</Style>
+                                                                </BottomBorder>
+                                                                <BackgroundColor>Silver</BackgroundColor>
                                                                 <PaddingLeft>2pt</PaddingLeft>
                                                                 <PaddingRight>2pt</PaddingRight>
                                                                 <PaddingTop>2pt</PaddingTop>
@@ -576,7 +616,7 @@ ORDER BY
                                                                       <Value>=Fields!SSISDBProjectName.Value</Value>
                                                                       <Style>
                                                                         <FontFamily />
-                                                                        <FontSize>9pt</FontSize>
+                                                                        <FontSize>8pt</FontSize>
                                                                         <Color>#333333</Color>
                                                                       </Style>
                                                                     </TextRun>
@@ -612,7 +652,245 @@ ORDER BY
                                                                       <Value>=Fields!SSISDBPackageName.Value</Value>
                                                                       <Style>
                                                                         <FontFamily />
-                                                                        <FontSize>9pt</FontSize>
+                                                                        <FontSize>8pt</FontSize>
+                                                                        <TextDecoration>None</TextDecoration>
+                                                                        <Color>#333333</Color>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style />
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>SSISDBPackageName</rd:DefaultName>
+                                                              <Style>
+                                                                <Border>
+                                                                  <Color>LightGrey</Color>
+                                                                </Border>
+                                                                <BottomBorder>
+                                                                  <Style>Solid</Style>
+                                                                </BottomBorder>
+                                                                <FontFamily />
+                                                                <PaddingLeft>2pt</PaddingLeft>
+                                                                <PaddingRight>2pt</PaddingRight>
+                                                                <PaddingTop>2pt</PaddingTop>
+                                                                <PaddingBottom>2pt</PaddingBottom>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="SSISDBExecutionId">
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value>=Fields!SSISDBExecutionId.Value</Value>
+                                                                      <Style>
+                                                                        <FontFamily />
+                                                                        <FontSize>8pt</FontSize>
+                                                                        <Color>#333333</Color>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Left</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>SSISDBExecutionId</rd:DefaultName>
+                                                              <Style>
+                                                                <Border>
+                                                                  <Color>LightGrey</Color>
+                                                                </Border>
+                                                                <BottomBorder>
+                                                                  <Style>Solid</Style>
+                                                                </BottomBorder>
+                                                                <FontFamily />
+                                                                <PaddingLeft>2pt</PaddingLeft>
+                                                                <PaddingRight>2pt</PaddingRight>
+                                                                <PaddingTop>2pt</PaddingTop>
+                                                                <PaddingBottom>2pt</PaddingBottom>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="ExecutionStartDateTime">
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value>=Fields!ExecutionStartDateTime.Value</Value>
+                                                                      <Style>
+                                                                        <FontFamily />
+                                                                        <FontSize>8pt</FontSize>
+                                                                        <Color>#333333</Color>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Right</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>ExecutionStartDateTime</rd:DefaultName>
+                                                              <Style>
+                                                                <Border>
+                                                                  <Color>LightGrey</Color>
+                                                                </Border>
+                                                                <BottomBorder>
+                                                                  <Style>Solid</Style>
+                                                                </BottomBorder>
+                                                                <FontFamily />
+                                                                <PaddingLeft>2pt</PaddingLeft>
+                                                                <PaddingRight>2pt</PaddingRight>
+                                                                <PaddingTop>2pt</PaddingTop>
+                                                                <PaddingBottom>2pt</PaddingBottom>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="ExecutionEndDateTime">
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value>=Fields!ExecutionEndDateTime.Value</Value>
+                                                                      <Style>
+                                                                        <FontFamily />
+                                                                        <FontSize>8pt</FontSize>
+                                                                        <Color>#333333</Color>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Right</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>ExecutionEndDateTime</rd:DefaultName>
+                                                              <Style>
+                                                                <Border>
+                                                                  <Color>LightGrey</Color>
+                                                                </Border>
+                                                                <BottomBorder>
+                                                                  <Style>Solid</Style>
+                                                                </BottomBorder>
+                                                                <FontFamily />
+                                                                <PaddingLeft>2pt</PaddingLeft>
+                                                                <PaddingRight>2pt</PaddingRight>
+                                                                <PaddingTop>2pt</PaddingTop>
+                                                                <PaddingBottom>2pt</PaddingBottom>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="ExecutionDurationInMinutes">
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value>=Fields!ExecutionDurationInMinutes.Value</Value>
+                                                                      <Style>
+                                                                        <FontFamily />
+                                                                        <FontSize>8pt</FontSize>
+                                                                        <Color>#333333</Color>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style />
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>ExecutionDurationInMinutes</rd:DefaultName>
+                                                              <Style>
+                                                                <Border>
+                                                                  <Color>LightGrey</Color>
+                                                                </Border>
+                                                                <BottomBorder>
+                                                                  <Style>Solid</Style>
+                                                                </BottomBorder>
+                                                                <FontFamily />
+                                                                <PaddingLeft>2pt</PaddingLeft>
+                                                                <PaddingRight>2pt</PaddingRight>
+                                                                <PaddingTop>2pt</PaddingTop>
+                                                                <PaddingBottom>2pt</PaddingBottom>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="PackageExecutionStatus">
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value>=Fields!PackageExecutionStatus.Value</Value>
+                                                                      <Style>
+                                                                        <FontFamily />
+                                                                        <FontSize>8pt</FontSize>
+                                                                        <TextDecoration>None</TextDecoration>
+                                                                        <Color>=iif(Fields!PackageExecutionStatus.Value = "Succeeded", "Green", iif(Fields!PackageExecutionStatus.Value = "Running", "#333333", iif(Fields!PackageExecutionStatus.Value = "Failed", "Red", "#333333")))</Color>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style />
+                                                                </Paragraph>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value />
+                                                                      <Style>
+                                                                        <FontFamily />
+                                                                        <FontSize>8pt</FontSize>
+                                                                        <TextDecoration>None</TextDecoration>
+                                                                        <Color>=iif(Fields!PackageExecutionStatus.Value = "Succeeded", "Green", iif(Fields!PackageExecutionStatus.Value = "Running", "#333333", iif(Fields!PackageExecutionStatus.Value = "Failed", "Red", "#333333")))</Color>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style />
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>PackageExecutionStatus</rd:DefaultName>
+                                                              <Style>
+                                                                <Border>
+                                                                  <Color>LightGrey</Color>
+                                                                </Border>
+                                                                <BottomBorder>
+                                                                  <Style>Solid</Style>
+                                                                </BottomBorder>
+                                                                <FontFamily />
+                                                                <PaddingLeft>2pt</PaddingLeft>
+                                                                <PaddingRight>2pt</PaddingRight>
+                                                                <PaddingTop>2pt</PaddingTop>
+                                                                <PaddingBottom>2pt</PaddingBottom>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="SSISDBPackageName2">
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value>="Performance"</Value>
+                                                                      <Style>
+                                                                        <FontFamily />
+                                                                        <FontSize>8pt</FontSize>
                                                                         <TextDecoration>Underline</TextDecoration>
                                                                         <Color>Blue</Color>
                                                                       </Style>
@@ -654,189 +932,25 @@ ORDER BY
                                                         </TablixCell>
                                                         <TablixCell>
                                                           <CellContents>
-                                                            <Textbox Name="SSISDBExecutionId">
+                                                            <Textbox Name="SSISDBPackageName3">
                                                               <KeepTogether>true</KeepTogether>
                                                               <Paragraphs>
                                                                 <Paragraph>
                                                                   <TextRuns>
                                                                     <TextRun>
-                                                                      <Value>=Fields!SSISDBExecutionId.Value</Value>
+                                                                      <Value>=IIF(Fields!PackageExecutionStatus.Value = "Failed", "Errors", "Messages")</Value>
                                                                       <Style>
                                                                         <FontFamily />
-                                                                        <FontSize>9pt</FontSize>
-                                                                        <Color>#333333</Color>
-                                                                      </Style>
-                                                                    </TextRun>
-                                                                  </TextRuns>
-                                                                  <Style>
-                                                                    <TextAlign>Left</TextAlign>
-                                                                  </Style>
-                                                                </Paragraph>
-                                                              </Paragraphs>
-                                                              <rd:DefaultName>SSISDBExecutionId</rd:DefaultName>
-                                                              <Style>
-                                                                <Border>
-                                                                  <Color>LightGrey</Color>
-                                                                </Border>
-                                                                <BottomBorder>
-                                                                  <Style>Solid</Style>
-                                                                </BottomBorder>
-                                                                <FontFamily />
-                                                                <PaddingLeft>2pt</PaddingLeft>
-                                                                <PaddingRight>2pt</PaddingRight>
-                                                                <PaddingTop>2pt</PaddingTop>
-                                                                <PaddingBottom>2pt</PaddingBottom>
-                                                              </Style>
-                                                            </Textbox>
-                                                          </CellContents>
-                                                        </TablixCell>
-                                                        <TablixCell>
-                                                          <CellContents>
-                                                            <Textbox Name="ExecutionStartDateTime">
-                                                              <KeepTogether>true</KeepTogether>
-                                                              <Paragraphs>
-                                                                <Paragraph>
-                                                                  <TextRuns>
-                                                                    <TextRun>
-                                                                      <Value>=Fields!ExecutionStartDateTime.Value</Value>
-                                                                      <Style>
-                                                                        <FontFamily />
-                                                                        <FontSize>9pt</FontSize>
-                                                                        <Color>#333333</Color>
-                                                                      </Style>
-                                                                    </TextRun>
-                                                                  </TextRuns>
-                                                                  <Style>
-                                                                    <TextAlign>Right</TextAlign>
-                                                                  </Style>
-                                                                </Paragraph>
-                                                              </Paragraphs>
-                                                              <rd:DefaultName>ExecutionStartDateTime</rd:DefaultName>
-                                                              <Style>
-                                                                <Border>
-                                                                  <Color>LightGrey</Color>
-                                                                </Border>
-                                                                <BottomBorder>
-                                                                  <Style>Solid</Style>
-                                                                </BottomBorder>
-                                                                <FontFamily />
-                                                                <PaddingLeft>2pt</PaddingLeft>
-                                                                <PaddingRight>2pt</PaddingRight>
-                                                                <PaddingTop>2pt</PaddingTop>
-                                                                <PaddingBottom>2pt</PaddingBottom>
-                                                              </Style>
-                                                            </Textbox>
-                                                          </CellContents>
-                                                        </TablixCell>
-                                                        <TablixCell>
-                                                          <CellContents>
-                                                            <Textbox Name="ExecutionEndDateTime">
-                                                              <KeepTogether>true</KeepTogether>
-                                                              <Paragraphs>
-                                                                <Paragraph>
-                                                                  <TextRuns>
-                                                                    <TextRun>
-                                                                      <Value>=Fields!ExecutionEndDateTime.Value</Value>
-                                                                      <Style>
-                                                                        <FontFamily />
-                                                                        <FontSize>9pt</FontSize>
-                                                                        <Color>#333333</Color>
-                                                                      </Style>
-                                                                    </TextRun>
-                                                                  </TextRuns>
-                                                                  <Style>
-                                                                    <TextAlign>Right</TextAlign>
-                                                                  </Style>
-                                                                </Paragraph>
-                                                              </Paragraphs>
-                                                              <rd:DefaultName>ExecutionEndDateTime</rd:DefaultName>
-                                                              <Style>
-                                                                <Border>
-                                                                  <Color>LightGrey</Color>
-                                                                </Border>
-                                                                <BottomBorder>
-                                                                  <Style>Solid</Style>
-                                                                </BottomBorder>
-                                                                <FontFamily />
-                                                                <PaddingLeft>2pt</PaddingLeft>
-                                                                <PaddingRight>2pt</PaddingRight>
-                                                                <PaddingTop>2pt</PaddingTop>
-                                                                <PaddingBottom>2pt</PaddingBottom>
-                                                              </Style>
-                                                            </Textbox>
-                                                          </CellContents>
-                                                        </TablixCell>
-                                                        <TablixCell>
-                                                          <CellContents>
-                                                            <Textbox Name="ExecutionDurationInMinutes">
-                                                              <KeepTogether>true</KeepTogether>
-                                                              <Paragraphs>
-                                                                <Paragraph>
-                                                                  <TextRuns>
-                                                                    <TextRun>
-                                                                      <Value>=Fields!ExecutionDurationInMinutes.Value</Value>
-                                                                      <Style>
-                                                                        <FontFamily />
-                                                                        <FontSize>9pt</FontSize>
-                                                                        <Color>#333333</Color>
-                                                                      </Style>
-                                                                    </TextRun>
-                                                                  </TextRuns>
-                                                                  <Style />
-                                                                </Paragraph>
-                                                              </Paragraphs>
-                                                              <rd:DefaultName>ExecutionDurationInMinutes</rd:DefaultName>
-                                                              <Style>
-                                                                <Border>
-                                                                  <Color>LightGrey</Color>
-                                                                </Border>
-                                                                <BottomBorder>
-                                                                  <Style>Solid</Style>
-                                                                </BottomBorder>
-                                                                <FontFamily />
-                                                                <PaddingLeft>2pt</PaddingLeft>
-                                                                <PaddingRight>2pt</PaddingRight>
-                                                                <PaddingTop>2pt</PaddingTop>
-                                                                <PaddingBottom>2pt</PaddingBottom>
-                                                              </Style>
-                                                            </Textbox>
-                                                          </CellContents>
-                                                        </TablixCell>
-                                                        <TablixCell>
-                                                          <CellContents>
-                                                            <Textbox Name="PackageExecutionStatus">
-                                                              <KeepTogether>true</KeepTogether>
-                                                              <Paragraphs>
-                                                                <Paragraph>
-                                                                  <TextRuns>
-                                                                    <TextRun>
-                                                                      <Value>=Fields!PackageExecutionStatus.Value</Value>
-                                                                      <Style>
-                                                                        <FontFamily />
-                                                                        <FontSize>9pt</FontSize>
+                                                                        <FontSize>8pt</FontSize>
                                                                         <TextDecoration>Underline</TextDecoration>
-                                                                        <Color>=iif(Fields!PackageExecutionStatus.Value = "Succeeded", "Green", iif(Fields!PackageExecutionStatus.Value = "Running", "Silver", iif(Fields!PackageExecutionStatus.Value = "Failed", "Red", "Black")))</Color>
-                                                                      </Style>
-                                                                    </TextRun>
-                                                                  </TextRuns>
-                                                                  <Style />
-                                                                </Paragraph>
-                                                                <Paragraph>
-                                                                  <TextRuns>
-                                                                    <TextRun>
-                                                                      <Value />
-                                                                      <Style>
-                                                                        <FontFamily />
-                                                                        <FontSize>9pt</FontSize>
-                                                                        <TextDecoration>Underline</TextDecoration>
-                                                                        <Color>=iif(Fields!PackageExecutionStatus.Value = "Succeeded", "Green", iif(Fields!PackageExecutionStatus.Value = "Running", "Silver", iif(Fields!PackageExecutionStatus.Value = "Failed", "Red", "Black")))</Color>
+                                                                        <Color>Blue</Color>
                                                                       </Style>
                                                                     </TextRun>
                                                                   </TextRuns>
                                                                   <Style />
                                                                 </Paragraph>
                                                               </Paragraphs>
-                                                              <rd:DefaultName>PackageExecutionStatus</rd:DefaultName>
+                                                              <rd:DefaultName>SSISDBPackageName</rd:DefaultName>
                                                               <ActionInfo>
                                                                 <Actions>
                                                                   <Action>
@@ -865,43 +979,6 @@ ORDER BY
                                                                 <PaddingBottom>2pt</PaddingBottom>
                                                               </Style>
                                                             </Textbox>
-                                                            <rd:Selected>true</rd:Selected>
-                                                          </CellContents>
-                                                        </TablixCell>
-                                                        <TablixCell>
-                                                          <CellContents>
-                                                            <Textbox Name="SSISParentExecutionStatus">
-                                                              <KeepTogether>true</KeepTogether>
-                                                              <Paragraphs>
-                                                                <Paragraph>
-                                                                  <TextRuns>
-                                                                    <TextRun>
-                                                                      <Value>=Fields!SSISParentExecutionStatus.Value</Value>
-                                                                      <Style>
-                                                                        <FontFamily />
-                                                                        <FontSize>9pt</FontSize>
-                                                                        <Color>=iif(Fields!PackageExecutionStatus.Value = "Succeeded", "Green", iif(Fields!SSISParentExecutionStatus.Value = "Silver", "Blue", iif(Fields!SSISParentExecutionStatus.Value = "Failed", "Red", "Black")))</Color>
-                                                                      </Style>
-                                                                    </TextRun>
-                                                                  </TextRuns>
-                                                                  <Style />
-                                                                </Paragraph>
-                                                              </Paragraphs>
-                                                              <rd:DefaultName>SSISParentExecutionStatus</rd:DefaultName>
-                                                              <Style>
-                                                                <Border>
-                                                                  <Color>LightGrey</Color>
-                                                                </Border>
-                                                                <BottomBorder>
-                                                                  <Style>Solid</Style>
-                                                                </BottomBorder>
-                                                                <FontFamily />
-                                                                <PaddingLeft>2pt</PaddingLeft>
-                                                                <PaddingRight>2pt</PaddingRight>
-                                                                <PaddingTop>2pt</PaddingTop>
-                                                                <PaddingBottom>2pt</PaddingBottom>
-                                                              </Style>
-                                                            </Textbox>
                                                           </CellContents>
                                                         </TablixCell>
                                                       </TablixCells>
@@ -910,6 +987,7 @@ ORDER BY
                                                 </TablixBody>
                                                 <TablixColumnHierarchy>
                                                   <TablixMembers>
+                                                    <TablixMember />
                                                     <TablixMember />
                                                     <TablixMember />
                                                     <TablixMember />
@@ -941,8 +1019,8 @@ ORDER BY
                                                   </TablixMembers>
                                                 </TablixRowHierarchy>
                                                 <DataSetName>ETLPackageExecutionStatuses</DataSetName>
-                                                <Height>0.64in</Height>
-                                                <Width>12.73958in</Width>
+                                                <Height>0.42in</Height>
+                                                <Width>11.93751in</Width>
                                                 <Style>
                                                   <FontFamily />
                                                   <FontSize>9pt</FontSize>
@@ -990,7 +1068,7 @@ ORDER BY
                               </PageBreak>
                               <Top>0.7625in</Top>
                               <Height>0.64in</Height>
-                              <Width>12.73958in</Width>
+                              <Width>11.93751in</Width>
                               <ZIndex>1</ZIndex>
                               <Style>
                                 <FontFamily />
@@ -1070,7 +1148,7 @@ ORDER BY
               <BreakLocation>End</BreakLocation>
             </PageBreak>
             <Height>1.4025in</Height>
-            <Width>12.73958in</Width>
+            <Width>11.93751in</Width>
             <Style>
               <FontSize>14pt</FontSize>
             </Style>
@@ -1079,7 +1157,7 @@ ORDER BY
         <Height>1.4025in</Height>
         <Style />
       </Body>
-      <Width>12.73958in</Width>
+      <Width>11.93751in</Width>
       <Page>
         <PageHeight>8.5in</PageHeight>
         <PageWidth>11in</PageWidth>

@@ -294,4 +294,11 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[ExecuteETLPackageGroupSQLCommands]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="26348904-5d00-4eb3-8c7b-e1d5dcf8e016" ChangeDateTime="03/03/2017 04:48:33">
+    <Property Name="ElementName" Value="[ctl].[ETLPackage].[SSISDBLoggingLevelId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[ctl].[ETLPackage]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[OverrideSSISDBLoggingLevelId]" />
+  </Operation>
 </Operations>

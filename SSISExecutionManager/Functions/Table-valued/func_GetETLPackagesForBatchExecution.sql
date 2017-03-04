@@ -27,9 +27,9 @@ AS
                                 e.execution_id AS ExecutionId
                               FROM
                                 [$(SSISDB)].catalog.executables e WITH (NOLOCK)
-                                INNER JOIN [$(SSISDB)].catalog.executable_statistics es WITH (NOLOCK)
-                                        ON e.executable_id = es.executable_id
-                                           AND e.execution_id = es.execution_id
+                                --INNER JOIN [$(SSISDB)].catalog.executable_statistics es WITH (NOLOCK)
+                                --        ON e.executable_id = es.executable_id
+                                --           AND e.execution_id = es.execution_id
                                 INNER JOIN (SELECT
                                               [ETLBatchExecutionId]
                                              ,ETLPackageId
@@ -131,7 +131,7 @@ AS
                     GROUP  BY
                      d.ETLPackageId) pepd
                 ON prnt.ETLPackageId = pepd.ETLPackageId
-         LEFT HASH JOIN (SELECT
+         LEFT JOIN (SELECT
                            ep.ETLPackageId
                           ,bbg.ETLBatchId
                           ,SUM(Iif(Isnull(bep.ETLPackageExecutionStatusId, -1) NOT IN (0, 2), 1, 0)) AS DependenciesNotMetCount

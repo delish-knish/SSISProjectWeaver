@@ -1,41 +1,41 @@
 ﻿CREATE TABLE [ctl].[ETLPackage]
   (
-     [ETLPackageId]           INT IDENTITY (1, 1) NOT NULL
-    ,[SSISDBFolderName]       VARCHAR (128) NOT NULL
-    ,[SSISDBProjectName]      VARCHAR (128) NOT NULL
-    ,[SSISDBPackageName]      VARCHAR (260) NOT NULL
+     [ETLPackageId]                 INT IDENTITY (1, 1) NOT NULL
+    ,[SSISDBFolderName]             VARCHAR (128) NOT NULL
+    ,[SSISDBProjectName]            VARCHAR (128) NOT NULL
+    ,[SSISDBPackageName]            VARCHAR (260) NOT NULL
     ,[EntryPointPackageInd] AS (CONVERT([BIT], CASE
                            WHEN [EntryPointETLPackageId] IS NULL THEN (1)
                            ELSE (0)
                          END))
-    ,[EntryPointETLPackageId] INT NULL
-    ,[EnabledInd]             BIT CONSTRAINT [DF_ETLPackage_PackageEnabledInd] DEFAULT ((1)) NOT NULL
-    ,[ReadyForExecutionInd]   BIT NULL
-    ,[BypassEntryPointInd]    BIT CONSTRAINT [DF_ETLPackage_ByPassEntryPointInd] DEFAULT ((0)) NOT NULL
-    ,[IgnoreDependenciesInd]  BIT CONSTRAINT [DF_ETLPackage_IgnoreDependenciesInd] DEFAULT ((0)) NOT NULL
-    ,[MaximumRetryAttempts]   INT CONSTRAINT [DF_ETLPackage_MaximumRetryAttempts] DEFAULT ((0)) NOT NULL
-    ,[RemainingRetryAttempts] INT CONSTRAINT [DF_ETLPackage_RemainingRetryAttempts] DEFAULT ((0)) NOT NULL
-    ,[SSISDBLoggingLevelId]   INT NULL
-    ,[ExecuteSundayInd]       BIT CONSTRAINT [DF_ETLPackage_ExecuteSundayInd] DEFAULT ((0)) NOT NULL
-    ,[ExecuteMondayInd]       BIT CONSTRAINT [DF_ETLPackage_ExecuteMondayInd] DEFAULT ((0)) NOT NULL
-    ,[ExecuteTuesdayInd]      BIT CONSTRAINT [DF_ETLPackage_ExecuteTuesdayInd] DEFAULT ((0)) NOT NULL
-    ,[ExecuteWednesdayInd]    BIT CONSTRAINT [DF_ETLPackage_ExecuteWednesdayInd] DEFAULT ((0)) NOT NULL
-    ,[ExecuteThursdayInd]     BIT CONSTRAINT [DF_ETLPackage_ExecuteThursdayInd] DEFAULT ((0)) NOT NULL
-    ,[ExecuteFridayInd]       BIT CONSTRAINT [DF_ETLPackage_ExecuteFridayInd] DEFAULT ((0)) NOT NULL
-    ,[ExecuteSaturdayInd]     BIT CONSTRAINT [DF_ETLPackage_ExecuteSaturdayInd] DEFAULT ((0)) NOT NULL
-    ,[Use32BitDtExecInd]      BIT CONSTRAINT [DF_ETLPackage_Use32BitDtExecInd] DEFAULT ((0)) NOT NULL
-    ,[SupportSeverityLevelId] INT NOT NULL
-    ,[Comments]               VARCHAR (MAX) NULL
-    ,[CreatedDate]            DATETIME2 (7) CONSTRAINT [DF_ETLPackage_CreatedDate] DEFAULT (GETDATE()) NOT NULL
-    ,[CreatedUser]            VARCHAR (50) CONSTRAINT [DF_ETLPackage_CreatedUser] DEFAULT (SUSER_SNAME()) NOT NULL
-    ,[LastUpdatedDate]        DATETIME2 (7) CONSTRAINT [DF_ETLPackage_LastUpdatedDate] DEFAULT (GETDATE()) NOT NULL
-    ,[LastUpdatedUser]        VARCHAR (50) CONSTRAINT [DF_ETLPackage_LastUpdatedUser] DEFAULT (SUSER_SNAME()) NOT NULL,
+    ,[EntryPointETLPackageId]       INT NULL
+    ,[EnabledInd]                   BIT CONSTRAINT [DF_ETLPackage_PackageEnabledInd] DEFAULT ((1)) NOT NULL
+    ,[ReadyForExecutionInd]         BIT NULL
+    ,[BypassEntryPointInd]          BIT CONSTRAINT [DF_ETLPackage_ByPassEntryPointInd] DEFAULT ((0)) NOT NULL
+    ,[IgnoreDependenciesInd]        BIT CONSTRAINT [DF_ETLPackage_IgnoreDependenciesInd] DEFAULT ((0)) NOT NULL
+    ,[MaximumRetryAttempts]         INT CONSTRAINT [DF_ETLPackage_MaximumRetryAttempts] DEFAULT ((0)) NOT NULL
+    ,[RemainingRetryAttempts]       INT CONSTRAINT [DF_ETLPackage_RemainingRetryAttempts] DEFAULT ((0)) NOT NULL
+    ,[OverrideSSISDBLoggingLevelId] INT NULL
+    ,[ExecuteSundayInd]             BIT CONSTRAINT [DF_ETLPackage_ExecuteSundayInd] DEFAULT ((0)) NOT NULL
+    ,[ExecuteMondayInd]             BIT CONSTRAINT [DF_ETLPackage_ExecuteMondayInd] DEFAULT ((0)) NOT NULL
+    ,[ExecuteTuesdayInd]            BIT CONSTRAINT [DF_ETLPackage_ExecuteTuesdayInd] DEFAULT ((0)) NOT NULL
+    ,[ExecuteWednesdayInd]          BIT CONSTRAINT [DF_ETLPackage_ExecuteWednesdayInd] DEFAULT ((0)) NOT NULL
+    ,[ExecuteThursdayInd]           BIT CONSTRAINT [DF_ETLPackage_ExecuteThursdayInd] DEFAULT ((0)) NOT NULL
+    ,[ExecuteFridayInd]             BIT CONSTRAINT [DF_ETLPackage_ExecuteFridayInd] DEFAULT ((0)) NOT NULL
+    ,[ExecuteSaturdayInd]           BIT CONSTRAINT [DF_ETLPackage_ExecuteSaturdayInd] DEFAULT ((0)) NOT NULL
+    ,[Use32BitDtExecInd]            BIT CONSTRAINT [DF_ETLPackage_Use32BitDtExecInd] DEFAULT ((0)) NOT NULL
+    ,[SupportSeverityLevelId]       INT NOT NULL
+    ,[Comments]                     VARCHAR (MAX) NULL
+    ,[CreatedDate]                  DATETIME2 (7) CONSTRAINT [DF_ETLPackage_CreatedDate] DEFAULT (GETDATE()) NOT NULL
+    ,[CreatedUser]                  VARCHAR (50) CONSTRAINT [DF_ETLPackage_CreatedUser] DEFAULT (SUSER_SNAME()) NOT NULL
+    ,[LastUpdatedDate]              DATETIME2 (7) CONSTRAINT [DF_ETLPackage_LastUpdatedDate] DEFAULT (GETDATE()) NOT NULL
+    ,[LastUpdatedUser]              VARCHAR (50) CONSTRAINT [DF_ETLPackage_LastUpdatedUser] DEFAULT (SUSER_SNAME()) NOT NULL,
      CONSTRAINT [PK_ETLPackage] PRIMARY KEY CLUSTERED ([ETLPackageId] ASC),
      CONSTRAINT [FK_ETLPackage_EntryPointETLPackageId] FOREIGN KEY ([EntryPointETLPackageId]) REFERENCES [ctl].[ETLPackage] ([ETLPackageId]),
      CONSTRAINT [FK_ETLPackage_SupportSeverityLevel] FOREIGN KEY ([SupportSeverityLevelId]) REFERENCES [ref].[SupportSeverityLevel] ([SupportSeverityLevelId]),
      CONSTRAINT [AK_ETLPackage_SSISDBPackageName] UNIQUE NONCLUSTERED ([SSISDBPackageName] ASC) --ToDo: Needed to limit this to the package due to a possible bug related to joining on only package name and not on folder, project, and package.
      ,
-     CONSTRAINT [FK_ETLPackage_SSISDBLoggingLevel] FOREIGN KEY (SSISDBLoggingLevelId) REFERENCES ref.SSISDBLoggingLevel(SSISDBLoggingLevelId)
+     CONSTRAINT [FK_ETLPackage_SSISDBLoggingLevel] FOREIGN KEY ([OverrideSSISDBLoggingLevelId]) REFERENCES ref.SSISDBLoggingLevel(SSISDBLoggingLevelId)
   );
 
 GO
