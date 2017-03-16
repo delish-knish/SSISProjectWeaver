@@ -4,13 +4,16 @@ RETURNS TABLE
 AS
     RETURN
       (SELECT
-         ETLBatchExecutionId
-         ,ETLBatchStatusId
-         ,DayOfWeekName
-         ,StartDateTime
-		 ,ETLBatchId
+          ebe.ETLBatchExecutionId
+         ,ebe.ETLBatchStatusId
+         ,ebe.DayOfWeekName
+         ,ebe.StartDateTime
+		 ,ebe.ETLBatchId
+		 ,eb.MinutesBackToContinueBatch
        FROM
-         ctl.[ETLBatchExecution] WITH (NOLOCK)
+         ctl.[ETLBatchExecution] ebe (NOLOCK)
+		 JOIN ctl.[ETLBatch] eb (NOLOCK)
+			ON ebe.ETLBatchId = eb.ETLBatchId
        WHERE
         DATEDIFF(MINUTE, StartDateTime, GETDATE()) <= @BatchStartedWithinMinutes
         AND EndDateTime IS NULL

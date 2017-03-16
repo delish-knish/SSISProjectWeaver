@@ -15,7 +15,7 @@ AS
     ,eb.TotalRemainingEntryPointPackageCount
     ,eb.TotalETLPackageCount
     ,eb.TotalRemainingETLPackageCount
-    ,eb.LastUpdatedDate                                                                                                        AS BatchStatusLastUpdatedDate
+	,eb.LastUpdatedDate                                                                                                        AS BatchStatusLastUpdatedDate
   FROM
     ctl.[ETLBatchExecution] eb
     JOIN ref.ETLBatchStatus rebs

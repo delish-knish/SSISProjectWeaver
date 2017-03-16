@@ -15,6 +15,7 @@ AS
                 ,pes.ETLPackageExecutionStatusId
                 ,pes.SSISDBExecutionId
                 ,pes.MissingSSISDBExecutablesEntryInd
+				,ebpspep.IgnoreForBatchCompleteInd
                FROM
                  [ctl].[ETLBatchExecution] eb WITH (NOLOCK)
                  JOIN ctl.[ETLBatch_ETLPackageGroup] epeps WITH (NOLOCK)
@@ -27,9 +28,6 @@ AS
                                 e.execution_id AS ExecutionId
                               FROM
                                 [$(SSISDB)].catalog.executables e WITH (NOLOCK)
-                                --INNER JOIN [$(SSISDB)].catalog.executable_statistics es WITH (NOLOCK)
-                                --        ON e.executable_id = es.executable_id
-                                --           AND e.execution_id = es.execution_id
                                 INNER JOIN (SELECT
                                               [ETLBatchExecutionId]
                                              ,ETLPackageId
@@ -90,6 +88,7 @@ AS
         ,pkg.ETLExecutionStatusId                 AS ETLExecutionStatusId
         ,pkg.SSISDBExecutionId                    AS SSISDBExecutionId
         ,pkg.MissingSSISDBExecutablesEntryInd     AS MissingSSISDBExecutablesEntryInd
+		,pkg.IgnoreForBatchCompleteInd			  AS IgnoreForBatchCompleteInd
         ,CASE
             WHEN pkg.ETLPackageExecutionStatusId = 0 THEN 0 --Succeeded make this first case so that other scenarios don't override it
             WHEN epd.DependenciesNotMetCount > 0

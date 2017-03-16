@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [sup].[ManuallyExecutePackageForETLBatch] @ETLBatchId          INT,
-                                                           @SSISDBFolderName    VARCHAR(128),
-                                                           @SSISDBProjectName   VARCHAR(128),
-                                                           @SSISDBPackageName   VARCHAR (260),
+                                                           @SSISDBFolderName    NVARCHAR(128),
+                                                           @SSISDBProjectName   NVARCHAR(128),
+                                                           @SSISDBPackageName   NVARCHAR (260),
                                                            @SSISExecutionId     BIGINT = NULL OUT
 AS
     /*The purpose of this stored procedure is to be able to execute a package as part of a batch but outside of the SQL Agent Job */

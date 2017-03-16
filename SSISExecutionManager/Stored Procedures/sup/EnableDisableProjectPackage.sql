@@ -1,6 +1,6 @@
-﻿CREATE PROCEDURE [sup].[EnableDisableProjectPackage] @SSISDBFolderName  VARCHAR(128),
-                                                     @SSISDBProjectName VARCHAR(128),
-                                                     @SSISDBPackageName VARCHAR (260) = NULL,
+﻿CREATE PROCEDURE [sup].[EnableDisableProjectPackage] @SSISDBFolderName  NVARCHAR(128),
+                                                     @SSISDBProjectName NVARCHAR(128),
+                                                     @SSISDBPackageName NVARCHAR (260) = NULL,
                                                      @EnabledInd        BIT,
                                                      @Comments          VARCHAR(MAX)
 AS

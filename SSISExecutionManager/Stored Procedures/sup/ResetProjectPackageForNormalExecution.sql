@@ -1,6 +1,6 @@
-﻿CREATE PROCEDURE [sup].[ResetProjectPackageToDefaultSettings] @SSISDBFolderName  VARCHAR(128),
-                                                              @SSISDBProjectName VARCHAR(128) = NULL,
-                                                              @SSISDBPackageName VARCHAR (260) = NULL
+﻿CREATE PROCEDURE [sup].[ResetProjectPackageToDefaultSettings] @SSISDBFolderName  NVARCHAR(128),
+                                                              @SSISDBProjectName NVARCHAR(128) = NULL,
+                                                              @SSISDBPackageName NVARCHAR (260) = NULL
 AS
     /*The purpose of this stored procedure is to reset indicators on packages to a "normal execution" state.*/
 

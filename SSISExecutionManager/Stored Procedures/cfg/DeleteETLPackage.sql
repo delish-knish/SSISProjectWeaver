@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [cfg].[DeleteETLPackage] @ETLPackageId      INT = NULL,
-                                          @SSISDBPackageName VARCHAR (260) = NULL,
-                                          @SSISDBProjectName VARCHAR(128) = NULL,
-                                          @SSISDBFolderName  VARCHAR(128) = NULL
+                                          @SSISDBPackageName NVARCHAR (260) = NULL,
+                                          @SSISDBProjectName NVARCHAR(128) = NULL,
+                                          @SSISDBFolderName  NVARCHAR(128) = NULL
 AS
     SELECT
       @ETLPackageId = ETLPackageId

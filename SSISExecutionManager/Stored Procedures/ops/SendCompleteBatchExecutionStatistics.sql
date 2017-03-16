@@ -2,9 +2,12 @@
 													@ETLBatchExecutionId INT
 AS
 	DECLARE @EmailRecipients VARCHAR(MAX) = ( [dbo].[func_GetConfigurationValue] ('Email Recipients - Monitors') ),
+	@InclueDisabledPackages BIT = ( IIF([dbo].[func_GetConfigurationValue] ('Report Disabled Packages') = 'True', 1, 0) ),
     @tableHTML NVARCHAR(MAX),
-	@ETLBatchName NVARCHAR(255) = (SELECT ETLBatchName FROM rpt.ETLBatchExecutions WHERE ETLBatchExecutionId = @ETLBatchExecutionId);
+	@ETLBatchName NVARCHAR(255) = (SELECT ETLBatchName FROM rpt.ETLBatchExecutions WHERE ETLBatchExecutionId = @ETLBatchExecutionId),
+	@ETLBatchId INT = (SELECT ETLBatchId FROM ctl.ETLBatchExecution WHERE ETLBatchExecutionId = @ETLBatchExecutionId);
 	
+	DECLARE @DisablePackageCount INT = (SELECT COUNT(*) FROM rpt.ETLPackagesDisabled WHERE ETLBatchId = @ETLBatchId);
 	
 	DECLARE @EmailSubject VARCHAR(255) = @ETLBatchName + ' Completed Successfully';
 
@@ -44,7 +47,33 @@ AS
 								FOR XML PATH('tr'), TYPE ) AS NVARCHAR(MAX) )
                      + N'</table>';
 
-					SET @tableHTML = REPLACE(@tableHTML, '<td>', '<td style="border: 1px solid black;">')
+	IF @InclueDisabledPackages = 1 AND @DisablePackageCount > 0
+	BEGIN
+		SET @tableHTML = @tableHTML + '<br><br>' + 
+			N'<H2>' + ' Disabled Packages (' + CAST(@DisablePackageCount AS NVARCHAR(10)) + ')</H2>'
+                     + N'<table cellspacing="0" style="border: 1px solid black;>'
+                     + N'<tr style="border: 1px solid black;>
+                           <th style="border: 1px solid black;background-color: yellow;">Project Name</th>
+						   <th style="border: 1px solid black;background-color: yellow;">Package Name</th>
+						   <th style="border: 1px solid black;background-color: yellow;">Comments</th>'
+                     + CAST ( ( SELECT 
+									td = [SSISDBProjectName], '',
+									td = [SSISDBPackageName], '', 
+									td = [Comments], '' 
+								FROM ( 								
+									SELECT [SSISDBProjectName]
+										   ,[SSISDBPackageName]
+										   ,ISNULL(NULLIF(RTRIM(LTRIM([Comments])),''), '*None Entered*') AS [Comments]
+									FROM   [rpt].[ETLPackagesDisabled]
+									WHERE  ETLBatchId = @ETLBatchId
+									 ) t
+								ORDER BY [SSISDBProjectName]
+										,[SSISDBPackageName]
+								FOR XML PATH('tr'), TYPE ) AS NVARCHAR(MAX) )
+                     + N'</table>';
+	END
+
+	SET @tableHTML = REPLACE(@tableHTML, '<td>', '<td style="border: 1px solid black;">')
 
     EXEC msdb.dbo.sp_send_dbmail
       @recipients = @EmailRecipients,

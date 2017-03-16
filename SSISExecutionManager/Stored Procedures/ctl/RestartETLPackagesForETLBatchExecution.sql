@@ -3,9 +3,9 @@
 AS
     /*This stored procedure will set the ReadyForExecutionInd flag on any package in the given batch that has ended unexpectedly	*/
     DECLARE @ETLPackageId        INT,
-            @SSISDBFolderName    VARCHAR(128),
-            @SSISDBProjectName   VARCHAR(128),
-            @SSISDBPackageName   VARCHAR(260),
+            @SSISDBFolderName    NVARCHAR(128),
+            @SSISDBProjectName   NVARCHAR(128),
+            @SSISDBPackageName   NVARCHAR(260),
             @SSISDBExecutionId   BIGINT,
             @SSISEnvironmentName NVARCHAR(MAX)
     DECLARE UnexpectedErrorCursor CURSOR FAST_FORWARD FOR

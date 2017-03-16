@@ -110,7 +110,7 @@ ORDER BY StartDateTime DESC</CommandText>
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>0.28125in</Width>
+                  <Width>0.39583in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.65625in</Width>
@@ -140,7 +140,7 @@ ORDER BY StartDateTime DESC</CommandText>
                   <Width>0.82292in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1in</Width>
+                  <Width>1.11458in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -569,7 +569,7 @@ ORDER BY StartDateTime DESC</CommandText>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Package Status</Value>
+                                  <Value>Package Statuses</Value>
                                   <Style>
                                     <FontFamily />
                                     <FontSize>8pt</FontSize>
@@ -648,6 +648,13 @@ ORDER BY StartDateTime DESC</CommandText>
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>=SWITCH(Fields!ETLBatchStatus.Value = "Running", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Created", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Halted", "PaleGoldenrod",
+Fields!ETLBatchStatus.Value = "Timed Out", "Salmon",
+Fields!ETLBatchStatus.Value = "Exception", "Salmon",
+Fields!ETLBatchStatus.Value = "Manually Ended/Canceled", "LightGrey"
+)</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -687,6 +694,13 @@ ORDER BY StartDateTime DESC</CommandText>
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>=SWITCH(Fields!ETLBatchStatus.Value = "Running", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Created", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Halted", "PaleGoldenrod",
+Fields!ETLBatchStatus.Value = "Timed Out", "Salmon",
+Fields!ETLBatchStatus.Value = "Exception", "Salmon",
+Fields!ETLBatchStatus.Value = "Manually Ended/Canceled", "LightGrey"
+)</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -726,6 +740,13 @@ ORDER BY StartDateTime DESC</CommandText>
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>=SWITCH(Fields!ETLBatchStatus.Value = "Running", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Created", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Halted", "PaleGoldenrod",
+Fields!ETLBatchStatus.Value = "Timed Out", "Salmon",
+Fields!ETLBatchStatus.Value = "Exception", "Salmon",
+Fields!ETLBatchStatus.Value = "Manually Ended/Canceled", "LightGrey"
+)</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -766,6 +787,13 @@ ORDER BY StartDateTime DESC</CommandText>
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>=SWITCH(Fields!ETLBatchStatus.Value = "Running", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Created", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Halted", "PaleGoldenrod",
+Fields!ETLBatchStatus.Value = "Timed Out", "Salmon",
+Fields!ETLBatchStatus.Value = "Exception", "Salmon",
+Fields!ETLBatchStatus.Value = "Manually Ended/Canceled", "LightGrey"
+)</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -805,6 +833,13 @@ ORDER BY StartDateTime DESC</CommandText>
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>=SWITCH(Fields!ETLBatchStatus.Value = "Running", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Created", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Halted", "PaleGoldenrod",
+Fields!ETLBatchStatus.Value = "Timed Out", "Salmon",
+Fields!ETLBatchStatus.Value = "Exception", "Salmon",
+Fields!ETLBatchStatus.Value = "Manually Ended/Canceled", "LightGrey"
+)</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -844,6 +879,13 @@ ORDER BY StartDateTime DESC</CommandText>
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>=SWITCH(Fields!ETLBatchStatus.Value = "Running", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Created", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Halted", "PaleGoldenrod",
+Fields!ETLBatchStatus.Value = "Timed Out", "Salmon",
+Fields!ETLBatchStatus.Value = "Exception", "Salmon",
+Fields!ETLBatchStatus.Value = "Manually Ended/Canceled", "LightGrey"
+)</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -883,6 +925,13 @@ ORDER BY StartDateTime DESC</CommandText>
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>=SWITCH(Fields!ETLBatchStatus.Value = "Running", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Created", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Halted", "PaleGoldenrod",
+Fields!ETLBatchStatus.Value = "Timed Out", "Salmon",
+Fields!ETLBatchStatus.Value = "Exception", "Salmon",
+Fields!ETLBatchStatus.Value = "Manually Ended/Canceled", "LightGrey"
+)</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -922,6 +971,13 @@ ORDER BY StartDateTime DESC</CommandText>
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>=SWITCH(Fields!ETLBatchStatus.Value = "Running", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Created", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Halted", "PaleGoldenrod",
+Fields!ETLBatchStatus.Value = "Timed Out", "Salmon",
+Fields!ETLBatchStatus.Value = "Exception", "Salmon",
+Fields!ETLBatchStatus.Value = "Manually Ended/Canceled", "LightGrey"
+)</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -961,6 +1017,13 @@ ORDER BY StartDateTime DESC</CommandText>
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>=SWITCH(Fields!ETLBatchStatus.Value = "Running", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Created", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Halted", "PaleGoldenrod",
+Fields!ETLBatchStatus.Value = "Timed Out", "Salmon",
+Fields!ETLBatchStatus.Value = "Exception", "Salmon",
+Fields!ETLBatchStatus.Value = "Manually Ended/Canceled", "LightGrey"
+)</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -1007,15 +1070,25 @@ ORDER BY StartDateTime DESC</CommandText>
                           </ActionInfo>
                           <Style>
                             <Border>
+                              <Color>LightGrey</Color>
                               <Style>None</Style>
                             </Border>
+                            <BottomBorder>
+                              <Style>Solid</Style>
+                            </BottomBorder>
+                            <BackgroundColor>=SWITCH(Fields!ETLBatchStatus.Value = "Running", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Created", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Halted", "PaleGoldenrod",
+Fields!ETLBatchStatus.Value = "Timed Out", "Salmon",
+Fields!ETLBatchStatus.Value = "Exception", "Salmon",
+Fields!ETLBatchStatus.Value = "Manually Ended/Canceled", "LightGrey"
+)</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -1027,7 +1100,7 @@ ORDER BY StartDateTime DESC</CommandText>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value EvaluationMode="Constant">Package Status</Value>
+                                  <Value>Package Statuses</Value>
                                   <Style>
                                     <FontFamily />
                                     <FontSize>8pt</FontSize>
@@ -1063,6 +1136,13 @@ ORDER BY StartDateTime DESC</CommandText>
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>=SWITCH(Fields!ETLBatchStatus.Value = "Running", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Created", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Halted", "PaleGoldenrod",
+Fields!ETLBatchStatus.Value = "Timed Out", "Salmon",
+Fields!ETLBatchStatus.Value = "Exception", "Salmon",
+Fields!ETLBatchStatus.Value = "Manually Ended/Canceled", "LightGrey"
+)</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -1114,7 +1194,7 @@ ORDER BY StartDateTime DESC</CommandText>
             <DataSetName>ETLBatchExecutions</DataSetName>
             <Top>0.355in</Top>
             <Height>0.43in</Height>
-            <Width>11.4896in</Width>
+            <Width>11.71876in</Width>
             <ZIndex>1</ZIndex>
             <Style />
           </Tablix>
@@ -1122,7 +1202,7 @@ ORDER BY StartDateTime DESC</CommandText>
         <Height>0.785in</Height>
         <Style />
       </Body>
-      <Width>11.4896in</Width>
+      <Width>11.71876in</Width>
       <Page>
         <LeftMargin>1in</LeftMargin>
         <RightMargin>1in</RightMargin>

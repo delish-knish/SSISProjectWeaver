@@ -1,6 +1,6 @@
-﻿CREATE FUNCTION [dbo].[func_GetSSISDBPackageId] (@SSISDBPackageName VARCHAR (260),
-                                            @SSISDBProjectName VARCHAR(128),
-                                            @SSISDBFolderName  VARCHAR(128))
+﻿CREATE FUNCTION [dbo].[func_GetSSISDBPackageId] (@SSISDBPackageName NVARCHAR (260),
+                                            @SSISDBProjectName NVARCHAR(128),
+                                            @SSISDBFolderName  NVARCHAR(128))
 RETURNS INT
 AS
   BEGIN

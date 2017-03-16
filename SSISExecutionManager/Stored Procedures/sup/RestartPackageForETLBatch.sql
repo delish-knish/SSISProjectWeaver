@@ -1,6 +1,6 @@
-﻿CREATE PROCEDURE [sup].[RestartPackageForETLBatch] @SSISDBFolderName           VARCHAR(128),
-                                                   @SSISDBProjectName          VARCHAR(128),
-                                                   @SSISDBPackageName          VARCHAR (260),
+﻿CREATE PROCEDURE [sup].[RestartPackageForETLBatch] @SSISDBFolderName           NVARCHAR(128),
+                                                   @SSISDBProjectName          NVARCHAR(128),
+                                                   @SSISDBPackageName          NVARCHAR (260),
                                                    @BypassEntryPointPackageInd BIT = 0,
                                                    @IgnoreDependenciesInd      BIT = 0
 AS

@@ -59,6 +59,8 @@ AS
              ,source.StartDateTime
              ,source.EndDateTime
              ,source. ETLPackageStatusId
-			 ,source.MissingSSISDBExecutablesEntryInd);
+			 ,source.MissingSSISDBExecutablesEntryInd)
+
+	OPTION (FORCE ORDER);
 
     RETURN 0 

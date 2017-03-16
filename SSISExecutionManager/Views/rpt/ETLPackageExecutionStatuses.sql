@@ -4,6 +4,7 @@ AS
                  eps.[ETLBatchName],
                  ep.[ETLPackageId],
                  pkg.SSISDBExecutionId,
+				 ep.[SSISDBFolderName],
                  ep.[SSISDBProjectName],
                  ep.[SSISDBPackageName],
                  pkg.StartDateTime                                                       AS ExecutionStartDateTime,
@@ -24,5 +25,4 @@ FROM   ctl.[ETLBatchExecution] ebe WITH (NOLOCK)
        LEFT JOIN ref.ETLPackageExecutionStatus rpes WITH (NOLOCK)
               ON pkg.ETLPackageExecutionStatusId = rpes.ETLPackageExecutionStatusId
 
---OPTION (HASH GROUP)
 GO 

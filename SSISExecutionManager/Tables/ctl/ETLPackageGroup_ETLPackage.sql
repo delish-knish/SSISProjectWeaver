@@ -3,6 +3,7 @@
      [ETLPackageGroup_ETLPackageId] INT IDENTITY(1, 1) NOT NULL
     ,[ETLPackageGroupId]            INT NOT NULL
     ,[ETLPackageId]                 INT NOT NULL
+	,[IgnoreForBatchCompleteInd]    BIT CONSTRAINT [DF_ETLPackageGroup_ETLPackage_IgnoreForBatchCompleteInd] DEFAULT (0) NOT NULL
     ,[EnabledInd]                   BIT CONSTRAINT [DF_ETLPackageGroup_ETLPackage_EnabledInd] DEFAULT (1) NOT NULL
     ,[CreatedDate]                  DATETIME2 (7) CONSTRAINT [DF_ETLPackageGroup_ETLPackage_CreatedDate] DEFAULT (GETDATE()) NOT NULL
     ,[CreatedUser]                  VARCHAR (50) CONSTRAINT [DF_ETLPackageGroup_ETLPackage_CreatedUser] DEFAULT (SUSER_SNAME()) NOT NULL

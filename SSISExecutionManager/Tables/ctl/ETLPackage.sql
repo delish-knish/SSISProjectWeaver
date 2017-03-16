@@ -1,9 +1,9 @@
 ﻿CREATE TABLE [ctl].[ETLPackage]
   (
      [ETLPackageId]                 INT IDENTITY (1, 1) NOT NULL
-    ,[SSISDBFolderName]             VARCHAR (128) NOT NULL
-    ,[SSISDBProjectName]            VARCHAR (128) NOT NULL
-    ,[SSISDBPackageName]            VARCHAR (260) NOT NULL
+    ,[SSISDBFolderName]             NVARCHAR (128) NOT NULL
+    ,[SSISDBProjectName]            NVARCHAR (128) NOT NULL
+    ,[SSISDBPackageName]            NVARCHAR (260) NOT NULL
     ,[EntryPointPackageInd] AS (CONVERT([BIT], CASE
                            WHEN [EntryPointETLPackageId] IS NULL THEN (1)
                            ELSE (0)

@@ -7,7 +7,7 @@ AS
     --Declare variables
     --------------------------------------
     DECLARE @SSISDBExecutionId    INT,
-            @SSISDBPackageName    VARCHAR(4000),
+            @SSISDBPackageName    NVARCHAR(4000),
             @StartTime            DATETIME,
             @AverageExecutionTime INT,
             @EMailBody            VARCHAR(4000),
