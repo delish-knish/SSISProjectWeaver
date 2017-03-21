@@ -29,13 +29,14 @@ AS
       DECLARE @ErrorEmailRecipients      VARCHAR(MAX) = ( [dbo].[func_GetConfigurationValue] ('Email Recipients - Default') ),
               @BatchStartedWithinMinutes VARCHAR(MAX),
               @PollingDelay				 CHAR(8) = ( [dbo].[func_GetConfigurationValue] ('ETL Batch Polling Delay') ),
-			  @SendBatchCompleteEmailInd BIT = (CAST( [dbo].[func_GetConfigurationValue] ('Send Batch Complete Email') AS BIT));
+			  @SendBatchCompleteEmailInd BIT;
 
       --Get running ETLBatch
       SELECT
-        @ETLBatchExecutionId = [ETLBatchExecutionId]
+        @ETLBatchExecutionId = ETLBatchExecutionId
         ,@PreviousETLBatchExecutionStatusId = ETLBatchStatusId
 		,@BatchStartedWithinMinutes = MinutesBackToContinueBatch
+		,@SendBatchCompleteEmailInd = SendBatchCompleteEmailInd
       FROM
         [dbo].[func_GetRunningETLBatchExecution] (@BatchStartedWithinMinutes, @CallingJobName) eb;
 

@@ -3,10 +3,8 @@
 MERGE cfg.[Configuration] AS Target
 USING (VALUES ('Email Recipients - Default','$(EmailRecipientsDefault)'),
 			  ('Email Recipients - Monitors', '$(EmailRecipientsMonitors)'),
-			  --('Minutes Back to Continue a Batch', '4320'),
 			  ('ETL Batch Polling Delay','00:00:05'),
 			  ('Default SQL Command Trigger Polling Delay','00:05:00'),
-			  ('Send Batch Complete Email', 'True'),
 			  ('Report Disabled Packages','True')
 			  
 			  	  ) AS Source (ConfigurationName, ConfigurationValue )
@@ -17,6 +15,6 @@ WHEN NOT MATCHED BY TARGET THEN
           ,ConfigurationValue)
   VALUES (ConfigurationName
           ,ConfigurationValue)
---WHEN NOT MATCHED BY SOURCE THEN
---  DELETE
+WHEN NOT MATCHED BY SOURCE THEN
+  DELETE
   ; 

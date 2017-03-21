@@ -10,6 +10,7 @@ AS
          ,ebe.StartDateTime
 		 ,ebe.ETLBatchId
 		 ,eb.MinutesBackToContinueBatch
+		 ,eb.SendBatchCompleteEmailInd
        FROM
          ctl.[ETLBatchExecution] ebe (NOLOCK)
 		 JOIN ctl.[ETLBatch] eb (NOLOCK)
