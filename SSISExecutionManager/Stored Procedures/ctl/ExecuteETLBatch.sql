@@ -7,7 +7,8 @@ AS
     --Set up "Constants"
     DECLARE @ETLBatchExecutionCompleteStatusId                   INT = 5,
             @ETLBatchExecutionTimeOutStatusId                    INT = 8,
-            @ETLBatchExecutionExceptionStatusId                  INT = 9;
+            @ETLBatchExecutionExceptionStatusId                  INT = 9,
+			@ETLBatchExecutionCanceledStatusId			 INT = 10;
 
     --Set up logging variables
     DECLARE @CurrentDateTime  DATETIME = GETDATE(),
@@ -27,7 +28,8 @@ AS
       --Get values from Config table
       DECLARE @ErrorEmailRecipients      VARCHAR(MAX) = ( [dbo].[func_GetConfigurationValue] ('Email Recipients - Default') ),
               @BatchStartedWithinMinutes VARCHAR(MAX),
-              @PollingDelay				 CHAR(8) = ( [dbo].[func_GetConfigurationValue] ('ETL Batch Polling Delay') );
+              @PollingDelay				 CHAR(8) = ( [dbo].[func_GetConfigurationValue] ('ETL Batch Polling Delay') ),
+			  @SendBatchCompleteEmailInd BIT = (CAST( [dbo].[func_GetConfigurationValue] ('Send Batch Complete Email') AS BIT));
 
       --Get running ETLBatch
       SELECT
@@ -64,7 +66,7 @@ AS
               EXEC ctl.[RestartETLPackagesForETLBatchExecution] @ETLBatchExecutionId,@ErrorEmailRecipients;
 
             --The batch has just been marked as complete
-            IF @ETLBatchExecutionStatusId = @ETLBatchExecutionCompleteStatusId --Was already completed or has just completed 
+            IF @ETLBatchExecutionStatusId IN (@ETLBatchExecutionCompleteStatusId, @ETLBatchExecutionCanceledStatusId) --Was already completed, has just completed, or was manually canceled 
               BEGIN
                   --Archive the execution stats of the packages for the batch
                   EXEC [log].SaveETLPackageExecutions @ETLBatchExecutionId = @ETLBatchExecutionId;
@@ -72,6 +74,9 @@ AS
                   SET @EventDescription = 'Batch completed';
 
                   EXEC [log].InsertETLBatchEvent 5,@ETLBatchExecutionId,NULL,@EventDescription;
+
+				  IF @SendBatchCompleteEmailInd = 1
+					EXEC [ops].[SendCompletedBatchExecutionStatistics] @ETLBatchExecutionId;
               END
         END --End: The batch is already running
       ELSE 
@@ -131,7 +136,7 @@ AS
 
       --The batch is in progress. Run all packages ready for execution.
       IF @ETLBatchExecutionId IS NOT NULL
-         AND @ETLBatchExecutionStatusId <> @ETLBatchExecutionCompleteStatusId
+         AND @ETLBatchExecutionStatusId NOT IN (@ETLBatchExecutionCompleteStatusId, @ETLBatchExecutionCanceledStatusId)
         BEGIN
             SET @EventDescription = 'Identifying packages to execute';
 

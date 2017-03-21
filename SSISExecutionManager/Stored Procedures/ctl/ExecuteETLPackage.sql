@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [ctl].[ExecuteETLPackage] @ETLBatchId          INT,
+﻿CREATE PROCEDURE [ctl].[ExecuteETLPackage] @ETLBatchExecutionId INT,
                                            @ETLPackageId        INT,
                                            @SSISEnvironmentName VARCHAR(128) = NULL,
                                            @SSISExecutionId     BIGINT = NULL OUT
@@ -8,6 +8,7 @@ AS
             ,@SSISDBFolderName             NVARCHAR(128)
             ,@Use32BitDtExecInd            BIT
             ,@OverrideSSISDBLoggingLevelId INT
+            ,@HasParamETLBatchExecutionId  BIT
             ,@EnvironmentReferenceId       INT = NULL
 
     --Get the package path values required by the create_execution stored procedure
@@ -18,6 +19,7 @@ AS
      ,@Use32BitDtExecInd = ep.Use32BitDtExecInd
      ,@EnvironmentReferenceId = env.reference_id
      ,@OverrideSSISDBLoggingLevelId = ep.OverrideSSISDBLoggingLevelId
+	 ,@HasParamETLBatchExecutionId = ep.HasParamETLBatchExecutionId
     FROM
       [ctl].ETLPackage ep
       JOIN [$(SSISDB)].[catalog].[packages] pkg
@@ -43,43 +45,32 @@ AS
     DECLARE @ExecutionId BIGINT
 
     EXEC [$(SSISDB)].[catalog].[create_execution]
-      @package_name=@SSISDBPackageName
-     ,--SSIS package name TABLE:(SELECT * FROM [SSISDB].internal.packages)
-      @folder_name=@SSISDBFolderName
-     ,--Folder were the package lives TABLE:(SELECT * FROM [SSISDB].internal.folders)
-      @project_name=@SSISDBProjectName
-     ,--Project name were SSIS package lives TABLE:(SELECT * FROM [SSISDB].internal.projects)
-      @use32bitruntime=@Use32BitDtExecInd
-     ,--Use the 32 dtexec runtime
-      @reference_id=@EnvironmentReferenceId
-     ,--Environment reference, if null then no environment configuration is applied.
-      @execution_id=@ExecutionId OUTPUT --The paramter is outputed and contains the execution_id of your SSIS execution context.
+      @package_name=@SSISDBPackageName --SSIS package name TABLE:(SELECT * FROM [SSISDB].internal.packages)
+     ,@folder_name=@SSISDBFolderName --Folder were the package lives TABLE:(SELECT * FROM [SSISDB].internal.folders)
+     ,@project_name=@SSISDBProjectName --Project name were SSIS package lives TABLE:(SELECT * FROM [SSISDB].internal.projects)
+     ,@use32bitruntime=@Use32BitDtExecInd --Use the 32 dtexec runtime
+     ,@reference_id=@EnvironmentReferenceId --Environment reference, if null then no environment configuration is applied.
+     ,@execution_id=@ExecutionId OUTPUT --The paramter is outputed and contains the execution_id of your SSIS execution context.
 
-/*--Set parameter values
-Use this logic to set generic parameters that can be found in entry-point packages. An example would be if some packages have a daily/hourly
-parameter and they behave differently based on this parameter. You could store a flag such as "ContainsPeriodicityIntelligenceInd" in the ETLPackage table
-and if the bit = 1 then the execute method will expect that this parameter will be passed (likely originating from the ctl.ExecuteETLBatch stored procedure
+    IF @HasParamETLBatchExecutionId = 1
+      BEGIN
+          DECLARE @ETLBatchExecutionIdParam SQL_VARIANT = @ETLBatchExecutionId --Parameter value needs to a sql_variant
 
-IF @ContainsPeriodicityIntelligence = 1 --We need to pass the param to a package parameter
-  BEGIN
-      DECLARE @PeriodicityParam SQL_VARIANT = @PeriodicityParam --Parameter value needs to a sql_variant
+          EXEC [$(SSISDB)].[catalog].[set_execution_parameter_value]
+            @ExecutionId           -- The execution_id value we received by calling [create_execution]
+           ,@object_type=30           --30 is Package Parameters, you can also use 20 for Project parameters or 50 for Environment
+           ,@parameter_name=N'ETLBatchExecutionId'           --Parameter name
+            ,@parameter_value= @ETLBatchExecutionIdParam
+      END
 
-      EXEC [$(SSISDB)].[catalog].[set_execution_parameter_value] @ExecutionId,-- The execution_id value we received by calling [create_execution]
-                                                                 @object_type=30,--30 is Package Parameters, you can also use 20 for Project parameters or 50 for Environment
-                                                                 @parameter_name=N'Periodicity',--Parameter name
-                                                                 @parameter_value= @PeriodicityParam
-  END */
     --Set the logging level if an override is configured
     IF @OverrideSSISDBLoggingLevelId IS NOT NULL
       BEGIN
           EXEC [$(SSISDB)].[catalog].[set_execution_parameter_value]
-            @ExecutionId
-           ,-- The execution_id value we received by calling [create_execution]
-            @object_type=50
-           ,--30 is Package Parameters, you can also use 20 for Project parameters or 50 for Environment
-            @parameter_name=N'LOGGING_LEVEL'
-           ,--Parameter name
-            @parameter_value= @OverrideSSISDBLoggingLevelId
+            @ExecutionId           -- The execution_id value we received by calling [create_execution]
+            ,@object_type=50           --30 is Package Parameters, you can also use 20 for Project parameters or 50 for Environment
+            ,@parameter_name=N'LOGGING_LEVEL'           --Parameter name
+            ,@parameter_value= @OverrideSSISDBLoggingLevelId
       END
 
     --Execute the package
@@ -94,7 +85,7 @@ IF @ContainsPeriodicityIntelligence = 1 --We need to pass the param to a package
 
     --Associate the SSISDB Execution ID with the batch 
     EXEC ctl.InsertETLBatchSSISDBExecution
-      @ETLBatchId
+      @ETLBatchExecutionId
      ,@ExecutionId
      ,@ETLPackageId
 

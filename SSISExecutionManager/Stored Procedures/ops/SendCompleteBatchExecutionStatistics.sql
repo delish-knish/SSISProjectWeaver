@@ -4,12 +4,19 @@ AS
 	DECLARE @EmailRecipients VARCHAR(MAX) = ( [dbo].[func_GetConfigurationValue] ('Email Recipients - Monitors') ),
 	@InclueDisabledPackages BIT = ( IIF([dbo].[func_GetConfigurationValue] ('Report Disabled Packages') = 'True', 1, 0) ),
     @tableHTML NVARCHAR(MAX),
-	@ETLBatchName NVARCHAR(255) = (SELECT ETLBatchName FROM rpt.ETLBatchExecutions WHERE ETLBatchExecutionId = @ETLBatchExecutionId),
+	@ETLBatchName NVARCHAR(255),
+	@ETLBatchStatus NVARCHAR(50),
 	@ETLBatchId INT = (SELECT ETLBatchId FROM ctl.ETLBatchExecution WHERE ETLBatchExecutionId = @ETLBatchExecutionId);
+
+	SELECT
+		@ETLBatchName = ETLBatchName 
+		,@ETLBatchStatus = ETLBatchStatus
+	FROM rpt.ETLBatchExecutions 
+	WHERE ETLBatchExecutionId = @ETLBatchExecutionId;
 	
 	DECLARE @DisablePackageCount INT = (SELECT COUNT(*) FROM rpt.ETLPackagesDisabled WHERE ETLBatchId = @ETLBatchId);
 	
-	DECLARE @EmailSubject VARCHAR(255) = @ETLBatchName + ' Completed Successfully';
+	DECLARE @EmailSubject VARCHAR(255) = @ETLBatchName + ' ' + @ETLBatchStatus;
 
     SET @tableHTML = N'<H1>' + 'Batch Id: ' + CAST(@ETLBatchExecutionId AS VARCHAR) + ' - ' + @ETLBatchName + '</H1>'
                      + N'<table cellspacing="0" style="border: 1px solid black;>'

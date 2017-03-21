@@ -16,7 +16,7 @@ AS
     ctl.ETLPackage ep
     LEFT JOIN ctl.ETLPackage epp
       ON ep.EntryPointETLPackageId = epp.ETLPackageId
-	JOIN ctl.ETLPackageGroup_ETLPackage epgb ON ep.ETLpackageID = epgb.ETLPackageId
+	JOIN ctl.ETLPackageGroup_ETLPackage epgb ON ep.ETLPackageId = epgb.ETLPackageId
 	JOIN ctl.ETLBatch_ETLPackageGroup ebpgb ON epgb.ETLPackageGroupId = ebpgb.ETLPackageGroupId
   WHERE
     ep.EnabledInd = 0 

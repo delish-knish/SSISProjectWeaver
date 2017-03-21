@@ -6,6 +6,7 @@ USING (VALUES ('Email Recipients - Default','$(EmailRecipientsDefault)'),
 			  --('Minutes Back to Continue a Batch', '4320'),
 			  ('ETL Batch Polling Delay','00:00:05'),
 			  ('Default SQL Command Trigger Polling Delay','00:05:00'),
+			  ('Send Batch Complete Email', 'True'),
 			  ('Report Disabled Packages','True')
 			  
 			  	  ) AS Source (ConfigurationName, ConfigurationValue )

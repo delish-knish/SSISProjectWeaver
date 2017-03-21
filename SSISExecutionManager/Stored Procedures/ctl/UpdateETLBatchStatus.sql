@@ -6,7 +6,7 @@ AS
             @TotalETLPackageCount                              SMALLINT = NULL,
             @TotalRemainingETLPackageCount                     SMALLINT = NULL;
 
-    SELECT
+	SELECT
       @TotalEntryPointPackageCount = epb.TotalEntryPointPackageCount
       ,@TotalRemainingEntryPointPackageCount = epb.TotalRemainingEntryPointPackageCount
       ,@TotalETLPackageCount = epb.TotalETLPackageCount

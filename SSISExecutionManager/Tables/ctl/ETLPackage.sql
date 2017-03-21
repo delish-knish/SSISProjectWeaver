@@ -16,6 +16,7 @@
     ,[MaximumRetryAttempts]         INT CONSTRAINT [DF_ETLPackage_MaximumRetryAttempts] DEFAULT ((0)) NOT NULL
     ,[RemainingRetryAttempts]       INT CONSTRAINT [DF_ETLPackage_RemainingRetryAttempts] DEFAULT ((0)) NOT NULL
     ,[OverrideSSISDBLoggingLevelId] INT NULL
+    ,[HasParamETLBatchExecutionId]  BIT CONSTRAINT [DF_ETLPackage_HasParamETLBatchExecutionId] DEFAULT ((0)) NOT NULL
     ,[ExecuteSundayInd]             BIT CONSTRAINT [DF_ETLPackage_ExecuteSundayInd] DEFAULT ((0)) NOT NULL
     ,[ExecuteMondayInd]             BIT CONSTRAINT [DF_ETLPackage_ExecuteMondayInd] DEFAULT ((0)) NOT NULL
     ,[ExecuteTuesdayInd]            BIT CONSTRAINT [DF_ETLPackage_ExecuteTuesdayInd] DEFAULT ((0)) NOT NULL
