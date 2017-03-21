@@ -10,7 +10,7 @@ AS
     ,IIF(eb.EndDateTime IS NULL
          AND lb.StartDateTime > eb.StartDateTime, NULL, DATEDIFF(MINUTE, eb.StartDateTime, ISNULL(eb.EndDateTime, GETDATE()))) AS [ExecutionDurationInMinutes]
     ,IIF(eb.EndDateTime IS NULL
-         AND lb.StartDateTime > eb.StartDateTime, 'Cancelled', rebs.ETLBatchStatus)                                            AS ETLBatchStatus
+         AND lb.StartDateTime > eb.StartDateTime, 'Canceled', rebs.ETLBatchStatus)                                            AS ETLBatchStatus
 	,eb.TotalEntryPointPackageCount
     ,eb.TotalRemainingEntryPointPackageCount
     ,eb.TotalETLPackageCount

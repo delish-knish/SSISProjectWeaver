@@ -12,7 +12,7 @@ AS
         ,PackagesReadyToExecuteCount = SUM(CAST(ep.ReadyForExecutionInd AS TINYINT))
         ,RunningPackageCount = SUM(r.RunningPackageCount)
         ,ETLBatchExecutionStatusId = CASE
-                                        WHEN MIN(eb.ETLBatchStatusId) = 10 THEN 10 -- The batch has been manually cancelled and we don't want to overwrite that
+                                        WHEN MIN(eb.ETLBatchStatusId) = 10 THEN 10 -- The batch has been manually canceled and we don't want to overwrite that
 										WHEN SUM(CAST(ep.EntryPointPackageInd AS TINYINT)) - SUM(IIF((epb.ETLPackageExecutionStatusId IN (0, 2) --Succeeded or Completed
                                                                                                      AND ep.EntryPointPackageInd = 1)
 																									 OR (epb.ETLPackageExecutionStatusId IN(1,4) --Failed or Canceled but can be ignored for batch complete status

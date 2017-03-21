@@ -15,7 +15,7 @@ AS
        WHEN 0 THEN 'Success'
        WHEN 1 THEN 'Failure'
        WHEN 2 THEN 'Completion'
-       WHEN 3 THEN 'Cancelled'
+       WHEN 3 THEN 'Canceled'
      END                                             AS ExecutionResult
   FROM
     [$(SSISDB)].[catalog].[executable_statistics] st
