@@ -9,7 +9,6 @@ AS
          ,ebe.DayOfWeekName
          ,ebe.StartDateTime
 		 ,ebe.ETLBatchId
-		 ,eb.MinutesBackToContinueBatch
 		 ,eb.SendBatchCompleteEmailInd
        FROM
          ctl.[ETLBatchExecution] ebe (NOLOCK)

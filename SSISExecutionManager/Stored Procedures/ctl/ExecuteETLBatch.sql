@@ -27,7 +27,7 @@ AS
    BEGIN TRY
       --Get values from Config table
       DECLARE @ErrorEmailRecipients      VARCHAR(MAX) = ( [dbo].[func_GetConfigurationValue] ('Email Recipients - Default') ),
-              @BatchStartedWithinMinutes VARCHAR(MAX),
+              @BatchStartedWithinMinutes VARCHAR(MAX) = ISNULL((SELECT MinutesBackToContinueBatch FROM ctl.ETLBatch WHERE ETLBatchId = @ETLBatchId), 1440),
               @PollingDelay				 CHAR(8) = ( [dbo].[func_GetConfigurationValue] ('ETL Batch Polling Delay') ),
 			  @SendBatchCompleteEmailInd BIT;
 
@@ -35,7 +35,6 @@ AS
       SELECT
         @ETLBatchExecutionId = ETLBatchExecutionId
         ,@PreviousETLBatchExecutionStatusId = ETLBatchStatusId
-		,@BatchStartedWithinMinutes = MinutesBackToContinueBatch
 		,@SendBatchCompleteEmailInd = SendBatchCompleteEmailInd
       FROM
         [dbo].[func_GetRunningETLBatchExecution] (@BatchStartedWithinMinutes, @CallingJobName) eb;
