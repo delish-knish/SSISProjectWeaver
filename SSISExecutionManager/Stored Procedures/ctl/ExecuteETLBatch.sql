@@ -8,7 +8,7 @@ AS
     DECLARE @ETLBatchExecutionCompleteStatusId                   INT = 5,
             @ETLBatchExecutionTimeOutStatusId                    INT = 8,
             @ETLBatchExecutionExceptionStatusId                  INT = 9,
-			@ETLBatchExecutionCanceledStatusId			 INT = 10;
+			@ETLBatchExecutionCanceledStatusId					 INT = 10;
 
     --Set up logging variables
     DECLARE @CurrentDateTime  DATETIME = GETDATE(),
