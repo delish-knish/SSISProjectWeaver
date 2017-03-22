@@ -71,12 +71,23 @@ AS
                   --Archive the execution stats of the packages for the batch
                   EXEC [log].SaveETLPackageExecutions @ETLBatchExecutionId = @ETLBatchExecutionId;
 
-                  SET @EventDescription = 'Batch completed';
+                  IF @ETLBatchExecutionStatusId = @ETLBatchExecutionCompleteStatusId
+				  BEGIN
+					SET @EventDescription = 'Batch completed';
 
-                  EXEC [log].InsertETLBatchEvent 5,@ETLBatchExecutionId,NULL,@EventDescription;
+					EXEC [log].InsertETLBatchEvent 5,@ETLBatchExecutionId,NULL,@EventDescription;
+				  END
+				  ELSE --Canceled
+				  BEGIN
+					SET @EventDescription = 'Batch canceled';
+
+					EXEC [log].InsertETLBatchEvent 6,@ETLBatchExecutionId,NULL,@EventDescription;
+				  END
 
 				  IF @SendBatchCompleteEmailInd = 1
 					EXEC [ops].[SendCompletedBatchExecutionStatistics] @ETLBatchExecutionId;
+
+				  BREAK;
               END
         END --End: The batch is already running
       ELSE 

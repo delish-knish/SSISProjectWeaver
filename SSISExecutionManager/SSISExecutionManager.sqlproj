@@ -170,7 +170,7 @@
     <Build Include="Views\rpt\ETLPackageExecutions.sql" />
     <Build Include="Views\rpt\ETLPackageLongRunningNotifications.sql" />
     <Build Include="Views\rpt\ETLPackagesDisabled.sql" />
-    <Build Include="Views\rpt\ETLBatchesETLBatchPhases.sql" />
+    <Build Include="Views\rpt\ETLBatchesETLBatchGroups.sql" />
     <Build Include="Views\rpt\ETLPackageExecutionStatuses.sql" />
     <Build Include="Views\rpt\ETLPackagesSQLCommandTriggers.sql" />
     <Build Include="Views\rpt\SSISDBErrorMessages.sql" />

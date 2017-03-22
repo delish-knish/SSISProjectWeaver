@@ -6,6 +6,7 @@ AS
     ,eps.[ETLBatchName]
     ,b.[ETLPackageGroupId]
     ,ep.[ETLPackageGroup]
+	,b.[EnabledInd]
   FROM
     [ctl].[ETLBatch_ETLPackageGroup] b
     JOIN ctl.[ETLBatch] eps
