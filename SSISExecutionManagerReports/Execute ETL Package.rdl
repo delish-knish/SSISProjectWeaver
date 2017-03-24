@@ -14,8 +14,8 @@
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
         <QueryParameters>
-          <QueryParameter Name="@ETLBatchId">
-            <Value>=Parameters!ETLBatchId.Value</Value>
+          <QueryParameter Name="@ETLBatchExecutionId">
+            <Value>=Parameters!ETLBatchExecutionId.Value</Value>
           </QueryParameter>
           <QueryParameter Name="@SSISDBFolderName">
             <Value>=Parameters!SSISDBFolderName.Value</Value>
@@ -30,7 +30,7 @@
         <CommandText>DECLARE	@SSISExecutionId bigint
 
 EXEC	[sup].[ManuallyExecutePackageForETLBatch]
-		@ETLBatchId = @ETLBatchId,-- 899,
+		@ETLBatchExecutionId = @ETLBatchExecutionId,
 		@SSISDBFolderName = @SSISDBFolderName , 
 		@SSISDBProjectName = @SSISDBProjectName , 
 		@SSISDBPackageName = @SSISDBPackageName , 
@@ -185,7 +185,7 @@ SELECT	@SSISExecutionId as N'@SSISExecutionId'</CommandText>
             <DataSetName>ExecutePackage</DataSetName>
             <Top>0.26042in</Top>
             <Left>0.33333in</Left>
-            <Height>0.72042in</Height>
+            <Height>0.72041in</Height>
             <Width>5.60417in</Width>
             <Style />
           </Tablix>
@@ -204,17 +204,17 @@ SELECT	@SSISExecutionId as N'@SSISExecutionId'</CommandText>
     </ReportSection>
   </ReportSections>
   <ReportParameters>
-    <ReportParameter Name="ETLBatchId">
+    <ReportParameter Name="SSISDBProjectName">
       <DataType>String</DataType>
-      <Prompt>ETLBatch Id</Prompt>
+      <Prompt>SSISDBProject Name</Prompt>
     </ReportParameter>
     <ReportParameter Name="SSISDBFolderName">
       <DataType>String</DataType>
       <Prompt>SSISDBFolder Name</Prompt>
     </ReportParameter>
-    <ReportParameter Name="SSISDBProjectName">
+    <ReportParameter Name="ETLBatchExecutionId">
       <DataType>String</DataType>
-      <Prompt>SSISDBProject Name</Prompt>
+      <Prompt>ETLBatch Execution Id</Prompt>
     </ReportParameter>
     <ReportParameter Name="SSISDBPackageName">
       <DataType>String</DataType>
@@ -227,24 +227,24 @@ SELECT	@SSISExecutionId as N'@SSISExecutionId'</CommandText>
       <NumberOfRows>2</NumberOfRows>
       <CellDefinitions>
         <CellDefinition>
-          <ColumnIndex>0</ColumnIndex>
-          <RowIndex>0</RowIndex>
-          <ParameterName>ETLBatchId</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
           <RowIndex>0</RowIndex>
           <ParameterName>SSISDBFolderName</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
-          <RowIndex>1</RowIndex>
+          <RowIndex>0</RowIndex>
           <ParameterName>SSISDBProjectName</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
           <RowIndex>1</RowIndex>
           <ParameterName>SSISDBPackageName</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>1</RowIndex>
+          <ParameterName>ETLBatchExecutionId</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>

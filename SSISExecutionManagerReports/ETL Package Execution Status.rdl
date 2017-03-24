@@ -107,7 +107,7 @@ OPTION(FORCE ORDER)</CommandText>
     <DataSet Name="ETLBatchExecutions">
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
-        <CommandText>SELECT TOP 20
+        <CommandText>SELECT TOP 40
   ETLBatchExecutionId
   ,CAST(ETLBatchExecutionId AS VARCHAR) + ' ' + ETLBatchName + ' - ' + DayOfWeekName + ' - ' + FORMAT( StartDateTime , 'MM/dd/yyyy h:mmtt', 'en-US' ) AS ETLBatchName
 FROM
@@ -1188,7 +1188,7 @@ Fields!PackageExecutionStatus.Value = "Canceled", "Salmon"
                                                                     <Drillthrough>
                                                                       <ReportName>Execute ETL Package</ReportName>
                                                                       <Parameters>
-                                                                        <Parameter Name="ETLBatchId">
+                                                                        <Parameter Name="ETLBatchExecutionId">
                                                                           <Value>=Fields!ETLBatchExecutionId.Value</Value>
                                                                         </Parameter>
                                                                         <Parameter Name="SSISDBProjectName">
@@ -1224,6 +1224,7 @@ Fields!PackageExecutionStatus.Value = "Canceled", "Salmon"
                                                                 <PaddingBottom>2pt</PaddingBottom>
                                                               </Style>
                                                             </Textbox>
+                                                            <rd:Selected>true</rd:Selected>
                                                           </CellContents>
                                                         </TablixCell>
                                                       </TablixCells>

@@ -70,9 +70,12 @@ AS
                  OUTER APPLY dbo.func_GetETLPackageExecutionStatusesFromSSISDB(ISNULL(exe.ExecutionId, em.ExecutionId)) pes
                WHERE
                 eb.ETLBatchExecutionId = @ETLBatchExecutionId
+				AND ep.EnabledInd = 1
+				AND ebpspep.EnabledInd = 1
+				AND epeps.EnabledInd = 1
                 AND (pes.ETLPackageId = ep.ETLPackageId
                       OR pes.ETLPackageId IS NULL)
-                AND ep.EnabledInd = 1
+                
                 AND (ExecuteSundayInd = Iif(eb.DayOfWeekName = 'Sunday', 1, NULL)
                       OR ExecuteMondayInd = Iif(eb.DayOfWeekName = 'Monday', 1, NULL)
                       OR ExecuteTuesdayInd = Iif(eb.DayOfWeekName = 'Tuesday', 1, NULL)
