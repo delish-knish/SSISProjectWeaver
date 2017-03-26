@@ -43,16 +43,6 @@ AS
                WHERE
                 em.operation_id = @ExecutionId) t
 				where rownum = 1) ems ON ep.SSISDBPackageName = ems.PackageName --first message for the package
-		--JOIN (select * from (SELECT
-  --               em.package_name                   AS PackageName
-  --               ,em.message_time					AS MessageDateTime
-		--		 ,em.message
-		--		 ,ROW_NUMBER() OVER (PARTITION BY em.package_name ORDER BY em.message_time DESC) rownum
-  --             FROM
-  --               [$(SSISDB)].catalog.event_messages em (NOLOCK)
-  --             WHERE
-  --              em.operation_id = @ExecutionId) t
-		--		where rownum = 1) emf ON ep.SSISDBPackageName = emf.PackageName --last message for the package
 		LEFT JOIN (select * from (SELECT
                  em.package_name                   AS PackageName
                  ,em.message_time					AS MessageDateTime

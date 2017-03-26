@@ -3,6 +3,7 @@
                                          @ETLBatchId			INT
 AS
     SET XACT_ABORT, NOCOUNT ON;
+	SET ANSI_WARNINGS OFF;
 
     --Set up "Constants"
     DECLARE @ETLBatchExecutionCompleteStatusId                   INT = 5,

@@ -10,6 +10,6 @@ AS
       EntryPointPackageInd = 1
        OR BypassEntryPointInd = 1
 
-	OPTION (FORCE ORDER);
+	--OPTION (FORCE ORDER);
 
     RETURN 0 
