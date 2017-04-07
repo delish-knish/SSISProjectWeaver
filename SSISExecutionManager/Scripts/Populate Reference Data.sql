@@ -208,7 +208,7 @@ VALUES
 	(14,'Timeout'),
 	(15,'Executing SQL Command'),
 	(16,'SQL Command(s) Executed'),
-	(18,'SQL Command-based Trigger Executed'),
+	(18,'SQL Command-based Condition Evaluated'),
 	(19,'SQL Command Execution Error')
 
 MERGE ref.[ETLBatchExecutionEventType] AS Target

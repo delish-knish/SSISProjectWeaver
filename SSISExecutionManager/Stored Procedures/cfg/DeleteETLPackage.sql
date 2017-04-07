@@ -32,7 +32,7 @@ AS
           DELETE FROM ctl.[ETLPackageGroup_ETLPackage]
           WHERE  ETLPackageId = @ETLPackageId;
 
-          DELETE FROM ctl.[ETLPackage_SQLCommandTrigger]
+          DELETE FROM ctl.[ETLPackage_SQLCommandCondition]
           WHERE  ETLPackageId = @ETLPackageId;
 		  
           DELETE FROM ctl.ETLPackage

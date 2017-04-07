@@ -301,4 +301,53 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[OverrideSSISDBLoggingLevelId]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="25ba486a-32ec-4a27-b2f6-c8bcf301fd0d" ChangeDateTime="04/07/2017 00:14:14">
+    <Property Name="ElementName" Value="[ctl].[ETLPackage_SQLCommandTrigger]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[ctl]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[ETLPackage_SQLCommandCondition]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="af01faf8-c515-415e-8dda-449a0aafd603" ChangeDateTime="04/07/2017 00:14:30">
+    <Property Name="ElementName" Value="[ctl].[ETLPackage_SQLCommandCondition].[ETLPackage_SQLCommandTriggerId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[ctl].[ETLPackage_SQLCommandCondition]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ETLPackage_SQLCommandConditionId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1f9f4ffe-95ad-4c87-8f1d-a6e2ad77a58d" ChangeDateTime="04/07/2017 00:15:51">
+    <Property Name="ElementName" Value="[cfg].[DeleteETLPackage_SQLCommandTrigger]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[cfg]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[DeleteETLPackage_SQLCommandCondition]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0d6baf80-dd59-4d57-85fa-8c3a5c672e22" ChangeDateTime="04/07/2017 00:16:19">
+    <Property Name="ElementName" Value="[cfg].[ETLPackage_SQLCommandTrigger]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[cfg]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[SaveETLPackage_SQLCommandTrigger]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c9e4d809-6ea4-45e2-81b8-a295737a09b5" ChangeDateTime="04/07/2017 00:20:07">
+    <Property Name="ElementName" Value="[rpt].[ETLPackagesSQLCommandTriggers]" />
+    <Property Name="ElementType" Value="SqlView" />
+    <Property Name="ParentElementName" Value="[rpt]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[ETLPackagesSQLCommandConditions]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="cf910c3f-26ec-4595-b417-e4b97fe6b528" ChangeDateTime="04/07/2017 00:22:20">
+    <Property Name="ElementName" Value="[cfg].[SaveETLPackage_SQLCommandTrigger]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[cfg]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[SaveETLPackage_SQLCommandCondition]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="245a72d4-6f21-41a4-a4a2-af7f4a9d7fa4" ChangeDateTime="04/07/2017 00:38:01">
+    <Property Name="ElementName" Value="[ctl].[ETLPackage_SQLCommandCondition].[ETLPackage_SQLCommandTriggerId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[ctl].[ETLPackage_SQLCommandCondition]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ETLPackage_SQLCommandConditionId]" />
+  </Operation>
 </Operations>

@@ -1,5 +1,4 @@
 ﻿CREATE PROCEDURE [ctl].[ExecuteETLPackagesForBatchExecution] @ETLBatchExecutionId INT,
-                                                    --@Periodicity         CHAR(2),
                                                     @SSISEnvironmentName VARCHAR(128)
 AS
     --Get list of packages to execute for cursor
@@ -18,18 +17,18 @@ AS
 
     WHILE @@FETCH_STATUS = 0
       BEGIN
-          --Determine if SQL Command-based triggers are met
+          --Determine if SQL Command-based Conditons are met
           DECLARE @SQLCommand     NVARCHAR(MAX),
                   @SQLCommandName VARCHAR(128);
 
-          DECLARE @TriggersMetInd BIT = 1;
+          DECLARE @ConditionsMetInd BIT = 1;
 
           DECLARE SQLCommandCursor CURSOR FAST_FORWARD FOR
             SELECT
-              SQLCommand + ' @TriggerMetInd OUTPUT'
+              SQLCommand + ' @ConditionMetInd OUTPUT'
               ,SQLCommandName
             FROM
-              ctl.[ETLPackage_SQLCommandTrigger] b
+              ctl.[ETLPackage_SQLCommandCondition] b
               JOIN ctl.SQLCommand sc
                 ON b.SQLCommandId = sc.SQLCommandId
             WHERE
@@ -42,14 +41,14 @@ AS
 
           WHILE @@FETCH_STATUS = 0
             BEGIN
-                DECLARE @ParamDefinition NVARCHAR(MAX) = N'@TriggerMetInd BIT OUTPUT';
+                DECLARE @ParamDefinition NVARCHAR(MAX) = N'@ConditionMetInd BIT OUTPUT';
 
-                EXECUTE sp_executesql @SQLCommand,@ParamDefinition,@TriggerMetInd = @TriggersMetInd OUT;
+                EXECUTE sp_executesql @SQLCommand,@ParamDefinition,@ConditionMetInd = @ConditionsMetInd OUT;
 
-                IF @TriggersMetInd = 0
+                IF @ConditionsMetInd = 0
                   BEGIN
-                      --Log the failed trigger
-                      SET @EventDescription = @SQLCommandName + ' trigger condition not met.';
+                      --Log the failed condition
+                      SET @EventDescription = @SQLCommandName + ' condition not met.';
 
                       EXEC [log].InsertETLBatchEvent 18,@ETLBatchExecutionId,@ETLPackageId,@EventDescription;
 
@@ -57,8 +56,8 @@ AS
                   END
                 ELSE
                   BEGIN
-                      --Log the trigger success condition
-                      SET @EventDescription = @SQLCommandName + ' trigger condition met.';
+                      --Log the success condition
+                      SET @EventDescription = @SQLCommandName + ' condition met.';
 
                       EXEC [log].InsertETLBatchEvent 18,@ETLBatchExecutionId,@ETLPackageId,@EventDescription;
                   END
@@ -70,7 +69,7 @@ AS
 
           DEALLOCATE SQLCommandCursor
 
-          IF @TriggersMetInd = 1 --Execute package
+          IF @ConditionsMetInd = 1 --Execute package
             BEGIN
                 DECLARE @SSISExecutionId BIGINT;
 

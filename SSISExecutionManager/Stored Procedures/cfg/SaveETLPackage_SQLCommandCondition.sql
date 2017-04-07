@@ -1,9 +1,9 @@
-﻿CREATE PROCEDURE [cfg].[ETLPackage_SQLCommandTrigger] @ETLPackageId INT,
+﻿CREATE PROCEDURE [cfg].[SaveETLPackage_SQLCommandCondition] @ETLPackageId INT,
 																@SQLCommandId INT,
 																@EnabledInd   BIT
 AS
 
-          MERGE [ctl].[ETLPackage_SQLCommandTrigger] AS Target
+          MERGE [ctl].[ETLPackage_SQLCommandCondition] AS Target
           USING (SELECT
                    @ETLPackageId
                    ,@SQLCommandId

@@ -4,7 +4,7 @@
                                                          @EndETLBatchExecutionInd BIT OUT
 AS
     DECLARE @EventDescription           VARCHAR(MAX)
-            ,@PollingDelay              CHAR(8) = ([dbo].[func_GetConfigurationValue] ('Default SQL Command Trigger Polling Delay'))
+            ,@PollingDelay              CHAR(8) = ([dbo].[func_GetConfigurationValue] ('Default SQL Command Condition Evaluation Polling Delay'))
             ,@BatchStartedWithinMinutes INT = ([dbo].[func_GetConfigurationValue] ('Minutes Back to Continue a Batch'))
             ,@ErrorEmailRecipients      VARCHAR(MAX) = ([dbo].[func_GetConfigurationValue] ('Email Recipients - Default'))
             ,@SendTimeoutNotification   BIT = ([dbo].[func_GetConfigurationValue] ('Send Timeout Notifications'))

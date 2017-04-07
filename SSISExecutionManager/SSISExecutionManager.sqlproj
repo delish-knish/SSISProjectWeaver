@@ -148,7 +148,7 @@
     <Build Include="Tables\ctl\ETLBatchSSISDBExecutions.sql" />
     <Build Include="Tables\ctl\ETLPackage.sql" />
     <Build Include="Tables\ctl\ETLBatch_ETLPackageGroup.sql" />
-    <Build Include="Tables\ctl\ETLPackage_SQLCommandTrigger.sql" />
+    <Build Include="Tables\ctl\ETLPackage_SQLCommandCondition.sql" />
     <Build Include="Tables\ctl\ETLPackage_ETLPackageDependency.sql" />
     <Build Include="Tables\ctl\ETLBatch.sql" />
     <Build Include="Tables\ctl\SQLCommand.sql" />
@@ -181,7 +181,7 @@
     <None Include="Functions\Scalar-valued\func_GetSQLCommandCountForETLPackageGroup.sql" />
     <Build Include="Functions\Scalar-valued\func_GetETLBatchPhaseName.sql" />
     <None Include="Scripts\Sync ETLPackage Configurations.sql" />
-    <Build Include="Stored Procedures\sqlcmd\SQLCommandTriggerExample.sql" />
+    <Build Include="Stored Procedures\sqlcmd\SQLCommandConditionExample.sql" />
     <Build Include="Tables\log\ETLPackageExecutionRowLevelError.sql" />
     <Build Include="Stored Procedures\log\InsertETLPackageExecutionRowLevelError.sql" />
     <Build Include="Stored Procedures\cfg\DeleteETLBatch.sql" />
@@ -189,13 +189,13 @@
     <Build Include="Stored Procedures\cfg\DeleteETLPackageGroup.sql" />
     <Build Include="Stored Procedures\cfg\DeleteETLPackageGroup_SQLCommand.sql" />
     <Build Include="Stored Procedures\cfg\DeleteETLPackage_ETLPackageDependency.sql" />
-    <Build Include="Stored Procedures\cfg\DeleteETLPackage_SQLCommandTrigger.sql" />
+    <Build Include="Stored Procedures\cfg\DeleteETLPackage_SQLCommandCondition.sql" />
     <Build Include="Stored Procedures\cfg\DeleteSQLCommand.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLBatch_ETLPackageGroup.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLPackageGroup.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLPackageGroup_ETLPackage.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLBatchPhase_SQLCommand.sql" />
-    <Build Include="Stored Procedures\cfg\SaveETLPackage_SQLCommandTrigger.sql" />
+    <Build Include="Stored Procedures\cfg\SaveETLPackage_SQLCommandCondition.sql" />
     <Build Include="Stored Procedures\ops\SendRowLevelErrorsEmail.sql" />
     <Build Include="Views\rpt\ETLPackageGroupExecutions.sql" />
     <Build Include="Stored Procedures\ops\SendCompleteBatchExecutionStatistics.sql" />
@@ -255,6 +255,10 @@
     <SqlCmdVariable Include="EmailRecipientsMonitors">
       <DefaultValue>support@youremail.com</DefaultValue>
       <Value>$(SqlCmdVar__5)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="ExampleProjectsRootFolder">
+      <DefaultValue>Z:\Source Code\Repos\SSISProjectWeaver\</DefaultValue>
+      <Value>$(SqlCmdVar__9)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="SolutionRootDir">
       <DefaultValue>C:\Source Code\Repos\SSISProjectWeaver\</DefaultValue>

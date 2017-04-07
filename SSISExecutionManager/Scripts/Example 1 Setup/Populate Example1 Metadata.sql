@@ -8,15 +8,15 @@ ALTER TABLE [ctl].[ETLPackage] DROP CONSTRAINT [FK_ETLPackage_EntryPointETLPacka
 ALTER TABLE [ctl].[ETLPackage] DROP CONSTRAINT [FK_ETLPackage_SupportSeverityLevel]
 ALTER TABLE [ctl].[ETLPackageGroup_SQLCommand] DROP CONSTRAINT [FK_ETLPackageGroup_SQLCommand_SQLCommand_ETLPackageGroup]
 ALTER TABLE [ctl].[ETLPackageGroup_SQLCommand] DROP CONSTRAINT [FK_ETLPackageGroup_SQLCommand_SQLCommand_SQLCommand]
-ALTER TABLE [ctl].[ETLPackage_SQLCommandTrigger] DROP CONSTRAINT [FK_ETLPackage_SQLCommandTrigger_ETLPackage]
-ALTER TABLE [ctl].[ETLPackage_SQLCommandTrigger] DROP CONSTRAINT [FK_ETLPackage_SQLCommandTrigger_SQLCommand]
+ALTER TABLE [ctl].[ETLPackage_SQLCommandCondition] DROP CONSTRAINT [FK_ETLPackage_SQLCommandCondition_ETLPackage]
+ALTER TABLE [ctl].[ETLPackage_SQLCommandCondition] DROP CONSTRAINT [FK_ETLPackage_SQLCommandCondition_SQLCommand]
 SET IDENTITY_INSERT [ctl].[SQLCommand] ON
 INSERT INTO [ctl].[SQLCommand] ([SQLCommandId], [SQLCommandName], [SQLCommand], [SQLCommandDescription], [RequiresETLBatchIdParameterInd], [RequiresEndETLBatchExecutionParameterInd], [CreatedDate], [CreatedUser], [LastUpdatedDate], [LastUpdatedUser]) VALUES (1, N'Check And Wait For Competing Jobs', N'EXEC [sqlcmd].[CheckAndWaitForCompetingJobs] ''SomeOtherJobName''', N'Waits for a particular job to complete before allowing this job/batch to start.', 0, 0, '20160617 19:13:44.2666667', N'MicrosoftAccount\orders@elish.net', '20160617 19:13:44.2666667', N'MicrosoftAccount\orders@elish.net')
-INSERT INTO [ctl].[SQLCommand] ([SQLCommandId], [SQLCommandName], [SQLCommand], [SQLCommandDescription], [RequiresETLBatchIdParameterInd], [RequiresEndETLBatchExecutionParameterInd], [CreatedDate], [CreatedUser], [LastUpdatedDate], [LastUpdatedUser]) VALUES (2, N'Example SQL Command Trigger', N'EXEC [sqlcmd].[SQLCommandTriggerExample]', N'Example of a SQL Command-based ETL Package trigger.', 0, 0, '20160618 19:01:05.0100000', N'MicrosoftAccount\orders@elish.net', '20160618 19:01:05.0100000', N'MicrosoftAccount\orders@elish.net')
+INSERT INTO [ctl].[SQLCommand] ([SQLCommandId], [SQLCommandName], [SQLCommand], [SQLCommandDescription], [RequiresETLBatchIdParameterInd], [RequiresEndETLBatchExecutionParameterInd], [CreatedDate], [CreatedUser], [LastUpdatedDate], [LastUpdatedUser]) VALUES (2, N'Example SQL Command Condition', N'EXEC [sqlcmd].[SQLCommandConditionExample]', N'Example of a SQL Command-based ETL Package condition.', 0, 0, '20160618 19:01:05.0100000', N'MicrosoftAccount\orders@elish.net', '20160618 19:01:05.0100000', N'MicrosoftAccount\orders@elish.net')
 SET IDENTITY_INSERT [ctl].[SQLCommand] OFF
-SET IDENTITY_INSERT [ctl].[ETLPackage_SQLCommandTrigger] ON
-INSERT INTO [ctl].[ETLPackage_SQLCommandTrigger] ([ETLPackage_SQLCommandTriggerId], [ETLPackageId], [SQLCommandId], [EnabledInd], [CreatedDate], [CreatedUser]) VALUES (1, 2, 2, 1, '20160618 19:01:47.3500000', N'MicrosoftAccount\orders@elish.net')
-SET IDENTITY_INSERT [ctl].[ETLPackage_SQLCommandTrigger] OFF
+SET IDENTITY_INSERT [ctl].[ETLPackage_SQLCommandCondition] ON
+INSERT INTO [ctl].[ETLPackage_SQLCommandCondition] ([ETLPackage_SQLCommandConditionId], [ETLPackageId], [SQLCommandId], [EnabledInd], [CreatedDate], [CreatedUser]) VALUES (1, 2, 2, 1, '20160618 19:01:47.3500000', N'MicrosoftAccount\orders@elish.net')
+SET IDENTITY_INSERT [ctl].[ETLPackage_SQLCommandCondition] OFF
 SET IDENTITY_INSERT [ctl].[ETLPackageGroup_SQLCommand] ON
 INSERT INTO [ctl].[ETLPackageGroup_SQLCommand] ([ETLPackageGroup_SQLCommandId], [ETLPackageGroupId], [SQLCommandId], [ExecuteAtBeginningOfGroupInd], [ExecuteAtEndOfGroupInd], [FailBatchOnFailureInd], [ExecutionOrder], [CreatedDate], [CreatedUser]) VALUES (1, 1, 1, 1, 0, 0, 0, '20160617 19:14:14.8933333', N'MicrosoftAccount\orders@elish.net')
 SET IDENTITY_INSERT [ctl].[ETLPackageGroup_SQLCommand] OFF
@@ -76,7 +76,7 @@ ALTER TABLE [ctl].[ETLPackageGroup_SQLCommand]
     ADD CONSTRAINT [FK_ETLPackageGroup_SQLCommand_SQLCommand_ETLPackageGroup] FOREIGN KEY ([ETLPackageGroupId]) REFERENCES [ctl].[ETLPackageGroup] ([ETLPackageGroupId])
 ALTER TABLE [ctl].[ETLPackageGroup_SQLCommand]
     ADD CONSTRAINT [FK_ETLPackageGroup_SQLCommand_SQLCommand_SQLCommand] FOREIGN KEY ([SQLCommandId]) REFERENCES [ctl].[SQLCommand] ([SQLCommandId])
-ALTER TABLE [ctl].[ETLPackage_SQLCommandTrigger]
-    ADD CONSTRAINT [FK_ETLPackage_SQLCommandTrigger_ETLPackage] FOREIGN KEY ([ETLPackageId]) REFERENCES [ctl].[ETLPackage] ([ETLPackageId])
-ALTER TABLE [ctl].[ETLPackage_SQLCommandTrigger]
-    ADD CONSTRAINT [FK_ETLPackage_SQLCommandTrigger_SQLCommand] FOREIGN KEY ([SQLCommandId]) REFERENCES [ctl].[SQLCommand] ([SQLCommandId])
+ALTER TABLE [ctl].[ETLPackage_SQLCommandCondition]
+    ADD CONSTRAINT [FK_ETLPackage_SQLCommandCondition_ETLPackage] FOREIGN KEY ([ETLPackageId]) REFERENCES [ctl].[ETLPackage] ([ETLPackageId])
+ALTER TABLE [ctl].[ETLPackage_SQLCommandCondition]
+    ADD CONSTRAINT [FK_ETLPackage_SQLCommandCondition_SQLCommand] FOREIGN KEY ([SQLCommandId]) REFERENCES [ctl].[SQLCommand] ([SQLCommandId])
