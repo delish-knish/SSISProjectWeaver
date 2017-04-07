@@ -9,16 +9,11 @@ AS
     DECLARE @ETLBatchExecutionCompleteStatusId                   INT = 5,
             @ETLBatchExecutionTimeOutStatusId                    INT = 8,
             @ETLBatchExecutionExceptionStatusId                  INT = 9,
-			@ETLBatchExecutionCanceledStatusId					 INT = 10;
-
-    --Set up logging variables
-    DECLARE @CurrentDateTime  DATETIME = GETDATE(),
-            @EventDescription VARCHAR(MAX);
+			@ETLBatchExecutionCanceledStatusId					 INT = 10,
+			@ETLBatchExecutionAutoCanceledStatusId				 INT = 11;
 
     --Set up batch variables
-    DECLARE @ETLBatchExecutionId				INT,
-            @PreviousETLBatchExecutionStatusId	INT,
-			@ETLBatchExecutionStatusId			INT = 0;
+    DECLARE @ETLBatchExecutionStatusId			INT = 0;
 
 	--Set up Batch behavior variables
     DECLARE @EndETLBatchExecutionInd BIT = 0;
@@ -27,10 +22,16 @@ AS
    BEGIN
    BEGIN TRY
       --Get values from Config table
-      DECLARE @ErrorEmailRecipients      VARCHAR(MAX) = ( [dbo].[func_GetConfigurationValue] ('Email Recipients - Default') ),
-              @BatchStartedWithinMinutes VARCHAR(MAX) = ISNULL((SELECT MinutesBackToContinueBatch FROM ctl.ETLBatch WHERE ETLBatchId = @ETLBatchId), 1440),
-              @PollingDelay				 CHAR(8) = ( [dbo].[func_GetConfigurationValue] ('ETL Batch Polling Delay') ),
-			  @SendBatchCompleteEmailInd BIT;
+      DECLARE @ETLBatchExecutionId					INT = NULL,
+              @PreviousETLBatchExecutionStatusId	INT = NULL,
+			  @ErrorEmailRecipients					VARCHAR(MAX) = ( [dbo].[func_GetConfigurationValue] ('Email Recipients - Default') ),
+              @BatchStartedWithinMinutes			VARCHAR(MAX) = ISNULL((SELECT MinutesBackToContinueBatch FROM ctl.ETLBatch WHERE ETLBatchId = @ETLBatchId), 1440),
+              @PollingDelay							CHAR(8) = ( [dbo].[func_GetConfigurationValue] ('ETL Batch Polling Delay') ),
+			  @SendBatchCompleteEmailInd			BIT;
+
+	  --Set up logging variables
+      DECLARE @CurrentDateTime  DATETIME = GETDATE(),
+              @EventDescription VARCHAR(MAX);
 
       --Get running ETLBatch
       SELECT
@@ -93,6 +94,18 @@ AS
         END --End: The batch is already running
       ELSE 
         BEGIN --The batch has not yet been created
+
+			--Cancel any "open" batches of the same type 
+			--TODO: Create proc which loops through open batches and calls ctl.EndETLBatchExecution proc
+			 UPDATE ctl.[ETLBatchExecution]
+			 SET ETLBatchStatusId = @ETLBatchExecutionAutoCanceledStatusId
+				,EndDateTime = GETDATE()
+				,LastUpdatedDate = GETDATE()
+				,LastUpdatedUser = SUSER_SNAME()
+			 WHERE
+				ETLBatchId = @ETLBatchId
+				AND EndDateTime IS NULL
+
 			--Seed the ETLBatchExecution table
             EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId OUT,@SSISEnvironmentName = @SSISEnvironmentName,@CallingJobName = @CallingJobName,@ETLBatchId = @ETLBatchId,@StartDateTime = @CurrentDateTime,@EndDateTime = NULL,@ETLBatchStatusId = 1;
 

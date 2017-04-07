@@ -48,7 +48,7 @@ AS
                 IF @ConditionsMetInd = 0
                   BEGIN
                       --Log the failed condition
-                      SET @EventDescription = @SQLCommandName + ' condition not met.';
+                      SET @EventDescription = @SQLCommandName + ' condition not met';
 
                       EXEC [log].InsertETLBatchEvent 18,@ETLBatchExecutionId,@ETLPackageId,@EventDescription;
 
@@ -57,7 +57,7 @@ AS
                 ELSE
                   BEGIN
                       --Log the success condition
-                      SET @EventDescription = @SQLCommandName + ' condition met.';
+                      SET @EventDescription = @SQLCommandName + ' condition met';
 
                       EXEC [log].InsertETLBatchEvent 18,@ETLBatchExecutionId,@ETLPackageId,@EventDescription;
                   END

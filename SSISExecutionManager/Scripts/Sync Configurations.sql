@@ -3,7 +3,7 @@
 MERGE cfg.[Configuration] AS Target
 USING (VALUES ('Email Recipients - Default','$(EmailRecipientsDefault)'),
 			  ('Email Recipients - Monitors', '$(EmailRecipientsMonitors)'),
-			  ('ETL Batch Polling Delay','00:00:05'),
+			  ('ETL Batch Polling Delay','00:00:30'),
 			  ('Default SQL Command Condition Evaluation Polling Delay','00:05:00'),
 			  ('Report Disabled Packages','True')
 			  

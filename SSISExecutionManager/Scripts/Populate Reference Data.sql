@@ -118,7 +118,8 @@ VALUES
 	(6,'Running'),
 	(8,'Timed Out'),
 	(9,'Exception'),
-	(10,'Canceled')
+	(10,'Canceled'),
+	(11,'Auto-Canceled')
 
 MERGE ref.ETLBatchStatus AS Target
 USING Sync_ETLBatchStatus AS Source ON (Target.[ETLBatchStatusId] = Source.[ETLBatchStatusId])
