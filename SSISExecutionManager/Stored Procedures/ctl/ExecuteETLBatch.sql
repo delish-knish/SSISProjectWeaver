@@ -16,7 +16,8 @@ AS
     DECLARE @ETLBatchExecutionStatusId			INT = 0;
 
 	--Set up Batch behavior variables
-    DECLARE @EndETLBatchExecutionInd BIT = 0;
+    DECLARE @EndETLBatchExecutionInd BIT = 0,
+			@LoopCounter			 INT = 0;
 
    WHILE @ETLBatchExecutionStatusId NOT IN (5,8,9) --While batch is not in the "Complete" state, hasn't timed out, and hasn't encountered an exception
    BEGIN
@@ -93,71 +94,36 @@ AS
               END
         END --End: The batch is already running
       ELSE 
-        BEGIN --The batch has not yet been created
+        BEGIN --The batch has not yet been created or it has been manually canceled
+			 --End the batch if it was manually canceled
+			IF @LoopCounter > 0 and @ETLBatchExecutionId IS NULL --The proc has been running for at least one iteration but there are no open batches of this type
+			BEGIN
+				BREAK;
+			END
+			ELSE
+			BEGIN
+				--Cancel any "open" batches of the same type 
+				--TODO: Create proc which loops through open batches and calls ctl.EndETLBatchExecution proc
+				 UPDATE ctl.[ETLBatchExecution]
+				 SET ETLBatchStatusId = @ETLBatchExecutionAutoCanceledStatusId
+					,EndDateTime = GETDATE()
+					,LastUpdatedDate = GETDATE()
+					,LastUpdatedUser = SUSER_SNAME()
+				 WHERE
+					ETLBatchId = @ETLBatchId
+					AND EndDateTime IS NULL
 
-			--Cancel any "open" batches of the same type 
-			--TODO: Create proc which loops through open batches and calls ctl.EndETLBatchExecution proc
-			 UPDATE ctl.[ETLBatchExecution]
-			 SET ETLBatchStatusId = @ETLBatchExecutionAutoCanceledStatusId
-				,EndDateTime = GETDATE()
-				,LastUpdatedDate = GETDATE()
-				,LastUpdatedUser = SUSER_SNAME()
-			 WHERE
-				ETLBatchId = @ETLBatchId
-				AND EndDateTime IS NULL
+				--Seed the ETLBatchExecution table
+				EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId OUT,@SSISEnvironmentName = @SSISEnvironmentName,@CallingJobName = @CallingJobName,@ETLBatchId = @ETLBatchId,@StartDateTime = @CurrentDateTime,@EndDateTime = NULL,@ETLBatchStatusId = 1;
 
-			--Seed the ETLBatchExecution table
-            EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId OUT,@SSISEnvironmentName = @SSISEnvironmentName,@CallingJobName = @CallingJobName,@ETLBatchId = @ETLBatchId,@StartDateTime = @CurrentDateTime,@EndDateTime = NULL,@ETLBatchStatusId = 1;
+				SET @EventDescription = 'Batch created';
 
-            SET @EventDescription = 'Batch created';
+				EXEC [log].InsertETLBatchEvent 1,@ETLBatchExecutionId,NULL,@EventDescription;
 
-            EXEC [log].InsertETLBatchEvent 1,@ETLBatchExecutionId,NULL,@EventDescription;
-
-            --Set the ReadyForExecutionInd flag on entry-point packages and packages set to bypass entry-point packages
-            EXEC [ctl].[UpdatePackagesToExecuteForBatch] @ETLBatchExecutionId;
+				--Set the ReadyForExecutionInd flag on entry-point packages and packages set to bypass entry-point packages
+				EXEC [ctl].[UpdatePackagesToExecuteForBatch] @ETLBatchExecutionId;
+			END
         END --End: Create Batch
-
-	  --Run SQLCommands
-	  /*TODO: This is invalid because there could be multiple batch pha$es
-	  IF @PreviousETLBatchPha$eId <> @ETLBatchPha$eId
-	  BEGIN
-		DECLARE @SQLCommandCount SMALLINT;
-		--If there are "end" SQLCommands for this pha$e then execute them
-		SET @SQLCommandCount = [dbo].[func_GetSQLCommandCountForETLBatchPha$e](@PreviousETLBatchPha$eId, NULL, 1);
-		IF @SQLCommandCount > 0
-              BEGIN
-                  EXEC [ctl].[ExecuteETLBatchPha$eSQLCommands] @ETLBatchExecutionId,@PreviousETLBatchPha$eId,NULL,1,@EndETLBatchExecutionInd OUT;
-
-                  SET @EventDescription = 'Executing end of [' + [dbo].[func_GetETLBatchPha$eName](@PreviousETLBatchPha$eId) + '] Pha$e SQL Commands';
-
-                  EXEC [log].InsertETLBatchEvent 16,@ETLBatchExecutionId,NULL,@EventDescription;
-
-                  IF @EndETLBatchExecutionInd = 1
-                    BEGIN
-                        SET @ETLBatchExecutionStatusId = @ETLBatchExecutionTimeOutStatusId;
-
-                        RETURN;
-                    END
-              END 
-
-		--If there are "begin" SQLCommands for this pha$e then execute them
-		SET @SQLCommandCount = [dbo].[func_GetSQLCommandCountForETLBatchPha$e](@ETLBatchPha$eId, 1, NULL);
-		IF @SQLCommandCount > 0
-              BEGIN
-                  EXEC [ctl].[ExecuteETLBatchPha$eSQLCommands] @ETLBatchExecutionId,@ETLBatchPha$eId,NULL,1,@EndETLBatchExecutionInd OUT;
-
-                  SET @EventDescription = 'Executing begin of [' + [dbo].[func_GetETLBatchPha$eName](@ETLBatchPha$eId) + '] Pha$e SQL Commands';
-
-                  EXEC [log].InsertETLBatchEvent 16,@ETLBatchExecutionId,NULL,@EventDescription;
-
-                  IF @EndETLBatchExecutionInd = 1
-                    BEGIN
-                        SET @ETLBatchExecutionStatusId = @ETLBatchExecutionTimeOutStatusId;
-
-                        RETURN;
-                    END
-              END 
-	  END */
 
       --The batch is in progress. Run all packages ready for execution.
       IF @ETLBatchExecutionId IS NOT NULL
@@ -190,6 +156,8 @@ AS
 
   IF @ETLBatchExecutionStatusId NOT IN (5,8,9)
 			WAITFOR DELAY @PollingDelay;
+
+  SET @LoopCounter = @LoopCounter + 1
 
   END
     RETURN 0 
