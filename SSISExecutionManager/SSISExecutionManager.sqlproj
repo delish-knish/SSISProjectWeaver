@@ -213,6 +213,8 @@
     <Build Include="Stored Procedures\cfg\ClearHistory.sql" />
     <Build Include="Views\rpt\ETLPackageExecutableStatistics.sql" />
     <Build Include="Tables\ref\SSISDBLoggingLevel.sql" />
+    <Build Include="Views\rpt\ETLBatchGroupsStatuses.sql" />
+    <Build Include="Stored Procedures\ops\SendETLBatchGroupsStatusesNotification.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="References\SSISDB.dacpac" />
