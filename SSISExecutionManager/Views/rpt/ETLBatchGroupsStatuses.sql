@@ -1,7 +1,9 @@
 ﻿CREATE VIEW [rpt].[ETLBatchGroupsStatuses]
 AS
   SELECT
-    ebe.ETLBatchExecutionId
+    ebe.[ETLBatchExecutionId]
+   ,ebe.[CallingJobName]
+   ,eb.[ETLBatchName]
    ,ebp.[ETLPackageGroup]
    ,MIN(ex.start_time) AS GroupStartDateTime
    ,MAX(ex.end_time)   AS GroupEndDateTime
@@ -9,6 +11,8 @@ AS
     ctl.ETLBatchExecution ebe
     JOIN [ctl].[ETLBatch_ETLPackageGroup] b
       ON ebe.ETLBatchId = b.ETLBatchId
+    JOIN ctl.ETLBatch eb
+      ON ebe.ETLBatchId = eb.ETLBatchId
     JOIN [ctl].[ETLPackageGroup] ebp
       ON b.[ETLPackageGroupId] = ebp.[ETLPackageGroupId]
     JOIN ctl.ETLPackageGroup_ETLPackage grppkg
@@ -22,5 +26,7 @@ AS
     LEFT JOIN [$(SSISDB)].[catalog].executions ex
            ON ebsdbe.SSISDBExecutionId = ex.execution_id
   GROUP  BY
-    ebe.ETLBatchExecutionId
+    ebe.[ETLBatchExecutionId]
+    ,ebe.[CallingJobName]
+    ,eb.[ETLBatchName]
     ,ebp.[ETLPackageGroup] 
