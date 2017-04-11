@@ -1,8 +1,10 @@
-﻿CREATE PROCEDURE [cfg].[DeleteETLPackage_SQLCommandCondition]	@ETLPackageId INT,
-																@SQLCommandId INT
+﻿CREATE PROCEDURE [cfg].[ETLBatch_DeleteETLPackage_SQLCommandCondition] @ETLBatchId   INT,
+                                                                       @ETLPackageId INT,
+                                                                       @SQLCommandId INT
 AS
-    DELETE FROM ctl.[ETLPackage_SQLCommandCondition]
-    WHERE  ETLPackageId = @ETLPackageId
+    DELETE FROM ctl.[ETLBatch_ETLPackage_SQLCommandCondition]
+    WHERE  ETLBatchId = @ETLBatchId
+           AND ETLPackageId = @ETLPackageId
            AND SQLCommandId = @SQLCommandId
 
     RETURN 0 

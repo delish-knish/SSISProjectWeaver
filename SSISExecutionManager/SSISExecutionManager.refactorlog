@@ -350,4 +350,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[ETLPackage_SQLCommandConditionId]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="10ec7f79-d6d2-4d42-97b8-748278affe51" ChangeDateTime="04/11/2017 04:38:52">
+    <Property Name="ElementName" Value="[ctl].[ETLPackage_SQLCommandCondition]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[ctl]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[ETLBatch_ETLPackage_SQLCommandCondition]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3930bf1c-c382-4f44-ab74-fa5d462086b9" ChangeDateTime="04/11/2017 04:39:59">
+    <Property Name="ElementName" Value="[cfg].[DeleteETLPackage_SQLCommandCondition]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[cfg]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[ETLBatch_DeleteETLPackage_SQLCommandCondition]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="632a0f62-93ec-46cc-b6cb-ba39a255bae9" ChangeDateTime="04/11/2017 04:48:34">
+    <Property Name="ElementName" Value="[ctl].[ETLBatchSSISDBExecutions].[IX_ETLBatchSSISDBExecutions_Column]" />
+    <Property Name="ElementType" Value="SqlIndex" />
+    <Property Name="ParentElementName" Value="[ctl].[ETLBatchSSISDBExecutions]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[IXU_ETLBatchSSISDBExecutions_Column]" />
+  </Operation>
 </Operations>

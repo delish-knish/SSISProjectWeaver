@@ -18,9 +18,9 @@ AS
     SET @tableHTML = N'<H1>' + 'Batch Id: ' + CAST(@ETLBatchExecutionId AS VARCHAR) + ' - ' + @ETLBatchName + '</H1>'
                      + N'<table cellspacing="0" style="border: 1px solid black;>'
                      + N'<tr style="border: 1px solid black;>
-                           <th style="border: 1px solid black;background-color: grey;">Process/Package Group</th>
-						   <th style="border: 1px solid black;background-color: grey;">Start</th>
-						   <th style="border: 1px solid black;background-color: grey;">End</th>'
+                           <th style="border: 1px solid black;background-color: gray;">Process/Package Group</th>
+						   <th style="border: 1px solid black;background-color: gray;">Start</th>
+						   <th style="border: 1px solid black;background-color: gray;">End</th>'
                      + CAST ( ( SELECT 
 									td = [ETLPackageGroup], '',
 									td = StartTime, '', 

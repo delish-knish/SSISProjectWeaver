@@ -148,7 +148,7 @@
     <Build Include="Tables\ctl\ETLBatchSSISDBExecutions.sql" />
     <Build Include="Tables\ctl\ETLPackage.sql" />
     <Build Include="Tables\ctl\ETLBatch_ETLPackageGroup.sql" />
-    <Build Include="Tables\ctl\ETLPackage_SQLCommandCondition.sql" />
+    <Build Include="Tables\ctl\ETLBatch_ETLPackage_SQLCommandCondition.sql" />
     <Build Include="Tables\ctl\ETLPackage_ETLPackageDependency.sql" />
     <Build Include="Tables\ctl\ETLBatch.sql" />
     <Build Include="Tables\ctl\SQLCommand.sql" />

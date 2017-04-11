@@ -21,6 +21,7 @@ AS
 																									 , 1, 0)) = 0 THEN 5 --Completed (we use entry point packages to determine completeness because it is possible to have acceptable child package failures)
                                         WHEN COUNT(*) - SUM(IIF(epb.ETLPackageExecutionStatusId IN (0, 2), 1, 0)) > 0
                                              AND SUM(CAST(ep.ReadyForExecutionInd AS TINYINT)) = 0
+											 AND SUM(CAST(epb.IgnoreForBatchCompleteInd AS TINYINT)) = 0
                                              AND COUNT(*) - (COUNT(*) - SUM(IIF(epb.ETLPackageExecutionStatusId IN (0, 2), 1, 0))) <> 0
                                              AND COUNT(*) - SUM(IIF(epb.ETLPackageExecutionStatusId IN (0, 2), 1, 0)) - SUM(r.RunningPackageCount) > 0 --Remaining - Running
                                       THEN 4 --Halted

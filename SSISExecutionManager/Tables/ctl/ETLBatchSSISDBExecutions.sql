@@ -20,3 +20,7 @@ CREATE INDEX [IX_ETLBatchSSISDBExecutions_ETLPackageId]
 GO
 
 CREATE INDEX [IX_ETLBatchSSISDBExecutions_SSISDBExecutionId] ON [ctl].[ETLBatchSSISDBExecutions] (SSISDBExecutionId)
+
+GO
+
+
