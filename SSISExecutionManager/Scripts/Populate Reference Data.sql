@@ -204,6 +204,7 @@ VALUES
 	(5,'Completed'),
 	(6,'Canceled'),
 	(7,'Error Notifications Sent'),
+	(10,'Waiting for Competing SQL Agent Job'),
 	(11,'Waiting for Sufficient Time to Pass'),
 	(13,'Restarting Package After Unexpected Termination'),
 	(14,'Timeout'),

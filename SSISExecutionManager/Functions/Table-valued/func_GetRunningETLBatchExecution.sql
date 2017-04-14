@@ -17,4 +17,5 @@ AS
        WHERE
         DATEDIFF(MINUTE, StartDateTime, GETDATE()) <= @BatchStartedWithinMinutes
         AND EndDateTime IS NULL
-        AND CallingJobName = @CallingJobName) 
+        AND CallingJobName = @CallingJobName
+		AND ETLBatchStatusId <> 1) --To handle batches that have been created but are waiting on SQL Command Conditions - might have to revisit 

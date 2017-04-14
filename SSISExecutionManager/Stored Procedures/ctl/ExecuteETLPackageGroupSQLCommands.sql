@@ -38,7 +38,7 @@ AS
           --Execute the SQL Command
           SET @EventDescription = 'Executing SQL Command "' + @SQLCommandName + '"';
 
-          EXEC [log].InsertETLBatchEvent 15,@ETLBatchExecutionId,NULL,@EventDescription;
+          EXEC [log].[InsertETLBatchExecutionEvent] 15,@ETLBatchExecutionId,NULL,@EventDescription;
 
           --Use a TRY/CATCH block so that we can continue executing upon failure
           BEGIN TRY
@@ -64,7 +64,7 @@ AS
           BEGIN CATCH
               SET @EventDescription = 'Error while attempting to execute SQL Command "' + @SQLCommandName + '" Error: ' + ERROR_MESSAGE();
 
-              EXEC [log].InsertETLBatchEvent 19,@ETLBatchExecutionId,NULL,@EventDescription;
+              EXEC [log].[InsertETLBatchExecutionEvent] 19,@ETLBatchExecutionId,NULL,@EventDescription;
 
               IF @FailBatchOnFailureInd = 1
                 THROW; --The error will be logged by ctl.ExecuteETLBatch

@@ -53,7 +53,7 @@ AS
                       --Log the failed condition
                       SET @EventDescription = @SQLCommandName + ' condition not met';
 
-                      EXEC [log].InsertETLBatchEvent
+                      EXEC [log].[InsertETLBatchExecutionEvent]
                         18
                        ,@ETLBatchExecutionId
                        ,@ETLPackageId
@@ -66,7 +66,7 @@ AS
                       --Log the success condition
                       SET @EventDescription = @SQLCommandName + ' condition met';
 
-                      EXEC [log].InsertETLBatchEvent
+                      EXEC [log].[InsertETLBatchExecutionEvent]
                         18
                        ,@ETLBatchExecutionId
                        ,@ETLPackageId
@@ -87,7 +87,7 @@ AS
                 --Log and execute the package
                 SET @EventDescription = 'Executing package Id ' + CAST(@ETLPackageId AS VARCHAR(10));
 
-                EXEC [log].InsertETLBatchEvent
+                EXEC [log].[InsertETLBatchExecutionEvent]
                   3
                  ,@ETLBatchExecutionId
                  ,@ETLPackageId

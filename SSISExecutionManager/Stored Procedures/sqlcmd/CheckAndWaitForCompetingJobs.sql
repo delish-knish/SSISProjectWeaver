@@ -1,22 +1,17 @@
-﻿CREATE PROCEDURE [sqlcmd].[CheckAndWaitForCompetingJobs] @CallingJobName          VARCHAR(128),
+﻿CREATE PROCEDURE [sqlcmd].[CheckAndWaitForCompetingJobs] @ETLBatchId              INT,
+                                                         @CallingJobName          VARCHAR(128) = NULL,
                                                          @JobNameToWaitFor        VARCHAR(128),
-                                                         @ETLBatchExecutionId     INT,
-                                                         @EndETLBatchExecutionInd BIT OUT
+                                                         @EndETLBatchExecutionInd BIT OUT,
+														 @PollingDelayOverride CHAR(8) = NULL
 AS
     DECLARE @EventDescription           VARCHAR(MAX)
-            ,@PollingDelay              CHAR(8) = ([dbo].[func_GetConfigurationValue] ('Default SQL Command Condition Evaluation Polling Delay'))
-            ,@BatchStartedWithinMinutes INT = ([dbo].[func_GetConfigurationValue] ('Minutes Back to Continue a Batch'))
-            ,@ErrorEmailRecipients      VARCHAR(MAX) = ([dbo].[func_GetConfigurationValue] ('Email Recipients - Default'))
-            ,@SendTimeoutNotification   BIT = ([dbo].[func_GetConfigurationValue] ('Send Timeout Notifications'))
-            ,@BatchDayOfWeekName        VARCHAR(10)
-            ,@BatchStartDateTime        DATETIME2
-            ,@ETLBatchTimeOutStatusId   INT = 8
-            ,@TimeoutEmailSubject       VARCHAR(MAX) = @@SERVERNAME + ' ' + @CallingJobName + ' Timed Out';
+            ,@PollingDelay              CHAR(8) = (ISNULL(@PollingDelayOverride, ([dbo].[func_GetConfigurationValue] ('Default SQL Command Condition Evaluation Polling Delay'))))
+            ,@BatchStartedWithinMinutes INT = (TRY_CAST(ISNULL((SELECT  MinutesBackToContinueBatch FROM ctl.ETLBatch WHERE ETLBatchId = @ETLBatchId), 1440) AS INT))
+            ,@ETLBatchExecutionId       INT = NULL;
 
-    --Get running ETLBatch
+    --Get running ETLBatch if there is one
     SELECT
-      @BatchDayOfWeekName = DayOfWeekName
-     ,@BatchStartDateTime = StartDateTime
+      @ETLBatchExecutionId = ETLBatchExecutionId
     FROM
       [dbo].[func_GetRunningETLBatchExecution] (@BatchStartedWithinMinutes, @CallingJobName) eb
 
@@ -24,11 +19,18 @@ AS
       BEGIN
           SET @EventDescription = 'Waiting for [' + @JobNameToWaitFor + '] job to complete. Wait interval ' + @PollingDelay;
 
-          EXEC [log].InsertETLBatchEvent
-            10
-           ,@ETLBatchExecutionId
-           ,NULL
-           ,@EventDescription;
+          IF @ETLBatchExecutionId IS NOT NULL
+            BEGIN
+                EXEC [log].[InsertETLBatchExecutionEvent]
+                  10
+                 ,@ETLBatchExecutionId
+                 ,NULL
+                 ,@EventDescription;
+            END
+          ELSE
+            BEGIN
+                PRINT @EventDescription;
+            END
 
           WAITFOR DELAY @PollingDelay;
       END

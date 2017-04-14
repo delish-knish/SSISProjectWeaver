@@ -34,6 +34,9 @@ AS
 
           DELETE FROM ctl.[ETLBatch_ETLPackage_SQLCommandCondition]
           WHERE  ETLPackageId = @ETLPackageId;
+
+		  DELETE FROM ctl.[ETLPackage_ETLPackageDependency]
+          WHERE  ETLPackageId = @ETLPackageId;
 		  
           DELETE FROM ctl.ETLPackage
           WHERE  ETLPackageId = @ETLPackageId;

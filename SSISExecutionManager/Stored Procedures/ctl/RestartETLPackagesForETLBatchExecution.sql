@@ -35,7 +35,7 @@ AS
 
                 DECLARE @EventDescription VARCHAR(MAX) = 'Restarting package after unexpected termination';
 
-                EXEC [log].InsertETLBatchEvent 13,@ETLBatchId,@ETLPackageId,@EventDescription;
+                EXEC [log].[InsertETLBatchExecutionEvent] 13,@ETLBatchId,@ETLPackageId,@EventDescription;
 
                 --Set the restart/reflag time 
                 UPDATE [log].ETLPackageExecutionError

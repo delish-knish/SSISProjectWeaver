@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [log].[InsertETLBatchEvent] @ETLBatchEventTypeId INT,
+﻿CREATE PROCEDURE [log].[InsertETLBatchExecutionEvent] @ETLBatchEventTypeId INT,
                                              @ETLBatchExecutionId INT,
                                              @ETLPackageId        INT,
                                              @Description         VARCHAR(MAX)

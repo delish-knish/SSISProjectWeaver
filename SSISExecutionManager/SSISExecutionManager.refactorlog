@@ -371,4 +371,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[IXU_ETLBatchSSISDBExecutions_Column]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="f471f48a-a128-45a4-8921-3983ffcfe297" ChangeDateTime="04/13/2017 21:33:14">
+    <Property Name="ElementName" Value="[log].[InsertETLBatchEvent]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[log]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[InsertETLBatchExecutionEvent]" />
+  </Operation>
 </Operations>

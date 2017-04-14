@@ -27,8 +27,9 @@ AS
               @PreviousETLBatchExecutionStatusId	INT = NULL,
 			  @ErrorEmailRecipients					VARCHAR(MAX) = ( [dbo].[func_GetConfigurationValue] ('Email Recipients - Default') ),
               @BatchStartedWithinMinutes			VARCHAR(MAX) = ISNULL((SELECT MinutesBackToContinueBatch FROM ctl.ETLBatch WHERE ETLBatchId = @ETLBatchId), 1440),
-              @PollingDelay							CHAR(8) = ( [dbo].[func_GetConfigurationValue] ('ETL Batch Polling Delay') ),
-			  @SendBatchCompleteEmailInd			BIT;
+              @PollingDelayETLBatch					CHAR(8) = ( [dbo].[func_GetConfigurationValue] ('ETL Batch Polling Delay') ),
+			  @SendBatchCompleteEmailInd			BIT,
+			  @PollingDelaySQLCommandCondition		CHAR(8) = ( [dbo].[func_GetConfigurationValue] ('Default SQL Command Condition Evaluation Polling Delay') );
 
 	  --Set up logging variables
       DECLARE @CurrentDateTime  DATETIME = GETDATE(),
@@ -61,7 +62,7 @@ AS
 
                   SET @EventDescription = 'Error Notification(s) Sent (' + CAST(@ErrorsRequiringNotificationCount AS VARCHAR(10)) + ')';
 
-                  EXEC [log].InsertETLBatchEvent 7,@ETLBatchExecutionId,NULL,@EventDescription;
+                  EXEC [log].[InsertETLBatchExecutionEvent] 7,@ETLBatchExecutionId,NULL,@EventDescription;
               END
 
             --If there are packages that require restart, flag them for restart (this is determined when executing SaveETLPackageExecutionErrors)
@@ -78,13 +79,13 @@ AS
 				  BEGIN
 					SET @EventDescription = 'Batch completed';
 
-					EXEC [log].InsertETLBatchEvent 5,@ETLBatchExecutionId,NULL,@EventDescription;
+					EXEC [log].[InsertETLBatchExecutionEvent] 5,@ETLBatchExecutionId,NULL,@EventDescription;
 				  END
 				  ELSE --Canceled
 				  BEGIN
 					SET @EventDescription = 'Batch canceled';
 
-					EXEC [log].InsertETLBatchEvent 6,@ETLBatchExecutionId,NULL,@EventDescription;
+					EXEC [log].[InsertETLBatchExecutionEvent] 6,@ETLBatchExecutionId,NULL,@EventDescription;
 				  END
 
 				  IF @SendBatchCompleteEmailInd = 1
@@ -118,7 +119,18 @@ AS
 
 				SET @EventDescription = 'Batch created';
 
-				EXEC [log].InsertETLBatchEvent 1,@ETLBatchExecutionId,NULL,@EventDescription;
+				EXEC [log].[InsertETLBatchExecutionEvent] 1,@ETLBatchExecutionId,NULL,@EventDescription;
+
+				--Prior to flagging packages for execution, make sure all conditions are met. If not, wait for them to be met.
+				-- We can't flag packages for execution because they might also be part of an already running batch and would be triggered to run again.
+				DECLARE @ConditionsMetInd BIT = 0
+				WHILE @ConditionsMetInd = 0
+				BEGIN
+					EXEC   [ctl].[AreETLBatchSQLCommandConditionsMet] @ETLBatchId, @ETLBatchExecutionId, @ConditionsMetInd OUT;
+					IF @ConditionsMetInd = 1
+						BREAK;
+					WAITFOR DELAY @PollingDelaySQLCommandCondition;
+				END
 
 				--Set the ReadyForExecutionInd flag on entry-point packages and packages set to bypass entry-point packages
 				EXEC [ctl].[UpdatePackagesToExecuteForBatch] @ETLBatchExecutionId;
@@ -131,7 +143,7 @@ AS
         BEGIN
             SET @EventDescription = 'Identifying packages to execute';
 
-            EXEC [log].InsertETLBatchEvent 2,@ETLBatchExecutionId,NULL,@EventDescription;
+            EXEC [log].[InsertETLBatchExecutionEvent] 2,@ETLBatchExecutionId,NULL,@EventDescription;
 
             --Execute packages that are ready
             EXEC [ctl].[ExecuteETLPackagesForBatchExecution] @ETLBatchExecutionId,@SSISEnvironmentName;
@@ -145,7 +157,7 @@ AS
       --Log the exception
       SET @EventDescription = 'Error: ' + ERROR_MESSAGE();
 
-      EXEC [log].InsertETLBatchEvent 4,@ETLBatchExecutionId,NULL,@EventDescription;
+      EXEC [log].[InsertETLBatchExecutionEvent] 4,@ETLBatchExecutionId,NULL,@EventDescription;
 
       --Log Error in addition to the batch event so that we get a notification
       EXEC [ctl].[InsertUnhandledError] @ETLBatchExecutionId,@EventDescription;
@@ -155,7 +167,7 @@ AS
   END CATCH
 
   IF @ETLBatchExecutionStatusId NOT IN (5,8,9)
-			WAITFOR DELAY @PollingDelay;
+			WAITFOR DELAY @PollingDelayETLBatch;
 
   SET @LoopCounter = @LoopCounter + 1
 
