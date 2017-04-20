@@ -13,18 +13,15 @@ AS
         ,RunningPackageCount = SUM(r.RunningPackageCount)
         ,ETLBatchExecutionStatusId = CASE
                                         WHEN MIN(eb.ETLBatchStatusId) = 10 THEN 10 -- The batch has been manually canceled and we don't want to overwrite that
-										WHEN SUM(CAST(ep.EntryPointPackageInd AS TINYINT)) - SUM(IIF((epb.ETLPackageExecutionStatusId IN (0, 2) --Succeeded or Completed
-                                                                                                     AND ep.EntryPointPackageInd = 1)
-																									 OR (epb.ETLPackageExecutionStatusId IN(1,4) --Failed or Canceled but can be ignored for batch complete status
-																									 AND ep.EntryPointPackageInd = 1
-																									 AND epb.IgnoreForBatchCompleteInd = 1)
-																									 , 1, 0)) = 0 THEN 5 --Completed (we use entry point packages to determine completeness because it is possible to have acceptable child package failures)
-                                        WHEN COUNT(*) - SUM(IIF(epb.ETLPackageExecutionStatusId IN (0, 2), 1, 0)) > 0
-                                             AND SUM(CAST(ep.ReadyForExecutionInd AS TINYINT)) = 0
-											 AND SUM(CAST(epb.IgnoreForBatchCompleteInd AS TINYINT)) = 0
-                                             AND COUNT(*) - (COUNT(*) - SUM(IIF(epb.ETLPackageExecutionStatusId IN (0, 2), 1, 0))) <> 0
-                                             AND COUNT(*) - SUM(IIF(epb.ETLPackageExecutionStatusId IN (0, 2), 1, 0)) - SUM(r.RunningPackageCount) > 0 --Remaining - Running
-                                      THEN 4 --Halted
+                                        WHEN SUM(CAST(ep.EntryPointPackageInd AS TINYINT)) - SUM(IIF((epb.ETLPackageExecutionStatusId IN (0, 2) --Succeeded or Completed
+                                                                                                      AND ep.EntryPointPackageInd = 1)
+                                                                                                      OR (epb.ETLPackageExecutionStatusId IN(1, 4) --Failed or Canceled but can be ignored for batch complete status
+                                                                                                          AND ep.EntryPointPackageInd = 1
+                                                                                                          AND epb.IgnoreForBatchCompleteInd = 1), 1, 0)) = 0 THEN 5 --Completed (we use entry point packages to determine completeness because it is possible to have acceptable child package failures)
+                                        --If total entry point packages for the batch is greater than the total completed entry point packages and nothing is running
+                                        WHEN SUM(IIF(ep.EntryPointPackageInd = 1, 1, 0)) - SUM(IIF((epb.ETLPackageExecutionStatusId IN (0, 2)
+                                                                                                    AND ep.EntryPointPackageInd = 1), 1, 0)) > 0
+                                             AND ISNULL(SUM(r.RunningPackageCount), 0) = 0 THEN 4 --Halted
                                         WHEN COUNT(*) - SUM(IIF(epb.ETLPackageExecutionStatusId IN (0, 2), 1, 0)) > 0 THEN 6
                                       END
        FROM

@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId                      INT OUTPUT,
-                                      @SSISEnvironmentName                               VARCHAR(128),
+                                      @SSISEnvironmentName                               VARCHAR(128) = NULL,
                                       @CallingJobName                                   VARCHAR(128) = NULL,
                                       @ETLBatchId										 INT = NULL,
                                       @StartDateTime                                     DATETIME2 = NULL,

@@ -115,7 +115,7 @@
     <Build Include="Stored Procedures\ctl\ExecuteETLBatch.sql" />
     <Build Include="Stored Procedures\ctl\ExecuteETLPackage.sql" />
     <Build Include="Stored Procedures\ctl\ExecuteETLPackagesForBatchExecution.sql" />
-    <Build Include="Stored Procedures\ctl\ExecuteETLPackageGroupSQLCommands.sql" />
+    <None Include="Stored Procedures\ctl\ExecuteETLPackageGroupSQLCommands.sql" />
     <Build Include="Stored Procedures\ctl\InsertETLBatchSSISDBExecution.sql" />
     <Build Include="Stored Procedures\ctl\InsertUnhandledError.sql" />
     <Build Include="Stored Procedures\ctl\RestartETLPackagesForETLBatchExecution.sql" />
@@ -177,7 +177,7 @@
     <Build Include="Tables\ctl\ETLPackageGroup.sql" />
     <Build Include="Tables\ctl\ETLPackageGroup_ETLPackage.sql" />
     <Build Include="Views\rpt\ETLBatchPhasesETLPackages.sql" />
-    <Build Include="Tables\ctl\ETLPackageGroup_SQLCommand.sql" />
+    <None Include="Tables\ctl\ETLPackageGroup_SQLCommand.sql" />
     <None Include="Functions\Scalar-valued\func_GetSQLCommandCountForETLPackageGroup.sql" />
     <Build Include="Functions\Scalar-valued\func_GetETLBatchPhaseName.sql" />
     <None Include="Scripts\Sync ETLPackage Configurations.sql" />
@@ -187,14 +187,14 @@
     <Build Include="Stored Procedures\cfg\DeleteETLBatch.sql" />
     <Build Include="Stored Procedures\cfg\DeleteETLBatch_ETLPackageGroup.sql" />
     <Build Include="Stored Procedures\cfg\DeleteETLPackageGroup.sql" />
-    <Build Include="Stored Procedures\cfg\DeleteETLPackageGroup_SQLCommand.sql" />
+    <None Include="Stored Procedures\cfg\DeleteETLPackageGroup_SQLCommand.sql" />
     <Build Include="Stored Procedures\cfg\DeleteETLPackage_ETLPackageDependency.sql" />
     <Build Include="Stored Procedures\cfg\DeleteETLPackage_SQLCommandCondition.sql" />
     <Build Include="Stored Procedures\cfg\DeleteSQLCommand.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLBatch_ETLPackageGroup.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLPackageGroup.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLPackageGroup_ETLPackage.sql" />
-    <Build Include="Stored Procedures\cfg\SaveETLBatchPhase_SQLCommand.sql" />
+    <None Include="Stored Procedures\cfg\SaveETLPackageGroup_SQLCommand.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLPackage_SQLCommandCondition.sql" />
     <Build Include="Stored Procedures\ops\SendRowLevelErrorsEmail.sql" />
     <Build Include="Views\rpt\ETLPackageGroupExecutions.sql" />
@@ -217,6 +217,7 @@
     <Build Include="Stored Procedures\ops\SendETLBatchGroupsStatusesNotification.sql" />
     <Build Include="Tables\ctl\ETLBatch_SQLCommandCondition.sql" />
     <Build Include="Stored Procedures\ctl\AreETLBatchSQLCommandConditionsMet.sql" />
+    <Build Include="Functions\Scalar-valued\func_IsETLBatchExecutionTimedOut.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="References\SSISDB.dacpac" />

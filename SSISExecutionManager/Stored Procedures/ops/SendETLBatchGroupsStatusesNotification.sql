@@ -15,7 +15,7 @@ AS
 	
 	DECLARE @EmailSubject VARCHAR(255) = 'ETL Batch Status: ' + @ETLBatchName + ' ' + @ETLBatchStatus;
 
-    SET @tableHTML = N'<H1>' + 'Batch Id: ' + CAST(@ETLBatchExecutionId AS VARCHAR) + ' - ' + @ETLBatchName + '</H1>'
+    SET @tableHTML = N'<H1>' + @ETLBatchName + ' (Batch Id: ' + CAST(@ETLBatchExecutionId AS VARCHAR) + ') - <b>' + @ETLBatchStatus + '<b></H1>'
                      + N'<table cellspacing="0" style="border: 1px solid black;>'
                      + N'<tr style="border: 1px solid black;>
                            <th style="border: 1px solid black;background-color: gray;">Process/Package Group</th>

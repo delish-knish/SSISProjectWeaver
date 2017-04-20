@@ -1328,7 +1328,7 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                             </Actions>
                           </ActionInfo>
                           <Visibility>
-                            <Hidden>=IIF(Fields!ETLBatchStatus.Value &lt;&gt; "Running",True, False)</Hidden>
+                            <Hidden>=IIF(Fields!ETLBatchStatus.Value &lt;&gt; "Running" AND Fields!ETLBatchStatus.Value &lt;&gt;"Conditions Not Met" AND Fields!ETLBatchStatus.Value &lt;&gt;"Halted",True, False)</Hidden>
                           </Visibility>
                           <Style>
                             <Border>
@@ -1339,6 +1339,7 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                             <VerticalAlign>Middle</VerticalAlign>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>

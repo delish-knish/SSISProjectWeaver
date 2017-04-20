@@ -6,11 +6,13 @@ AS
 	SET ANSI_WARNINGS OFF;
 
     --Set up "Constants"
-    DECLARE @ETLBatchExecutionCompleteStatusId                   INT = 5,
+    DECLARE @ETLBatchExecutionCreatedStatusId                    INT = 1,
+            @ETLBatchExecutionCompleteStatusId                   INT = 5,
             @ETLBatchExecutionTimeOutStatusId                    INT = 8,
             @ETLBatchExecutionExceptionStatusId                  INT = 9,
 			@ETLBatchExecutionCanceledStatusId					 INT = 10,
-			@ETLBatchExecutionAutoCanceledStatusId				 INT = 11;
+			@ETLBatchExecutionAutoCanceledStatusId				 INT = 11,
+			@ETLBatchExecutionConditionsNoteMetStatusId			 INT = 12;
 
     --Set up batch variables
     DECLARE @ETLBatchExecutionStatusId			INT = 0;
@@ -123,13 +125,27 @@ AS
 
 				--Prior to flagging packages for execution, make sure all conditions are met. If not, wait for them to be met.
 				-- We can't flag packages for execution because they might also be part of an already running batch and would be triggered to run again.
-				DECLARE @ConditionsMetInd BIT = 0
+				DECLARE @ConditionsMetInd BIT = 0,
+					@ETLBatchTimedOut BIT = 0;
+
 				WHILE @ConditionsMetInd = 0
 				BEGIN
-					EXEC   [ctl].[AreETLBatchSQLCommandConditionsMet] @ETLBatchId, @ETLBatchExecutionId, @ConditionsMetInd OUT;
-					IF @ConditionsMetInd = 1
-						BREAK;
-					WAITFOR DELAY @PollingDelaySQLCommandCondition;
+					IF [dbo].[func_IsETLBatchExecutionTimedOut] (@ETLBatchExecutionId) = 1 --Time out the batch
+						BEGIN
+							DECLARE @EndDateTime DATETIME2 = GETDATE();
+							EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId = @ETLBatchExecutionId, @EndDateTime = @EndDateTime, @ETLBatchStatusId = @ETLBatchExecutionTimeOutStatusId;
+							BREAK;
+						END
+					ELSE
+					BEGIN
+						EXEC   [ctl].[AreETLBatchSQLCommandConditionsMet] @ETLBatchId, @ETLBatchExecutionId, @ConditionsMetInd OUT;
+						IF @ConditionsMetInd = 1
+							BREAK;
+
+						EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId = @ETLBatchExecutionId, @ETLBatchStatusId = @ETLBatchExecutionConditionsNoteMetStatusId;
+					
+						WAITFOR DELAY @PollingDelaySQLCommandCondition;
+					END
 				END
 
 				--Set the ReadyForExecutionInd flag on entry-point packages and packages set to bypass entry-point packages
