@@ -3,7 +3,8 @@
                                                                 @LookupTableRowKey  VARCHAR(250),
                                                                 @ParentProcessName  VARCHAR(250),
                                                                 @TargetTableName    VARCHAR(250),
-                                                                @Description        VARCHAR(1000))
+                                                                @Description        VARCHAR(1000),
+																@SSISDBExecutionId	BIGINT = NULL)
 AS
   BEGIN
       DECLARE @ETLPackageExecutionRowLevelErrorId BIGINT
@@ -15,14 +16,16 @@ AS
 				  ,ParentProcessName
 				  ,TargetTableName
                   ,[Description]
-                  ,ErrorDateTime)
+                  ,ErrorDateTime
+				  ,SSISDBExecutionId)
       VALUES      ( @TableProcessRowKey
                    ,@LookupTableName
                    ,@LookupTableRowKey
 				   ,@ParentProcessName
 				   ,@TargetTableName
                    ,@Description
-                   ,GETDATE())
+                   ,GETDATE()
+				   ,@SSISDBExecutionId)
 
       SET @ETLPackageExecutionRowLevelErrorId = SCOPE_IDENTITY();
 
