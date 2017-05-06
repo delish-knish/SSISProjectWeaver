@@ -178,7 +178,6 @@
     <Build Include="Tables\ctl\ETLPackageGroup_ETLPackage.sql" />
     <Build Include="Views\rpt\ETLBatchPhasesETLPackages.sql" />
     <None Include="Tables\ctl\ETLPackageGroup_SQLCommand.sql" />
-    <None Include="Functions\Scalar-valued\func_GetSQLCommandCountForETLPackageGroup.sql" />
     <Build Include="Functions\Scalar-valued\func_GetETLBatchPhaseName.sql" />
     <None Include="Scripts\Sync ETLPackage Configurations.sql" />
     <Build Include="Stored Procedures\sqlcmd\SQLCommandConditionExample.sql" />
@@ -218,6 +217,8 @@
     <Build Include="Tables\ctl\ETLBatch_SQLCommandCondition.sql" />
     <Build Include="Stored Procedures\ctl\AreETLBatchSQLCommandConditionsMet.sql" />
     <Build Include="Functions\Scalar-valued\func_IsETLBatchExecutionTimedOut.sql" />
+    <Build Include="Functions\Table-valued\func_GetETLBatchExecutionSSISDBExecutionSummary.sql" />
+    <Build Include="Functions\Scalar-valued\func_IsETLPackageRunning.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="References\SSISDB.dacpac" />

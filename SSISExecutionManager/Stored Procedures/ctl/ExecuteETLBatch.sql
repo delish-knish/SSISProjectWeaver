@@ -99,7 +99,7 @@ AS
       ELSE 
         BEGIN --The batch has not yet been created or it has been manually canceled
 			 --End the batch if it was manually canceled
-			IF @LoopCounter > 0 and @ETLBatchExecutionId IS NULL --The proc has been running for at least one iteration but there are no open batches of this type
+			IF @LoopCounter > 0 and @ETLBatchExecutionId IS NULL --The proc has been running for at least one iteration but there are no open batches of this type (due to cancelation outside of the proc)
 			BEGIN
 				BREAK;
 			END
@@ -130,21 +130,31 @@ AS
 
 				WHILE @ConditionsMetInd = 0
 				BEGIN
-					IF [dbo].[func_IsETLBatchExecutionTimedOut] (@ETLBatchExecutionId) = 1 --Time out the batch
+					SET @ETLBatchExecutionStatusId = ( dbo.func_GetETLBatchStatusId(@ETLBatchExecutionId) );
+
+					IF [dbo].[func_IsETLBatchExecutionTimedOut] (@ETLBatchExecutionId) = 1 OR @ETLBatchExecutionStatusId = @ETLBatchExecutionCanceledStatusId --Time out the batch TODO: OR batch has been canceled
 						BEGIN
-							DECLARE @EndDateTime DATETIME2 = GETDATE();
-							EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId = @ETLBatchExecutionId, @EndDateTime = @EndDateTime, @ETLBatchStatusId = @ETLBatchExecutionTimeOutStatusId;
-							BREAK;
+							IF [dbo].[func_IsETLBatchExecutionTimedOut] (@ETLBatchExecutionId) = 1
+							BEGIN
+								DECLARE @EndDateTime DATETIME2 = GETDATE();
+								EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId = @ETLBatchExecutionId, @EndDateTime = @EndDateTime, @ETLBatchStatusId = @ETLBatchExecutionTimeOutStatusId;
+							END
+							
+							RETURN 0; --TODO: Revisit this. Does it provide the behavior we want?
 						END
 					ELSE
 					BEGIN
 						EXEC   [ctl].[AreETLBatchSQLCommandConditionsMet] @ETLBatchId, @ETLBatchExecutionId, @ConditionsMetInd OUT;
 						IF @ConditionsMetInd = 1
-							BREAK;
-
-						EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId = @ETLBatchExecutionId, @ETLBatchStatusId = @ETLBatchExecutionConditionsNoteMetStatusId;
+						BEGIN
+							BREAK; --Stop waiting
+						END
+						ELSE --conditions not met
+						BEGIN
+							EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId = @ETLBatchExecutionId, @ETLBatchStatusId = @ETLBatchExecutionConditionsNoteMetStatusId;
 					
-						WAITFOR DELAY @PollingDelaySQLCommandCondition;
+							WAITFOR DELAY @PollingDelaySQLCommandCondition;
+						END
 					END
 				END
 
