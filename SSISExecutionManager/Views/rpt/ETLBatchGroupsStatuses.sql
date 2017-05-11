@@ -5,8 +5,8 @@ AS
    ,ebe.[CallingJobName]
    ,eb.[ETLBatchName]
    ,ebp.[ETLPackageGroup]
-   ,MIN(ex.start_time) AS GroupStartDateTime
-   ,MAX(ex.end_time)   AS GroupEndDateTime
+   ,MIN(ex.start_time)                                                                                                      AS GroupStartDateTime
+   ,IIF([dbo].[func_IsPackageGroupComplete] (ebe.[ETLBatchExecutionId], ebp.ETLPackageGroupId) = 1, MAX(ex.end_time), NULL) AS GroupEndDateTime
   FROM
     ctl.ETLBatchExecution ebe
     JOIN [ctl].[ETLBatch_ETLPackageGroup] b
@@ -30,3 +30,4 @@ AS
     ,ebe.[CallingJobName]
     ,eb.[ETLBatchName]
     ,ebp.[ETLPackageGroup] 
+	,ebp.[ETLPackageGroupId]
