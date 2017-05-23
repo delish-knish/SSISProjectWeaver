@@ -1,32 +1,45 @@
 ﻿CREATE PROCEDURE [ops].[SendRowLevelErrorsEmail]
 													@EmailSubject       NVARCHAR(MAX),
-                                                    @TimeIntervalInHours TINYINT = 24
+                                                    @TimeIntervalInHours TINYINT = 24, 
+													@ETLBatchExecutionId INT = NULL
 AS
 	DECLARE @EmailRecipients VARCHAR(MAX) = ( [dbo].[func_GetConfigurationValue] ('Email Recipients - Monitors') );
 
 
     DECLARE @tableHTML NVARCHAR(MAX)
 
-    SET @tableHTML = N'<H1>Row Level Errors Logged in Past ' + CAST(@TimeIntervalInHours AS VARCHAR) + ' Hours </H1>'
+    SET @tableHTML = N'<H1>Row-level Errors Logged ' + IIF(@ETLBatchExecutionId IS NOT NULL, 'for Batch Execution ' + CAST(@ETLBatchExecutionId AS VARCHAR(10)), 'in Past ' + CAST(@TimeIntervalInHours AS VARCHAR) + ' Hours') + '</H1>'
                      + N'<table border="1">'
                      + N'<tr>
-                           <th>Process</th>'
-                       + N'<th>Description</th>
-						   <th>Date/Time</th>'
+							<th>Process</th>
+							<th>Row Key</th>
+							<th>Lookup Table</th>
+							<th>Lookup Key</th>
+							<th>Description</th>
+							<th>Date/Time</th>'
                      + CAST ( ( SELECT 
 									td = ParentProcessName, '', 
+									td = RowKey, '', 
+									td = LookupTable, '', 
+									td = LookupKey, '', 
 									td = [Description], '', 
 									td = ErrorDateTime, '' 
 								FROM ( 
 								
 									SELECT 
-											ISNULL(err.ParentProcessName, '') AS ParentProcessName, 
-											ISNULL(err.ErrorDateTime, '') AS ErrorDateTime,
-											ISNULL(err.[Description], '') AS [Description]
+											ISNULL(err.ParentProcessName, '')	AS ParentProcessName, 
+											ISNULL(err.TableProcessRowKey, '')	AS RowKey,
+											ISNULL(err.LookupTableName, '')		AS LookupTable,
+											ISNULL(err.LookupTableRowKey, '')	AS LookupKey, 
+											ISNULL(err.ErrorDateTime, '')		AS ErrorDateTime,
+											ISNULL(err.[Description], '')		AS [Description]
 									FROM 
 										[log].[ETLPackageExecutionRowLevelError] err
+										JOIN [ctl].[ETLBatchSSISDBExecutions] ex ON err.SSISDBExecutionId = ex.SSISDBExecutionId
 									WHERE 
-										(err.ErrorDateTime BETWEEN DATEADD(hour, -@TimeIntervalInHours, GETDATE()) AND GETDATE() OR @TimeIntervalInHours IS NULL)) t 
+										((err.ErrorDateTime BETWEEN DATEADD(hour, -@TimeIntervalInHours, GETDATE()) AND GETDATE() OR @TimeIntervalInHours IS NULL) AND @ETLBatchExecutionId IS NULL)
+										OR ex.ETLBatchExecutionId = @ETLBatchExecutionId
+										) t 
 								FOR XML PATH('tr'), TYPE ) AS NVARCHAR(MAX) )
                      + N'</table>';
 

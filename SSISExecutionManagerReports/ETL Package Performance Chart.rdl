@@ -28,6 +28,7 @@ FROM
   [rpt].[ETLPackageExecutions]
 WHERE
   ETLPackageId = @ETLPackageId 
+  AND DATEDIFF(DD,PackageStartDateTime, GETDATE()) &lt;=60
 ORDER  BY
   PackageStartDateTime</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
