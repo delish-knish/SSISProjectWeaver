@@ -3,6 +3,8 @@
                                                              @ConditionsMetInd    BIT = NULL OUT)
 AS
   BEGIN
+	  SET NOCOUNT ON;
+
       --Determine if SQL Command-based Conditons are met
       DECLARE @SQLCommand      NVARCHAR(MAX)
               ,@SQLCommandName VARCHAR(128);
