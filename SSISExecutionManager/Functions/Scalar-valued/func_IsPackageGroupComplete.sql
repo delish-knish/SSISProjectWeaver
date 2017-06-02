@@ -6,8 +6,6 @@ AS
       RETURN
         (SELECT
            CAST(IIF(COUNT(DISTINCT p.ETLPackageId) - COUNT(DISTINCT folder_name + project_name + package_name) = 0, 1, 0) AS BIT) AS IsPackageGroupCompleteInd
-         --,COUNT(DISTINCT p.ETLPackageId) AS TotalEntryPointPackages
-         --,COUNT(DISTINCT folder_name + project_name + package_name) AS TotalCompletedEntryPointPackages
          FROM
            ctl.ETLBatch_ETLPackageGroup g
            JOIN ctl.ETLBatchExecution bx
@@ -16,6 +14,8 @@ AS
              ON g.ETLPackageGroupId = b.ETLPackageGroupId
            JOIN ctl.ETLPackage p
              ON b.ETLPackageId = p.ETLPackageId
+           JOIN func_GetETLPackagesForBatchExecution (@ETLBatchExecutionId) bex
+             ON p.ETLPackageId = bex.ETLPackageId
            LEFT JOIN ctl.ETLBatchSSISDBExecutions sx
                   ON p.ETLPackageId = sx.ETLPackageId
                      AND bx.ETLBatchExecutionId = sx.ETLBatchExecutionId
@@ -24,13 +24,14 @@ AS
                      AND p.SSISDBFolderName = x.folder_name
                      AND p.SSISDBPackageName = x.package_name
                      AND sx.SSISDBExecutionId = x.execution_id
-                     AND x.[status] IN (7, 9)
+                     AND x.[status] IN ( 7, 9 )
          WHERE
           g.EnabledInd = 1
           AND b.EnabledInd = 1
           AND p.EnabledInd = 1
           AND p.EntryPointPackageInd = 1
-          AND (b.IgnoreForBatchCompleteInd = 0 or x.[status] IN (7, 9))
+          AND ( b.IgnoreForBatchCompleteInd = 0
+                 OR x.[status] IN ( 7, 9 ) )
           AND bx.ETLBatchExecutionId = @ETLBatchExecutionId
           AND b.ETLPackageGroupId = @ETLPackageGroupId
          GROUP  BY
