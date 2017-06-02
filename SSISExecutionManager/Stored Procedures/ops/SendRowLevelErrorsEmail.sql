@@ -35,10 +35,10 @@ AS
 											ISNULL(err.[Description], '')		AS [Description]
 									FROM 
 										[log].[ETLPackageExecutionRowLevelError] err
-										JOIN [ctl].[ETLBatchSSISDBExecutions] ex ON err.SSISDBExecutionId = ex.SSISDBExecutionId
+										LEFT JOIN [ctl].[ETLBatchSSISDBExecutions] ex ON err.SSISDBExecutionId = ex.SSISDBExecutionId --older versions didn't write the execution id to the row level error table, hence the left join
 									WHERE 
-										((err.ErrorDateTime BETWEEN DATEADD(hour, -@TimeIntervalInHours, GETDATE()) AND GETDATE() OR @TimeIntervalInHours IS NULL) AND @ETLBatchExecutionId IS NULL)
-										OR ex.ETLBatchExecutionId = @ETLBatchExecutionId
+										(err.ErrorDateTime BETWEEN DATEADD(hour, -@TimeIntervalInHours, GETDATE()) AND GETDATE() OR @TimeIntervalInHours IS NULL) 
+										AND ( ex.ETLBatchExecutionId = @ETLBatchExecutionId OR @ETLBatchExecutionId IS NULL)
 										) t 
 								FOR XML PATH('tr'), TYPE ) AS NVARCHAR(MAX) )
                      + N'</table>';
