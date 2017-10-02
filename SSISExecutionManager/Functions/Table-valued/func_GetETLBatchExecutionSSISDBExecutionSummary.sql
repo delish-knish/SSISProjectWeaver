@@ -18,5 +18,7 @@ AS
          [ctl].[ETLBatchSSISDBExecutions] bx
          LEFT JOIN [$(SSISDB)].[catalog].[executions] x
                 ON bx.SSISDBExecutionId = x.execution_id
+	   WHERE
+		bx.[ETLBatchExecutionId] = @ETLBatchExecutionId
        GROUP  BY
         bx.[ETLBatchExecutionId]) 

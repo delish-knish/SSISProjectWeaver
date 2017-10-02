@@ -30,10 +30,5 @@ AS
       ON ebe.ETLBatchExecutionId = eb.ETLBatchExecutionId
     JOIN ctl.ETLBatch b
       ON eb.ETLBatchId = b.ETLBatchId
-  WHERE
-    ex.executable_name NOT IN ('esql_InsertLocalEDWExport', 'esql_LoadXMLtoRelational', 'esql_UpdateSourceEDWExport', 'seqc_StageXML', 'xml_ApplyXSLT')
-    AND [SSISDBPackageName] <> ex.executable_name + '.dtsx'
-    AND LEFT(executable_name, 5) <> 'seqc_'
-    AND LEFT(executable_name, 3) <> 'ep_'
   ORDER  BY
     st.[start_time] DESC 
