@@ -41,6 +41,10 @@
       <Name>Execute ETL Package.rdl</Name>
       <FullPath>Execute ETL Package.rdl</FullPath>
     </ProjectItem>
+    <ProjectItem>
+      <Name>ETL Batch Execution Dashboard.rdl</Name>
+      <FullPath>ETL Batch Execution Dashboard.rdl</FullPath>
+    </ProjectItem>
   </Reports>
   <Configurations>
     <Configuration>

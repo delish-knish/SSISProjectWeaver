@@ -83,6 +83,7 @@
     <Folder Include="Views\rpt" />
     <Folder Include="Scripts\Example 1 Setup" />
     <Folder Include="Stored Procedures\etl" />
+    <Folder Include="Stored Procedures\util" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Functions\Scalar-valued\func_GetConfigurationValue.sql" />
@@ -221,6 +222,8 @@
     <Build Include="Functions\Scalar-valued\func_IsETLPackageRunning.sql" />
     <Build Include="Functions\Scalar-valued\func_IsPackageGroupComplete.sql" />
     <Build Include="Stored Procedures\sqlcmd\IsFilePresent.sql" />
+    <Build Include="Security\Schemas\util.sql" />
+    <Build Include="Stored Procedures\util\GetDiskSpace.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="References\SSISDB.dacpac" />

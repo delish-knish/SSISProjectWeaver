@@ -138,13 +138,16 @@ ORDER BY StartDateTime DESC</CommandText>
                   <Width>1.35417in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.85417in</Width>
+                  <Width>0.71528in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.875in</Width>
+                  <Width>0.65972in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.19792in</Width>
+                  <Width>0.99653in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>0.65972in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.53125in</Width>
@@ -538,6 +541,46 @@ ORDER BY StartDateTime DESC</CommandText>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="Textbox24">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Overview</Value>
+                                  <Style>
+                                    <FontFamily />
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>#666666</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox24</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                            </Border>
+                            <BottomBorder>
+                              <Style>Solid</Style>
+                            </BottomBorder>
+                            <BackgroundColor>Silver</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="Textbox12">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -704,7 +747,6 @@ ORDER BY StartDateTime DESC</CommandText>
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="ETLBatchExecutionId">
-                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
@@ -763,7 +805,6 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="ETLBatchName">
-                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
@@ -809,7 +850,6 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="DayOfWeekName">
-                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
@@ -855,7 +895,6 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="ETLBatchStatus">
-                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
@@ -902,7 +941,6 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="StartDateTime">
-                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
@@ -948,7 +986,6 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="EndDateTime">
-                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
@@ -994,7 +1031,6 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="ExecutionDurationInMinutes">
-                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
@@ -1040,7 +1076,6 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="TotalETLPackageCount">
-                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
@@ -1086,7 +1121,6 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="TotalRemainingETLPackageCount">
-                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
@@ -1131,8 +1165,64 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="Textbox15">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Overview</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <TextDecoration>Underline</TextDecoration>
+                                    <Color>Blue</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox11</rd:DefaultName>
+                          <ActionInfo>
+                            <Actions>
+                              <Action>
+                                <Drillthrough>
+                                  <ReportName>ETL Batch Execution Dashboard</ReportName>
+                                  <Parameters>
+                                    <Parameter Name="ETLBatchExecutionId">
+                                      <Value>=Fields!ETLBatchExecutionId.Value</Value>
+                                    </Parameter>
+                                  </Parameters>
+                                </Drillthrough>
+                              </Action>
+                            </Actions>
+                          </ActionInfo>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <BottomBorder>
+                              <Style>Solid</Style>
+                            </BottomBorder>
+                            <BackgroundColor>=SWITCH(Fields!ETLBatchStatus.Value = "Running", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Created", "LimeGreen",
+Fields!ETLBatchStatus.Value = "Halted", "PaleGoldenrod",
+Fields!ETLBatchStatus.Value = "Timed Out", "Salmon",
+Fields!ETLBatchStatus.Value = "Exception", "Salmon",
+Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
+)</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="Textbox11">
-                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
@@ -1190,7 +1280,6 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="ETLBatchStatus2">
-                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
@@ -1198,7 +1287,6 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                                 <TextRun>
                                   <Value>Package Statuses</Value>
                                   <Style>
-                                    <FontFamily />
                                     <FontSize>8pt</FontSize>
                                     <TextDecoration>Underline</TextDecoration>
                                     <Color>Blue</Color>
@@ -1339,7 +1427,6 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                             <VerticalAlign>Middle</VerticalAlign>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>
@@ -1718,6 +1805,47 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="Textbox26">
+                          <CanShrink>true</CanShrink>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily />
+                                    <FontSize>8pt</FontSize>
+                                    <TextDecoration>Underline</TextDecoration>
+                                    <Color>Blue</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox26</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <BackgroundColor>White</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="Textbox52">
                           <CanShrink>true</CanShrink>
                           <KeepTogether>true</KeepTogether>
@@ -1899,6 +2027,7 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
+                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -1925,7 +2054,7 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
             <DataSetName>ETLBatchExecutions</DataSetName>
             <Top>0.355in</Top>
             <Height>0.46125in</Height>
-            <Width>12.52084in</Width>
+            <Width>12.62501in</Width>
             <ZIndex>1</ZIndex>
             <Style />
           </Tablix>
@@ -1933,8 +2062,10 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
         <Height>0.81625in</Height>
         <Style />
       </Body>
-      <Width>12.52084in</Width>
+      <Width>12.62501in</Width>
       <Page>
+        <PageHeight>8.5in</PageHeight>
+        <PageWidth>11in</PageWidth>
         <LeftMargin>1in</LeftMargin>
         <RightMargin>1in</RightMargin>
         <TopMargin>1in</TopMargin>
