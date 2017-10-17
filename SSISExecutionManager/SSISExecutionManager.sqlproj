@@ -232,8 +232,6 @@
     <None Include="Scripts\Example 1 Setup\Configure SSIS Catalog and Deploy Example1 Projects.sql" />
     <None Include="Scripts\Example 1 Setup\Populate Example1 Metadata.sql" />
     <None Include="Scripts\Example 1 Setup\Deploy Example1 SSIS Projects.bat" />
-    <None Include="QA.publish.xml" />
-    <None Include="Prod.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
