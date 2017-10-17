@@ -95,7 +95,7 @@ WHERE
   ,package_name AS SSISDBPackageName
   ,CAST(start_time AS DATETIME2) AS StartDateTime
 FROM   SSISDB.[catalog].executions ex
-       JOIN SSISExecutionManager.ctl.ETLBatchSSISDBExecutions exm
+       JOIN ctl.ETLBatchSSISDBExecutions exm
          ON ex.execution_id = exm.SSISDBExecutionId
 WHERE
   [status] = 2 
@@ -141,8 +141,8 @@ WHERE
   ,[ErrorDateTime]
   ,[ErrorMessage]
   ,[ETLPackageRestartDateTime]
-FROM   [SSISExecutionManager].[log].[ETLPackageExecutionError] err
-       JOIN [SSISExecutionManager].ctl.ETLPackage p
+FROM   [log].[ETLPackageExecutionError] err
+       JOIN ctl.ETLPackage p
          ON err.ETLPackageId = p.ETLPackageId
 WHERE
    [ETLBatchExecutionId] = @ETLBatchExecutionId</CommandText>
@@ -199,32 +199,32 @@ FROM (
 SELECT [ETLBatchExecutionId]
 	  ,'Batch Execution Id' AS Label
       ,CAST([ETLBatchExecutionId] AS VARCHAR) AS Val
-  FROM [SSISExecutionManager].[rpt].[ETLBatchExecutions]
+  FROM [rpt].[ETLBatchExecutions]
 UNION ALL
 SELECT [ETLBatchExecutionId]
 	  ,'Name' AS Label
       ,[ETLBatchName] AS Val
-  FROM [SSISExecutionManager].[rpt].[ETLBatchExecutions]
+  FROM [rpt].[ETLBatchExecutions]
 UNION ALL
 SELECT [ETLBatchExecutionId]
 	  ,'Status' AS Label
       ,[ETLBatchStatus]
-  FROM [SSISExecutionManager].[rpt].[ETLBatchExecutions]
+  FROM [rpt].[ETLBatchExecutions]
 UNION ALL
 SELECT [ETLBatchExecutionId]
 	  ,'Total Pkgs' AS Label
       ,CAST([TotalETLPackageCount] AS VARCHAR)
-  FROM [SSISExecutionManager].[rpt].[ETLBatchExecutions]
+  FROM [rpt].[ETLBatchExecutions]
 UNION ALL
 SELECT [ETLBatchExecutionId]
 	  ,'Remaining Pkgs' AS Label
       ,CAST([TotalRemainingETLPackageCount] AS VARCHAR)
-  FROM [SSISExecutionManager].[rpt].[ETLBatchExecutions]
+  FROM [rpt].[ETLBatchExecutions]
 UNION ALL
 SELECT [ETLBatchExecutionId]
 	  ,'Status Last Updated' AS Label
 	,FORMAT( [BatchStatusLastUpdatedDate], 'dd/MM/yyyy HH:mm tt', 'en-US' ) 
-  FROM [SSISExecutionManager].[rpt].[ETLBatchExecutions] ) t
+  FROM [rpt].[ETLBatchExecutions] ) t
 WHERE
 	[ETLBatchExecutionId] = @ETLBatchExecutionId</CommandText>
       </Query>
@@ -259,12 +259,12 @@ WHERE
   ,[DayOfWeekName]
   ,bs.ETLBatchStatus
 FROM   
-	[SSISExecutionManager].[ctl].[ETLBatchExecution] be
-	JOIN [SSISExecutionManager].[ref].[ETLBatchStatus] bs ON be.ETLBatchStatusId = bs.ETLBatchStatusId
+	[ctl].[ETLBatchExecution] be
+	JOIN [ref].[ETLBatchStatus] bs ON be.ETLBatchStatusId = bs.ETLBatchStatusId
 WHERE
   [ETLBatchId] = (SELECT
                     ETLBatchId
-                  FROM   [SSISExecutionManager].[ctl].ETLBatchExecution
+                  FROM   [ctl].ETLBatchExecution
 	  WHERE ETLBatchExecutionId = @ETLBatchExecutionId    )
   AND [StartDateTime] &gt;= DATEADD(DAY,-60, GETDATE())
 ORDER  BY
@@ -340,8 +340,8 @@ ORDER  BY
       ,[FirstErrorMessage]
       ,[ErrorDateTime]
   FROM 
-      [SSISExecutionManager].[rpt].[ETLPackagesInFailedState] fs
-      JOIN [SSISExecutionManager].[ctl].[ETLPackage] ep ON fs.ETLPackageId = ep.ETLPackageId
+      [rpt].[ETLPackagesInFailedState] fs
+      JOIN [ctl].[ETLPackage] ep ON fs.ETLPackageId = ep.ETLPackageId
 WHERE
        ETLBatchExecutionId= @ETLBatchExecutionId</CommandText>
       </Query>
@@ -391,7 +391,7 @@ WHERE
         <CommandText>SELECT TOP 10
   [EventDateTime]
   ,[Description]
-FROM   [SSISExecutionManager].[rpt].[ETLBatchExecutionEvents]
+FROM   [rpt].[ETLBatchExecutionEvents]
 WHERE
   [ETLBatchExecutionId] = @ETLBatchExecutionId
 ORDER  BY
@@ -767,7 +767,6 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
             </ChartNoDataMessage>
             <DataSetName>ETLBatchGroupsStatuses</DataSetName>
             <Top>2.87888in</Top>
-            <Left>0in</Left>
             <Height>3.04861in</Height>
             <Width>11.70139in</Width>
             <Style>
@@ -800,7 +799,6 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>textbox1</rd:DefaultName>
-            <Left>0in</Left>
             <Height>0.43in</Height>
             <Width>11.70139in</Width>
             <ZIndex>1</ZIndex>
@@ -1205,7 +1203,6 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
             </Paragraphs>
             <rd:DefaultName>Textbox23</rd:DefaultName>
             <Top>2.61499in</Top>
-            <Left>0in</Left>
             <Height>0.25in</Height>
             <Width>11.70139in</Width>
             <ZIndex>3</ZIndex>
@@ -1710,7 +1707,6 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
             <NoRowsMessage xml:space="preserve">  </NoRowsMessage>
             <DataSetName>ETLPackageExecutionErrors</DataSetName>
             <Top>5.96916in</Top>
-            <Left>0in</Left>
             <Height>0.69in</Height>
             <Width>11.70139in</Width>
             <ZIndex>4</ZIndex>
@@ -1987,7 +1983,6 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
             </TablixRowHierarchy>
             <DataSetName>ETLBatchExecution</DataSetName>
             <Top>0.44388in</Top>
-            <Left>0in</Left>
             <Height>0.71in</Height>
             <Width>3.45139in</Width>
             <ZIndex>5</ZIndex>
@@ -2016,7 +2011,6 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
             </Paragraphs>
             <rd:DefaultName>Textbox23</rd:DefaultName>
             <Top>6.71875in</Top>
-            <Left>0in</Left>
             <Height>0.25in</Height>
             <Width>11.70139in</Width>
             <ZIndex>6</ZIndex>
@@ -2367,7 +2361,6 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
             </ChartNoDataMessage>
             <DataSetName>BatchExecutionPerformancePast60Days</DataSetName>
             <Top>6.96875in</Top>
-            <Left>0in</Left>
             <Height>3.04861in</Height>
             <Width>11.70139in</Width>
             <ZIndex>7</ZIndex>
@@ -2892,9 +2885,8 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
             <NoRowsMessage xml:space="preserve">  </NoRowsMessage>
             <DataSetName>ETLPackagesInFailedState</DataSetName>
             <Top>1.18166in</Top>
-            <Left>0in</Left>
             <Height>0.69in</Height>
-            <Width>11.70139in</Width>
+            <Width>11.70141in</Width>
             <ZIndex>8</ZIndex>
             <Style>
               <Border>
@@ -3144,7 +3136,7 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
         <Height>11.55847in</Height>
         <Style />
       </Body>
-      <Width>11.70139in</Width>
+      <Width>11.70141in</Width>
       <Page>
         <LeftMargin>1in</LeftMargin>
         <RightMargin>1in</RightMargin>
