@@ -44,6 +44,7 @@ ORDER BY
   [ETLBatchExecutionId]
   ,[CallingJobName]
   ,[ETLBatchName]
+  ,[ETLPackageGroupId]
   ,[ETLPackageGroup]
   ,[GroupStartDateTime]
   ,[GroupEndDateTime]
@@ -64,6 +65,10 @@ WHERE
         <Field Name="ETLBatchName">
           <DataField>ETLBatchName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ETLPackageGroupId">
+          <DataField>ETLPackageGroupId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="ETLPackageGroup">
           <DataField>ETLPackageGroup</DataField>
@@ -408,6 +413,27 @@ ORDER  BY
         </Field>
       </Fields>
     </DataSet>
+    <DataSet Name="ETLBatchExecutionStatus">
+      <Query>
+        <DataSourceName>SSISExecutionManager</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@ETLBatchExecutionId">
+            <Value>=Parameters!ETLBatchExecutionId.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>SELECT ETLBatchStatus
+FROM
+ rpt.ETLBatchExecutions
+WHERE
+  ETLBatchExecutionId = @ETLBatchExecutionId</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="ETLBatchStatus">
+          <DataField>ETLBatchStatus</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
   </DataSets>
   <ReportSections>
     <ReportSection>
@@ -457,6 +483,23 @@ ORDER  BY
                         <ToolTip>=CStr(Fields!GroupStartDateTime.Value) + " to " + CStr(Fields!GroupEndDateTime.Value)</ToolTip>
                       </ChartDataLabel>
                       <ToolTip>=CStr(Min(Fields!GroupStartDateTime.Value)) + " to " + CStr(Max(Fields!GroupEndDateTime.Value))</ToolTip>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>ETL Package Executions Gantt Chart</ReportName>
+                              <Parameters>
+                                <Parameter Name="ETLBatchExecutionId">
+                                  <Value>=Fields!ETLBatchExecutionId.Value</Value>
+                                </Parameter>
+                                <Parameter Name="ETLPackageGroupId">
+                                  <Value>=Fields!ETLPackageGroupId.Value</Value>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
                       <Style>
                         <Color>=SWITCH(rownumber("ETLBatchGroupsStatuses") = 1, "DarkGray",
 rownumber("ETLBatchGroupsStatuses") = 2, "IndianRed",
@@ -1883,6 +1926,9 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox2</rd:DefaultName>
+                          <Visibility>
+                            <Hidden>=IIF(First(Fields!ETLBatchStatus.Value, "ETLBatchExecutionStatus") = "Completed" Or First(Fields!ETLBatchStatus.Value, "ETLBatchExecutionStatus") = "Canceled", True, False)</Hidden>
+                          </Visibility>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -1947,6 +1993,9 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
                               </Action>
                             </Actions>
                           </ActionInfo>
+                          <Visibility>
+                            <Hidden>=IIF(First(Fields!ETLBatchStatus.Value, "ETLBatchExecutionStatus") = "Completed" Or First(Fields!ETLBatchStatus.Value, "ETLBatchExecutionStatus") = "Canceled", True, False)</Hidden>
+                          </Visibility>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -2064,17 +2113,36 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
                         <Style />
                       </ChartDataLabel>
                       <ToolTip>=Fields!ExecutionDurationString.Value + " | " + Fields!ETLBatchStatus.Value</ToolTip>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>ETL Batch Execution Dashboard</ReportName>
+                              <Parameters>
+                                <Parameter Name="ETLBatchExecutionId">
+                                  <Value>=Fields!ETLBatchExecutionId.Value</Value>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
                       <Style>
-                        <Color>=IIF(Fields!ETLBatchStatus.Value = "Completed", "Green", "IndianRed")</Color>
+                        <Color>Black</Color>
                         <BackgroundGradientType>None</BackgroundGradientType>
                         <BackgroundHatchType>None</BackgroundHatchType>
                       </Style>
                       <ChartMarker>
-                        <Style />
+                        <Type>Diamond</Type>
+                        <Size>4.5pt</Size>
+                        <Style>
+                          <Color>=IIF(Fields!ETLBatchStatus.Value = "Completed", "Green", "IndianRed")</Color>
+                        </Style>
                       </ChartMarker>
                       <DataElementOutput>Output</DataElementOutput>
                     </ChartDataPoint>
                   </ChartDataPoints>
+                  <Type>Line</Type>
                   <Style />
                   <ChartEmptyPoints>
                     <Style />
@@ -2917,14 +2985,39 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Event Log (last 10 entries)</Value>
+                                  <Value>Event Log (last 10 entries) </Value>
                                   <Style>
                                     <FontSize>12pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
+                                <TextRun>
+                                  <Value>view all</Value>
+                                  <ActionInfo>
+                                    <Actions>
+                                      <Action>
+                                        <Drillthrough>
+                                          <ReportName>ETL Batch Execution Events</ReportName>
+                                          <Parameters>
+                                            <Parameter Name="ETLBatchExecutionId">
+                                              <Value>=Parameters!ETLBatchExecutionId.Value</Value>
+                                            </Parameter>
+                                          </Parameters>
+                                        </Drillthrough>
+                                      </Action>
+                                    </Actions>
+                                  </ActionInfo>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>Underline</TextDecoration>
+                                    <Color>Blue</Color>
+                                  </Style>
+                                </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox23</rd:DefaultName>

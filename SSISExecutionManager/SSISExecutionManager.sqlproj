@@ -256,10 +256,6 @@
     </ArtifactReference>
   </ItemGroup>
   <ItemGroup>
-    <SqlCmdVariable Include="DeployPackageConfiguration">
-      <DefaultValue>0</DefaultValue>
-      <Value>$(SqlCmdVar__3)</Value>
-    </SqlCmdVariable>
     <SqlCmdVariable Include="EmailRecipientsDefault">
       <DefaultValue>you@youremail.com</DefaultValue>
       <Value>$(SqlCmdVar__4)</Value>
@@ -275,10 +271,6 @@
     <SqlCmdVariable Include="SolutionRootDir">
       <DefaultValue>C:\Source Code\Repos\SSISProjectWeaver\</DefaultValue>
       <Value>$(SqlCmdVar__6)</Value>
-    </SqlCmdVariable>
-    <SqlCmdVariable Include="PopulateReferenceData">
-      <DefaultValue>1</DefaultValue>
-      <Value>$(SqlCmdVar__2)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="DeployExample">
       <DefaultValue>1</DefaultValue>

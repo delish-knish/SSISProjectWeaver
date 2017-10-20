@@ -14,6 +14,10 @@
       <FullPath>Currently Executing SQL.rdl</FullPath>
     </ProjectItem>
     <ProjectItem>
+      <Name>ETL Batch Execution Dashboard.rdl</Name>
+      <FullPath>ETL Batch Execution Dashboard.rdl</FullPath>
+    </ProjectItem>
+    <ProjectItem>
       <Name>ETL Batch Execution Events.rdl</Name>
       <FullPath>ETL Batch Execution Events.rdl</FullPath>
     </ProjectItem>
@@ -42,8 +46,8 @@
       <FullPath>Execute ETL Package.rdl</FullPath>
     </ProjectItem>
     <ProjectItem>
-      <Name>ETL Batch Execution Dashboard.rdl</Name>
-      <FullPath>ETL Batch Execution Dashboard.rdl</FullPath>
+      <Name>ETL Package Executions Gantt Chart.rdl</Name>
+      <FullPath>ETL Package Executions Gantt Chart.rdl</FullPath>
     </ProjectItem>
   </Reports>
   <Configurations>

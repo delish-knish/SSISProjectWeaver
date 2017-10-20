@@ -10,20 +10,6 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 PRINT 'Started populating database'
-----------------------------------------------------------------------------------
-IF $(PopulateReferenceData) = 1
-BEGIN
-	PRINT 'Started Populate Reference Data.sql'
-		:r "Populate Reference Data.sql"
-	PRINT 'Completed Populate Reference Data.sql'
-END
------------------------------------------------------------------------------------
-IF $(DeployPackageConfiguration) = 1
-BEGIN
-	PRINT 'Started Insert ETLPackage Configurations.sql'
-		:r "Sync ETLPackage Configurations.sql"
-	PRINT 'Completed Insert ETLPackage Configurations.sql'
-END
 -----------------------------------------------------------------------------------
 PRINT 'Started Sync cfg.Configurations.sql'
 		:r "Sync Configurations.sql"

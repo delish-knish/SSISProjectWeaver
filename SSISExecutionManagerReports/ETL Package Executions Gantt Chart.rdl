@@ -1,82 +1,113 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Report MustUnderstand="df" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:df="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition/defaultfontfamily">
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
     <DataSource Name="SSISExecutionManager">
       <DataSourceReference>SSISExecutionManager</DataSourceReference>
-      <rd:SecurityType>Integrated</rd:SecurityType>
-      <rd:DataSourceID>959bffd2-785f-4874-9847-f5a13a8e1482</rd:DataSourceID>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>7b989407-b3e4-4402-8a72-6b266094517f</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="ETLPackageDuration">
+    <DataSet Name="ETLBatchExecutions">
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
-        <QueryParameters>
-          <QueryParameter Name="@ETLPackageId">
-            <Value>=Parameters!ETLPackageId.Value</Value>
-          </QueryParameter>
-        </QueryParameters>
-        <CommandText>SELECT
-  ETLPackageId,
-  SSISDBProjectName,
-  SSISDBPackageName,
-  PackageStartDateTime,
-  DATEDIFF(MINUTE, PackageStartDateTime, PackageEndDateTime) AS Duration
+        <CommandText>SELECT TOP 40
+  ETLBatchExecutionId
+  ,CAST(ETLBatchExecutionId AS VARCHAR) + ' ' + ETLBatchName + ' - ' + DayOfWeekName + ' - ' + FORMAT( StartDateTime , 'MM/dd/yyyy h:mmtt', 'en-US' ) AS ETLBatchName
 FROM
-  [rpt].[ETLPackageExecutions]
-WHERE
-  ETLPackageId = @ETLPackageId 
-  AND DATEDIFF(DD,PackageStartDateTime, GETDATE()) &lt;=60
-ORDER  BY
-  PackageStartDateTime</CommandText>
-        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+ rpt.ETLBatchExecutions
+ORDER BY 
+  ETLBatchExecutionId DESC</CommandText>
       </Query>
       <Fields>
         <Field Name="Id">
-          <DataField>ETLPackageId</DataField>
+          <DataField>ETLBatchExecutionId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="ProjectName">
-          <DataField>SSISDBProjectName</DataField>
+        <Field Name="Name">
+          <DataField>ETLBatchName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="StartDate">
-          <DataField>PackageStartDateTime</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="PackageName">
-          <DataField>SSISDBPackageName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Duration">
-          <DataField>Duration</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
-    <DataSet Name="ETLPackage">
+    <DataSet Name="ETLPackageExecutions">
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@ETLBatchExecutionId">
+            <Value>=Parameters!ETLBatchExecutionId.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@ETLPackageGroupId">
+            <Value>=Parameters!ETLPackageGroupId.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
         <CommandText>SELECT
-	[ETLPackageId]
-	,[SSISDBProjectName] + '.' + [SSISDBPackageName] AS Name
-FROM
-	[ctl].[ETLPackage]
+  [ETLBatchExecutionId]
+  ,[ETLPackageExecutionId]
+  ,[SSISDBExecutionId]
+  ,[ETLPackageId]
+  ,[ETLBatchId]
+  ,[SSISDBProjectName]
+  ,[SSISDBPackageName]
+  ,[PackageStartDateTime]
+  ,[PackageEndDateTime]
+  ,[ETLPackageGroupId]
+  ,[ETLPackageGroup]
+  ,[ETLPackageExecutionStatus]
+FROM   
+	[SSISExecutionManager].[rpt].[ETLPackageExecutions] 
 WHERE
-	ETLPackageId &gt; 0
-ORDER BY 
-	[SSISDBProjectName]
-	,[SSISDBPackageName]</CommandText>
+	([ETLBatchExecutionId] = @ETLBatchExecutionId) AND ([ETLPackageGroupId] = @ETLPackageGroupId OR @ETLPackageGroupId IS NULL)</CommandText>
       </Query>
       <Fields>
+        <Field Name="ETLBatchExecutionId">
+          <DataField>ETLBatchExecutionId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ETLPackageExecutionId">
+          <DataField>ETLPackageExecutionId</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="SSISDBExecutionId">
+          <DataField>SSISDBExecutionId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
         <Field Name="ETLPackageId">
           <DataField>ETLPackageId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="Name">
-          <DataField>Name</DataField>
+        <Field Name="ETLBatchId">
+          <DataField>ETLBatchId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="SSISDBProjectName">
+          <DataField>SSISDBProjectName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SSISDBPackageName">
+          <DataField>SSISDBPackageName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PackageStartDateTime">
+          <DataField>PackageStartDateTime</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="PackageEndDateTime">
+          <DataField>PackageEndDateTime</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="ETLPackageGroupId">
+          <DataField>ETLPackageGroupId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ETLPackageGroup">
+          <DataField>ETLPackageGroup</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ETLPackageExecutionStatus">
+          <DataField>ETLPackageExecutionStatus</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -86,51 +117,99 @@ ORDER BY
     <ReportSection>
       <Body>
         <ReportItems>
-          <Chart Name="Chart1">
+          <Chart Name="Chart2">
             <ChartCategoryHierarchy>
               <ChartMembers>
                 <ChartMember>
-                  <Group Name="Chart1_CategoryGroup">
+                  <Group Name="Chart2_CategoryGroup">
                     <GroupExpressions>
-                      <GroupExpression>=Fields!StartDate.Value</GroupExpression>
+                      <GroupExpression>=Fields!SSISDBPackageName.Value</GroupExpression>
                     </GroupExpressions>
                   </Group>
                   <SortExpressions>
                     <SortExpression>
-                      <Value>=Fields!StartDate.Value</Value>
+                      <Value>=Fields!SSISDBPackageName.Value</Value>
                     </SortExpression>
                   </SortExpressions>
-                  <Label>=Fields!StartDate.Value</Label>
+                  <Label>=Fields!SSISDBPackageName.Value</Label>
                 </ChartMember>
               </ChartMembers>
             </ChartCategoryHierarchy>
             <ChartSeriesHierarchy>
               <ChartMembers>
                 <ChartMember>
-                  <Label>Duration</Label>
+                  <Label>Package End Date Time</Label>
                 </ChartMember>
               </ChartMembers>
             </ChartSeriesHierarchy>
             <ChartData>
               <ChartSeriesCollection>
-                <ChartSeries Name="Duration">
+                <ChartSeries Name="GroupStartDateTime">
                   <ChartDataPoints>
                     <ChartDataPoint>
                       <ChartDataPointValues>
-                        <Y>=Sum(Fields!Duration.Value)</Y>
+                        <High>=Max(Fields!PackageEndDateTime.Value)</High>
+                        <Low>=Min(Fields!PackageStartDateTime.Value)</Low>
                       </ChartDataPointValues>
                       <ChartDataLabel>
-                        <Style />
+                        <Style>
+                          <FontSize>7pt</FontSize>
+                        </Style>
+                        <Label>=Fields!SSISDBPackageName.Value</Label>
+                        <Visible>true</Visible>
+                        <Position>TopLeft</Position>
+                        <ToolTip>=CStr(Fields!PackageStartDateTime.Value) + " to " + CStr(Fields!PackageEndDateTime.Value)</ToolTip>
                       </ChartDataLabel>
-                      <ToolTip>=Fields!Duration.Value</ToolTip>
-                      <Style />
+                      <ToolTip>=CStr(Min(Fields!PackageStartDateTime.Value)) + " to " + CStr(Max(Fields!PackageEndDateTime.Value))</ToolTip>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>ETL Package Performance Chart</ReportName>
+                              <Parameters>
+                                <Parameter Name="ETLPackageId">
+                                  <Value>=Fields!ETLPackageId.Value</Value>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
+                      <Style>
+                        <Color>=SWITCH(rownumber("ETLPackageExecutions") = 1, "DarkGray",
+rownumber("ETLPackageExecutions") = 2, "IndianRed",
+rownumber("ETLPackageExecutions") = 3, "LightSalmon",
+rownumber("ETLPackageExecutions") = 4, "BurlyWood",
+rownumber("ETLPackageExecutions") = 5, "OliveDrab",
+rownumber("ETLPackageExecutions") = 6, "Teal",
+rownumber("ETLPackageExecutions") = 7, "LightSteelBlue",
+rownumber("ETLPackageExecutions") = 8, "Plum",
+rownumber("ETLPackageExecutions") = 9, "Thistle",
+rownumber("ETLPackageExecutions") = 10, "Tomato",
+rownumber("ETLPackageExecutions") = 11, "SaddleBrown",
+rownumber("ETLPackageExecutions") = 12, "Silver",
+rownumber("ETLPackageExecutions") = 13, "Silver",
+rownumber("ETLPackageExecutions") = 14, "Silver",
+rownumber("ETLPackageExecutions") = 15, "Silver",
+rownumber("ETLPackageExecutions") = 16, "Silver",
+rownumber("ETLPackageExecutions") = 17, "Silver",
+rownumber("ETLPackageExecutions") = 18, "Silver",
+rownumber("ETLPackageExecutions") = 19, "Silver",
+rownumber("ETLPackageExecutions") = 20, "Silver",
+rownumber("ETLPackageExecutions") = 21, "Silver",
+rownumber("ETLPackageExecutions") = 22, "Silver",
+rownumber("ETLPackageExecutions") = 23, "Silver",
+rownumber("ETLPackageExecutions") = 24, "Silver",
+rownumber("ETLPackageExecutions") = 25, "Silver")</Color>
+                      </Style>
                       <ChartMarker>
                         <Style />
                       </ChartMarker>
                       <DataElementOutput>Output</DataElementOutput>
                     </ChartDataPoint>
                   </ChartDataPoints>
-                  <Type>Line</Type>
+                  <Type>Range</Type>
+                  <Subtype>Bar</Subtype>
                   <Style />
                   <ChartEmptyPoints>
                     <Style />
@@ -141,12 +220,10 @@ ORDER BY
                       <Style />
                     </ChartDataLabel>
                   </ChartEmptyPoints>
-                  <ChartItemInLegend>
-                    <LegendText>Duration (mins)</LegendText>
-                  </ChartItemInLegend>
                   <ValueAxisName>Primary</ValueAxisName>
                   <CategoryAxisName>Primary</CategoryAxisName>
                   <ChartSmartLabel>
+                    <Disabled>true</Disabled>
                     <CalloutLineColor>Black</CalloutLineColor>
                     <MinMovingDistance>0pt</MinMovingDistance>
                   </ChartSmartLabel>
@@ -157,6 +234,7 @@ ORDER BY
               <ChartArea Name="Default">
                 <ChartCategoryAxes>
                   <ChartAxis Name="Primary">
+                    <Visible>False</Visible>
                     <Style>
                       <Border>
                         <Color>Gainsboro</Color>
@@ -276,6 +354,7 @@ ORDER BY
                         <Style>None</Style>
                       </Border>
                       <FontSize>8pt</FontSize>
+                      <Format>hh:mm tt</Format>
                       <Color>#5c5c5c</Color>
                     </Style>
                     <ChartAxisTitle>
@@ -285,6 +364,7 @@ ORDER BY
                         <Color>#5c5c5c</Color>
                       </Style>
                     </ChartAxisTitle>
+                    <IntervalType>Hours</IntervalType>
                     <ChartMajorGridLines>
                       <Style>
                         <Border>
@@ -319,6 +399,7 @@ ORDER BY
                     <CrossAt>NaN</CrossAt>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
+                    <IncludeZero>false</IncludeZero>
                     <ChartAxisScaleBreak>
                       <Style />
                     </ChartAxisScaleBreak>
@@ -385,39 +466,6 @@ ORDER BY
                 </Style>
               </ChartArea>
             </ChartAreas>
-            <ChartLegends>
-              <ChartLegend Name="Default">
-                <Style>
-                  <BackgroundGradientType>None</BackgroundGradientType>
-                  <FontSize>8pt</FontSize>
-                </Style>
-                <Position>TopLeft</Position>
-                <ChartLegendTitle>
-                  <Caption />
-                  <Style>
-                    <FontSize>8pt</FontSize>
-                    <FontWeight>Bold</FontWeight>
-                    <TextAlign>Center</TextAlign>
-                  </Style>
-                </ChartLegendTitle>
-                <HeaderSeparatorColor>Black</HeaderSeparatorColor>
-                <ColumnSeparatorColor>Black</ColumnSeparatorColor>
-              </ChartLegend>
-            </ChartLegends>
-            <ChartTitles>
-              <ChartTitle Name="Default">
-                <Caption>=Fields!PackageName.Value</Caption>
-                <Style>
-                  <BackgroundGradientType>None</BackgroundGradientType>
-                  <FontSize>14pt</FontSize>
-                  <FontWeight>Bold</FontWeight>
-                  <TextAlign>Left</TextAlign>
-                  <VerticalAlign>Top</VerticalAlign>
-                  <Color>DimGray</Color>
-                </Style>
-                <Position>TopLeft</Position>
-              </ChartTitle>
-            </ChartTitles>
             <Palette>Pacific</Palette>
             <ChartBorderSkin>
               <Style>
@@ -435,10 +483,10 @@ ORDER BY
                 <VerticalAlign>Top</VerticalAlign>
               </Style>
             </ChartNoDataMessage>
-            <DataSetName>ETLPackageDuration</DataSetName>
-            <Top>0.47167in</Top>
-            <Height>4.46875in</Height>
-            <Width>12.03125in</Width>
+            <DataSetName>ETLPackageExecutions</DataSetName>
+            <Top>0.27778in</Top>
+            <Height>8.07332in</Height>
+            <Width>18.44447in</Width>
             <Style>
               <Border>
                 <Color>LightGrey</Color>
@@ -448,11 +496,45 @@ ORDER BY
               <BackgroundGradientType>None</BackgroundGradientType>
             </Style>
           </Chart>
+          <Textbox Name="Textbox25">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>="Package Executions for " + First(Fields!ETLPackageGroup.Value, "ETLPackageExecutions")</Value>
+                    <Style>
+                      <FontSize>12pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox23</rd:DefaultName>
+            <Height>0.25in</Height>
+            <Width>18.44447in</Width>
+            <ZIndex>1</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <BottomBorder>
+                <Style>Solid</Style>
+              </BottomBorder>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
-        <Height>5.405in</Height>
+        <Height>8.3511in</Height>
         <Style />
       </Body>
-      <Width>12.22917in</Width>
+      <Width>18.44447in</Width>
       <Page>
         <LeftMargin>1in</LeftMargin>
         <RightMargin>1in</RightMargin>
@@ -463,16 +545,18 @@ ORDER BY
     </ReportSection>
   </ReportSections>
   <ReportParameters>
-    <ReportParameter Name="ETLPackageId">
+    <ReportParameter Name="ETLBatchExecutionId">
       <DataType>Integer</DataType>
-      <Prompt>ETL Package</Prompt>
-      <ValidValues>
-        <DataSetReference>
-          <DataSetName>ETLPackage</DataSetName>
-          <ValueField>ETLPackageId</ValueField>
-          <LabelField>Name</LabelField>
-        </DataSetReference>
-      </ValidValues>
+      <DefaultValue>
+        <Values>
+          <Value>9995</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>ETL Batch Execution Id</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ETLPackageGroupId">
+      <DataType>Integer</DataType>
+      <Prompt>ETL Package Group Id</Prompt>
     </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
@@ -483,13 +567,16 @@ ORDER BY
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>0</RowIndex>
-          <ParameterName>ETLPackageId</ParameterName>
+          <ParameterName>ETLBatchExecutionId</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>ETLPackageGroupId</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>
   </ReportParametersLayout>
-  <Language>en-US</Language>
-  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
-  <rd:ReportID>25d4408a-6cf8-4225-9563-cabb2371a3ef</rd:ReportID>
+  <rd:ReportID>66043e2a-5385-430d-a537-7a3cd78953fc</rd:ReportID>
 </Report>
