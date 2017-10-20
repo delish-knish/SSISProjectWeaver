@@ -80,19 +80,20 @@ AS
 
 	--If a package that has a failure logged is still in a failed state then mark it as Ready For Execution and decrease the Remaining Retry Attempts by one
 	--ToDo: make this sql statement more straightforward
-    UPDATE up
-    SET    RemainingRetryAttempts = IIF(IIF(pp.ETLPackageId is not null, pp.RemainingRetryAttempts, p.RemainingRetryAttempts) > 0, IIF(pp.ETLPackageId is not null, pp.RemainingRetryAttempts, p.RemainingRetryAttempts) - 1, 0)
-          ,ReadyForExecutionInd = IIF(IIF(pp.ETLPackageId is not null, pp.RemainingRetryAttempts, p.RemainingRetryAttempts) > 0, 1, 0)
+    UPDATE pepgep
+    SET    RemainingRetryAttempts = IIF(IIF(pp.ETLPackageId is not null, pepgep.RemainingRetryAttempts, epgep.RemainingRetryAttempts) > 0, IIF(pp.ETLPackageId is not null, pepgep.RemainingRetryAttempts, epgep.RemainingRetryAttempts) - 1, 0)
+          ,ReadyForExecutionInd = IIF(IIF(pp.ETLPackageId is not null, pepgep.RemainingRetryAttempts, epgep.RemainingRetryAttempts) > 0, 1, 0)
     FROM   [log].[ETLPackageExecutionError] e
+			JOIN [ctl].ETLPackageGroup_ETLPackage epgep ON e.ETLPackageId = epgep.ETLPackageId AND e.ETLPackageGroupId = epgep.ETLPackageGroupId	
            JOIN ctl.ETLPackage p
-             ON e.ETLPackageId = p.ETLPackageId
+             ON epgep.ETLPackageId = p.ETLPackageId
            CROSS APPLY [dbo].[func_GetETLPackageExecutionStatusesFromSSISDB] (e.SSISDBExecutionId) s
-		   LEFT JOIN ctl.ETLPackage pp ON P.EntryPointETLPackageId = pp.ETLPackageId
-		   JOIN ctl.ETLPackage up ON up.ETLPackageId = ISNULL(pp.ETLPackageId, p.ETLPackageId)
+		   LEFT JOIN ctl.ETLPackage pp ON p.EntryPointETLPackageId = pp.ETLPackageId
+		   JOIN [ctl].ETLPackageGroup_ETLPackage pepgep ON pepgep.ETLPackageId = ISNULL(pp.ETLPackageId, p.ETLPackageId) and e.ETLPackageGroupId = pepgep.ETLPackageGroupId
     WHERE
       ETLBatchExecutionId = @ETLBatchExecutionId
-	  AND p.RemainingRetryAttempts > 0
-      AND up.ETLPackageId = ISNULL(pp.ETLPackageId, s.ETLPackageId)
+	  AND epgep.RemainingRetryAttempts > 0
+      AND pepgep.ETLPackageId = ISNULL(pp.ETLPackageId, s.ETLPackageId)
       AND s.ETLPackageExecutionStatusId = 1
 	  AND [dbo].[func_GetLastPackageExecutionStatus] (@ETLBatchExecutionId, ISNULL(pp.ETLPackageId, s.ETLPackageId)) <> 5 ;
 

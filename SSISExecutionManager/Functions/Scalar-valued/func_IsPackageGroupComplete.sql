@@ -28,7 +28,6 @@ AS
          WHERE
           g.EnabledInd = 1
           AND b.EnabledInd = 1
-          AND p.EnabledInd = 1
           AND p.EntryPointPackageInd = 1
           AND ( b.IgnoreForBatchCompleteInd = 0
                  OR x.[status] IN ( 7, 9 ) )

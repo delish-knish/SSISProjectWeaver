@@ -23,8 +23,8 @@ AS
               AND ep.ETLPackageId = ebpep.ETLPackageId
        WHERE
         (ep.EntryPointPackageInd = 1
-          OR ep.BypassEntryPointInd = 1)
-        AND ep.ReadyForExecutionInd = 1
+          OR ebpep.BypassEntryPointInd = 1)
+        AND ebpep.ReadyForExecutionInd = 1
         AND (bp.DependenciesNotMetCount = 0
-              OR ep.IgnoreDependenciesInd = 1) --All dependencies met or we are going to ignore them
+              OR ebpep.IgnoreDependenciesInd = 1) --All dependencies met or we are going to ignore them
       ) 

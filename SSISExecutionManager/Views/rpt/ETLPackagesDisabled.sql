@@ -2,24 +2,28 @@
 AS
   SELECT
     ebpgb.ETLBatchId
-	,ep.[ETLPackageId]
+    ,epg.ETLPackageGroupId
+    ,epg.ETLPackageGroup
+    ,ep.[ETLPackageId]
     ,ep.[SSISDBFolderName]
     ,ep.[SSISDBProjectName]
     ,ep.[SSISDBPackageName]
     ,ep.[EntryPointPackageInd]
     ,epp.SSISDBPackageName AS [EntryPointETLPackageName]
-    ,ep.[BypassEntryPointInd]
-    ,ep.[IgnoreDependenciesInd]
-    ,ep.[SupportSeverityLevelId]
+    ,epgb.[BypassEntryPointInd]
+    ,epgb.[IgnoreDependenciesInd]
+    ,epgb.[SupportSeverityLevelId]
     ,ep.[Comments]
   FROM
     ctl.ETLPackage ep
     LEFT JOIN ctl.ETLPackage epp
-      ON ep.EntryPointETLPackageId = epp.ETLPackageId
-	JOIN ctl.ETLPackageGroup_ETLPackage epgb ON ep.ETLPackageId = epgb.ETLPackageId
-	JOIN ctl.ETLBatch_ETLPackageGroup ebpgb ON epgb.ETLPackageGroupId = ebpgb.ETLPackageGroupId
+           ON ep.EntryPointETLPackageId = epp.ETLPackageId
+    JOIN ctl.ETLPackageGroup_ETLPackage epgb
+      ON ep.ETLPackageId = epgb.ETLPackageId
+    JOIN ctl.ETLBatch_ETLPackageGroup ebpgb
+      ON epgb.ETLPackageGroupId = ebpgb.ETLPackageGroupId
+    JOIN ctl.ETLPackageGroup epg
+      ON epgb.ETLPackageGroupId = epg.ETLPackageGroupId
   WHERE
-    ep.EnabledInd = 0 
-	OR epgb.EnabledInd = 0
-	OR ebpgb.EnabledInd = 0
-	
+    epgb.EnabledInd = 0
+     OR ebpgb.EnabledInd = 0 

@@ -24,11 +24,11 @@ AS
        ,ep.SSISDBProjectName
        ,ep.SSISDBPackageName
        ,ISNULL(epp.SSISDBPackageName, ep.SSISDBPackageName)           AS EntryPointPackageName
-       ,ep.SupportSeverityLevelId
+       ,epgep.SupportSeverityLevelId
        ,rssl.SupportSeverityLevelCd
        ,CAST(err.ErrorDateTime AS DATETIME2(0))                       AS ErrorDateTime
        ,err.ErrorMessage
-       ,ISNULL(epp.RemainingRetryAttempts, ep.RemainingRetryAttempts) AS RemainingRetryAttempts
+       ,ISNULL(pepgep.RemainingRetryAttempts, epgep.RemainingRetryAttempts) AS RemainingRetryAttempts
       FROM
         [log].[ETLPackageExecutionError] err
         --Limit errors to the first error per package for the batch 
@@ -56,12 +56,15 @@ AS
                    OR minerr.ETLPackageExecutionErrorTypeId = 3)
         JOIN ctl.[ETLBatchExecution] eb
           ON err.[ETLBatchExecutionId] = eb.[ETLBatchExecutionId]
+		JOIN ctl.[ETLPackageGroup_ETLPackage] epgep ON err.ETLPackageId = epgep.ETLPackageId
+			and err.ETLPackageGroupId = epgep.ETLPackageGroupId
         JOIN ctl.ETLPackage ep
           ON err.ETLPackageId = ep.ETLPackageId
         JOIN ref.SupportSeverityLevel rssl
-          ON ep.SupportSeverityLevelId = rssl.SupportSeverityLevelId
+          ON epgep.SupportSeverityLevelId = rssl.SupportSeverityLevelId
         LEFT JOIN ctl.ETLPackage epp
                ON ep.EntryPointETLPackageId = epp.ETLPackageId
+		LEFT JOIN ctl.[ETLPackageGroup_ETLPackage] pepgep ON ep.EntryPointETLPackageId = pepgep.ETLPackageId and err.ETLPackageGroupId = pepgep.ETLPackageGroupId
       WHERE
         eb.[ETLBatchExecutionId] = @ETLBatchId
         AND err.EmailNotificationSentDateTime IS NULL

@@ -2,16 +2,15 @@
                                                            @SSISDBFolderName    NVARCHAR(128),
                                                            @SSISDBProjectName   NVARCHAR(128),
                                                            @SSISDBPackageName   NVARCHAR (260),
+														   @ETLPackageGroupId	INT,
                                                            @SSISExecutionId     BIGINT = NULL OUT
 AS
-    /*The purpose of this stored procedure is to be able to execute a package as part of a batch but outside of the SQL Agent Job */
+    /*The purpose of this stored procedure is to immediately execute a package and tie it to an ETL Batch Execution but outside of the polling process */
 
     DECLARE
-    --@Periodicity CHAR(2),
     @SSISEnvironmentName VARCHAR(128)
 
     SELECT
-      --@Periodicity = Periodicity
       @SSISEnvironmentName = SSISEnvironmentName
     FROM
       ctl.[ETLBatchExecution]
@@ -31,6 +30,7 @@ AS
     EXEC [ctl].ExecuteETLPackage
       @ETLBatchExecutionId
      ,@ETLPackageId
+	 ,@ETLPackageGroupId
      ,@SSISEnvironmentName
      ,@SSISExecutionId OUT
 

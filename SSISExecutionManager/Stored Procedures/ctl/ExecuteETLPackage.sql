@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [ctl].[ExecuteETLPackage] @ETLBatchExecutionId INT,
                                            @ETLPackageId        INT,
+										   @ETLPackageGroupId	INT,
                                            @SSISEnvironmentName VARCHAR(128) = NULL,
                                            @SSISExecutionId     BIGINT = NULL OUT
 AS
@@ -18,7 +19,7 @@ AS
      ,@SSISDBFolderName = ep.SSISDBFolderName
      ,@Use32BitDtExecInd = ep.Use32BitDtExecInd
      ,@EnvironmentReferenceId = env.reference_id
-     ,@OverrideSSISDBLoggingLevelId = ep.OverrideSSISDBLoggingLevelId
+     ,@OverrideSSISDBLoggingLevelId = epgep.OverrideSSISDBLoggingLevelId
 	 ,@HasParamETLBatchExecutionId = ep.HasParamETLBatchExecutionId
     FROM
       [ctl].ETLPackage ep
@@ -27,6 +28,9 @@ AS
       JOIN [$(SSISDB)].[catalog].[projects] prj
         ON pkg.project_id = prj.project_id
            AND prj.[name] = ep.SSISDBProjectName
+	  JOIN [ctl].ETLPackageGroup_ETLPackage epgep
+		ON ep.ETLPackageId = epgep.ETLPackageId
+			AND epgep.ETLPackageGroupId = @ETLPackageGroupId
       JOIN [$(SSISDB)].[catalog].[folders] fld
         ON prj.folder_id = fld.folder_id
            AND fld.[name] = ep.SSISDBFolderName
@@ -78,16 +82,18 @@ AS
       @ExecutionId
 
     --Set the ReadyForExecutionInd on the package so that it is not picked up
-    UPDATE [ctl].ETLPackage
+    UPDATE [ctl].ETLPackageGroup_ETLPackage
     SET    ReadyForExecutionInd = 0
     WHERE
       ETLPackageId = @ETLPackageId
+	  AND ETLPackageGroupId = @ETLPackageGroupId
 
     --Associate the SSISDB Execution ID with the batch 
     EXEC ctl.InsertETLBatchSSISDBExecution
       @ETLBatchExecutionId
      ,@ExecutionId
      ,@ETLPackageId
+	 ,@ETLPackageGroupId
 
     --Set the ouput parameter so that we can then look up the execution in the SSISDB
     SET @SSISExecutionId = @ExecutionId

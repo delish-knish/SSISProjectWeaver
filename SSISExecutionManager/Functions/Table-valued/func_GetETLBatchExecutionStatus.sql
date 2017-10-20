@@ -9,7 +9,7 @@ AS
         ,TotalEntryPointPackageCount = SUM(CAST(ep.EntryPointPackageInd AS TINYINT))
         ,TotalRemainingEntryPointPackageCount = SUM(CAST(ep.EntryPointPackageInd AS TINYINT)) - SUM(IIF(epb.ETLPackageExecutionStatusId IN (0, 2)
                                                                                                          AND ep.EntryPointPackageInd = 1, 1, 0))
-        ,PackagesReadyToExecuteCount = SUM(CAST(ep.ReadyForExecutionInd AS TINYINT))
+        ,PackagesReadyToExecuteCount = SUM(CAST(epb.ReadyForExecutionInd AS TINYINT))
         ,RunningPackageCount = SUM(r.RunningPackageCount)
         ,ETLBatchExecutionStatusId = CASE
                                         WHEN MIN(eb.ETLBatchStatusId) = 10 THEN 10 -- The batch has been manually canceled and we don't want to overwrite that

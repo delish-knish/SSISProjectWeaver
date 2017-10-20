@@ -3,8 +3,9 @@
      [ETLPackageExecutionErrorId]      BIGINT IDENTITY(1, 1)
      ,[SSISDBExecutionId]              INT NULL
      ,[SSISDBEventMessageId]           BIGINT NULL --nullable to allow for logging unexpected terminations
-     ,[ETLBatchExecutionId]                     INT NOT NULL
+     ,[ETLBatchExecutionId]            INT NOT NULL
      ,[ETLPackageId]                   INT NOT NULL
+     ,[ETLPackageGroupId]              INT NOT NULL
      ,[ErrorDateTime]                  DATETIME2 NOT NULL
      ,[ErrorMessage]                   VARCHAR(MAX) NOT NULL
      ,[EmailNotificationSentDateTime]  DATETIME2 NULL
@@ -16,6 +17,7 @@
      ,[LastUpdatedUser]                VARCHAR (50) CONSTRAINT [DF_ETLPackageExecutionError_LastUpdatedUser] DEFAULT (SUSER_SNAME()) NOT NULL,
      CONSTRAINT [PK_ETLPackageExecutionError] PRIMARY KEY (ETLPackageExecutionErrorId),
      CONSTRAINT [FK_ETLPackageExecutionError_ETLPackage] FOREIGN KEY ([ETLPackageId]) REFERENCES [ctl].ETLPackage([ETLPackageId]),
+     CONSTRAINT [FK_ETLPackageExecutionError_ETLPackageGroup] FOREIGN KEY ([ETLPackageGroupId]) REFERENCES [ctl].ETLPackageGroup([ETLPackageGroupId]),
      CONSTRAINT [FK_ETLPackageExecutionError_ETLBatchExecution] FOREIGN KEY ([ETLBatchExecutionId]) REFERENCES [ctl].[ETLBatchExecution]([ETLBatchExecutionId]),
      --CONSTRAINT [AK_ETLPackageExecutionError_SSISDBExecutionId_SSISDBEventMessageId] UNIQUE (SSISDBExecutionId, SSISDBEventMessageId), Removed to allow for non SSISDB errors
      CONSTRAINT [FK_ETLPackageExecutionError_ETLPackageExecutionErrorType] FOREIGN KEY (ETLPackageExecutionErrorTypeId) REFERENCES ref.ETLPackageExecutionErrorType(ETLPackageExecutionErrorTypeId)
