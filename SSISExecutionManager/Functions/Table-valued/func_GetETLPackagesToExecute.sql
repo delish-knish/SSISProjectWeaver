@@ -4,6 +4,7 @@ AS
     RETURN
       (SELECT
          eb.ETLBatchId
+		,bp.ETLPackageGroupId
         ,bp.ETLPackageId
         ,ep.SSISDBFolderName
         ,ep.SSISDBProjectName

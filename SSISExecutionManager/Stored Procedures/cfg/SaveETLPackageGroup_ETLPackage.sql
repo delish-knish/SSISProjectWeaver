@@ -106,7 +106,6 @@ AS
                     ,source.ETLPackageId
                     ,source.EnabledInd
                     ,source.IgnoreForBatchCompleteInd
-                    ,source.EnabledInd
                     ,source.ReadyForExecutionInd
                     ,source.BypassEntryPointInd
                     ,source.IgnoreDependenciesInd

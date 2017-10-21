@@ -11,7 +11,7 @@
      CONSTRAINT [PK_ETLBatchSSISDBExecutions] PRIMARY KEY ([ETLBatchExecutionId], [SSISDBExecutionId]),
      CONSTRAINT [FK_ETLBatchSSISDBExecutions_ETLPackage] FOREIGN KEY ([ETLPackageId]) REFERENCES ctl.ETLPackage([ETLPackageId]),
      CONSTRAINT [FK_ETLBatchSSISDBExecutions_ETLPackageGroup] FOREIGN KEY ([ETLPackageGroupId]) REFERENCES ctl.ETLPackageGroup([ETLPackageGroupId]),
-     CONSTRAINT [FK_ETLBatchSSISDBExecutions_ETLBatchId] FOREIGN KEY ([ETLBatchExecutionId]) REFERENCES ctl.[ETLBatchExecution]([ETLBatchExecutionId]),
+     CONSTRAINT [FK_ETLBatchSSISDBExecutions_ETLBatchExecutionId] FOREIGN KEY ([ETLBatchExecutionId]) REFERENCES ctl.[ETLBatchExecution]([ETLBatchExecutionId]),
   )
 
 GO

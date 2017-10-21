@@ -225,6 +225,7 @@
     <Build Include="Security\Schemas\util.sql" />
     <Build Include="Stored Procedures\util\GetDiskSpace.sql" />
     <Build Include="Views\rpt\ETLPackagesInFailedState.sql" />
+    <Build Include="Stored Procedures\util\CopyDatabase.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="References\SSISDB.dacpac" />

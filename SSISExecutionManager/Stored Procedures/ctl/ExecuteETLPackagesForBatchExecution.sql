@@ -2,19 +2,21 @@
                                                              @SSISEnvironmentName VARCHAR(128)
 AS
     --Get list of packages to execute for cursor
-    DECLARE @ETLBatchId        INT
-            ,@ETLPackageId     INT
-            ,@EventDescription VARCHAR(MAX);
+    DECLARE @ETLBatchId         INT
+            ,@ETLPackageGroupId INT
+            ,@ETLPackageId      INT
+            ,@EventDescription  VARCHAR(MAX);
     DECLARE PackageCursor CURSOR FAST_FORWARD FOR
       SELECT
         ETLBatchId
-       ,ETLPackageId
+        ,ETLPackageGroupId
+        ,ETLPackageId
       FROM
         dbo.func_GetETLPackagesToExecute(@ETLBatchExecutionId) t
 
     OPEN PackageCursor
 
-    FETCH NEXT FROM PackageCursor INTO @ETLBatchId, @ETLPackageId
+    FETCH NEXT FROM PackageCursor INTO @ETLBatchId, @ETLPackageGroupId, @ETLPackageId
 
     WHILE @@FETCH_STATUS = 0
       BEGIN
@@ -25,7 +27,7 @@ AS
           DECLARE SQLCommandCursor CURSOR FAST_FORWARD FOR
             SELECT
               SQLCommand + ' @ConditionMetInd OUTPUT'
-             ,SQLCommandName
+              ,SQLCommandName
             FROM
               ctl.[ETLBatch_ETLPackage_SQLCommandCondition] b
               JOIN ctl.SQLCommand sc
@@ -44,9 +46,9 @@ AS
                 DECLARE @ParamDefinition NVARCHAR(MAX) = N'@ConditionMetInd BIT OUTPUT';
 
                 EXECUTE sp_executesql
-                  @SQLCommand
-                 ,@ParamDefinition
-                 ,@ConditionMetInd = @ConditionsMetInd OUT;
+                  @SQLCommand,
+                  @ParamDefinition,
+                  @ConditionMetInd = @ConditionsMetInd OUT;
 
                 IF @ConditionsMetInd = 0
                   BEGIN
@@ -54,10 +56,10 @@ AS
                       SET @EventDescription = @SQLCommandName + ' condition not met';
 
                       EXEC [log].[InsertETLBatchExecutionEvent]
-                        18
-                       ,@ETLBatchExecutionId
-                       ,@ETLPackageId
-                       ,@EventDescription;
+                        18,
+                        @ETLBatchExecutionId,
+                        @ETLPackageId,
+                        @EventDescription;
 
                       BREAK;
                   END
@@ -67,10 +69,10 @@ AS
                       SET @EventDescription = @SQLCommandName + ' condition met';
 
                       EXEC [log].[InsertETLBatchExecutionEvent]
-                        18
-                       ,@ETLBatchExecutionId
-                       ,@ETLPackageId
-                       ,@EventDescription;
+                        18,
+                        @ETLBatchExecutionId,
+                        @ETLPackageId,
+                        @EventDescription;
                   END
 
                 FETCH NEXT FROM SQLCommandCursor INTO @SQLCommand, @SQLCommandName
@@ -85,22 +87,24 @@ AS
                 DECLARE @SSISExecutionId BIGINT;
 
                 --Log and execute the package
-                SET @EventDescription = 'Executing package Id ' + CAST(@ETLPackageId AS VARCHAR(10));
+                SET @EventDescription = 'Executing package Id '
+                                        + CAST(@ETLPackageId AS VARCHAR(10));
 
                 EXEC [log].[InsertETLBatchExecutionEvent]
-                  3
-                 ,@ETLBatchExecutionId
-                 ,@ETLPackageId
-                 ,@EventDescription;
+                  3,
+                  @ETLBatchExecutionId,
+                  @ETLPackageId,
+                  @EventDescription;
 
                 EXEC [ctl].ExecuteETLPackage
-                  @ETLBatchExecutionId
-                 ,@ETLPackageId
-                 ,@SSISEnvironmentName
-                 ,@SSISExecutionId OUT
+                  @ETLBatchExecutionId,
+                  @ETLPackageId,
+                  @ETLPackageGroupId,
+                  @SSISEnvironmentName,
+                  @SSISExecutionId OUT
             END
 
-          FETCH NEXT FROM PackageCursor INTO @ETLBatchId, @ETLPackageId
+          FETCH NEXT FROM PackageCursor INTO @ETLBatchId, @ETLPackageGroupId, @ETLPackageId
       END
 
     CLOSE PackageCursor

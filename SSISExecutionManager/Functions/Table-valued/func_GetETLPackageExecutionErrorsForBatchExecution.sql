@@ -4,6 +4,7 @@ AS
     RETURN
       (SELECT
          ebe.[ETLBatchExecutionId]                       AS [ETLBatchExecutionId]
+         ,ebe.ETLPackageGroupId                          AS [ETLPackageGroupId]
          ,ISNULL(err.[ETLPackageId], ebe.[ETLPackageId]) AS [ETLPackageId]
          ,ebe.[SSISDBExecutionId]                        AS [SSISDBExecutionId]
          ,err.[EventMessageId]                           AS [EventMessageId]
