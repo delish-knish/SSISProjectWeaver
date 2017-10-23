@@ -9,8 +9,8 @@
      ,[LastUpdatedDate]		DATETIME2 (7) CONSTRAINT [DF_ETLBatchSSISDBExecutions_LastUpdatedDate] DEFAULT (GETDATE()) NOT NULL
      ,[LastUpdatedUser]		VARCHAR (50) CONSTRAINT [DF_ETLBatchSSISDBExecutions_LastUpdatedUser] DEFAULT (SUSER_SNAME()) NOT NULL,
      CONSTRAINT [PK_ETLBatchSSISDBExecutions] PRIMARY KEY ([ETLBatchExecutionId], [SSISDBExecutionId]),
-     CONSTRAINT [FK_ETLBatchSSISDBExecutions_ETLPackage] FOREIGN KEY ([ETLPackageId]) REFERENCES ctl.ETLPackage([ETLPackageId]),
-     CONSTRAINT [FK_ETLBatchSSISDBExecutions_ETLPackageGroup] FOREIGN KEY ([ETLPackageGroupId]) REFERENCES ctl.ETLPackageGroup([ETLPackageGroupId]),
+     CONSTRAINT [FK_ETLBatchSSISDBExecutions_ETLPackage] FOREIGN KEY ([ETLPackageId]) REFERENCES [cfg].ETLPackage([ETLPackageId]),
+     CONSTRAINT [FK_ETLBatchSSISDBExecutions_ETLPackageGroup] FOREIGN KEY ([ETLPackageGroupId]) REFERENCES [cfg].ETLPackageGroup([ETLPackageGroupId]),
      CONSTRAINT [FK_ETLBatchSSISDBExecutions_ETLBatchExecutionId] FOREIGN KEY ([ETLBatchExecutionId]) REFERENCES ctl.[ETLBatchExecution]([ETLBatchExecutionId]),
   )
 

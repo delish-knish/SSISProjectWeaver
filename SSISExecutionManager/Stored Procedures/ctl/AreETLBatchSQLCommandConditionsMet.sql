@@ -16,8 +16,8 @@ AS
           SQLCommand + ' @ConditionMetInd OUTPUT'
          ,SQLCommandName
         FROM
-          ctl.[ETLBatch_SQLCommandCondition] b
-          JOIN ctl.SQLCommand sc
+          [cfg].[ETLBatch_SQLCommandCondition] b
+          JOIN [cfg].SQLCommand sc
             ON b.SQLCommandId = sc.SQLCommandId
         WHERE
           ETLBatchId = @ETLBatchId

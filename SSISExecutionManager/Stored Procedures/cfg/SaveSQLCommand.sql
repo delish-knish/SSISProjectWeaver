@@ -4,7 +4,7 @@
                                         @SQLCommandDescription          VARCHAR(MAX),
                                         @RequiresETLBatchIdParameterInd BIT
 AS
-    MERGE [ctl].SQLCommand AS Target
+    MERGE [cfg].SQLCommand AS Target
     USING (SELECT
              @SQLCommandId
              ,@SQLCommandName

@@ -22,7 +22,7 @@ AS
          --,eme.Message                                                   AS ETLPackageFirstErrorMessage
          ,CAST(IIF(es.execution_result IS NULL, 1, 0) AS BIT)           AS MissingSSISDBExecutablesEntryInd
        FROM
-         [ctl].ETLPackage ep WITH (NOLOCK)
+         [cfg].ETLPackage ep WITH (NOLOCK)
          LEFT JOIN [$(SSISDB)].catalog.executables e WITH (NOLOCK)
                 ON ep.SSISDBPackageName = e.package_name
                    AND e.package_path = '\Package'

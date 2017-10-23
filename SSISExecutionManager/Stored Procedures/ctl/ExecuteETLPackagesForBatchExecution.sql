@@ -29,8 +29,8 @@ AS
               SQLCommand + ' @ConditionMetInd OUTPUT'
               ,SQLCommandName
             FROM
-              ctl.[ETLBatch_ETLPackage_SQLCommandCondition] b
-              JOIN ctl.SQLCommand sc
+              [cfg].[ETLBatch_ETLPackage_SQLCommandCondition] b
+              JOIN [cfg].SQLCommand sc
                 ON b.SQLCommandId = sc.SQLCommandId
             WHERE
               ETLBatchId = @ETLBatchId
@@ -86,8 +86,15 @@ AS
             BEGIN
                 DECLARE @SSISExecutionId BIGINT;
 
-                --Log and execute the package
-                SET @EventDescription = 'Executing package Id '
+                --Execute and log the package                
+                EXEC [ctl].ExecuteETLPackage
+                  @ETLBatchExecutionId,
+                  @ETLPackageId,
+                  @ETLPackageGroupId,
+                  @SSISEnvironmentName,
+                  @SSISExecutionId OUT
+
+				SET @EventDescription = 'Executing package Id '
                                         + CAST(@ETLPackageId AS VARCHAR(10));
 
                 EXEC [log].[InsertETLBatchExecutionEvent]
@@ -96,12 +103,6 @@ AS
                   @ETLPackageId,
                   @EventDescription;
 
-                EXEC [ctl].ExecuteETLPackage
-                  @ETLBatchExecutionId,
-                  @ETLPackageId,
-                  @ETLPackageGroupId,
-                  @SSISEnvironmentName,
-                  @SSISExecutionId OUT
             END
 
           FETCH NEXT FROM PackageCursor INTO @ETLBatchId, @ETLPackageGroupId, @ETLPackageId

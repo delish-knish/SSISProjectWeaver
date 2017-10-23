@@ -22,14 +22,14 @@ AS
       ON ex.SSISDBExecutionId = dbex.SSISDBExecutionId
     JOIN [ctl].[ETLBatchExecution] eb
       ON dbex.ETLBatchExecutionId = eb.[ETLBatchExecutionId]
-    JOIN [ctl].ETLPackage ep
+    JOIN [cfg].ETLPackage ep
       ON ex.ETLPackageId = ep.ETLPackageId
-    JOIN [ctl].[ETLPackageGroup_ETLPackage] b
+    JOIN [cfg].[ETLPackageGroup_ETLPackage] b
       ON ep.ETLPackageId = b.ETLPackageId
-    JOIN [ctl].[ETLBatch_ETLPackageGroup] bgb
+    JOIN [cfg].[ETLBatch_ETLPackageGroup] bgb
       ON b.ETLPackageGroupId = bgb.ETLPackageGroupId
          AND eb.ETLBatchId = bgb.ETLBatchId
-	JOIN [ctl].ETLPackageGroup bg ON bgb.ETLPackageGroupId = bg.ETLPackageGroupId
+	JOIN [cfg].ETLPackageGroup bg ON bgb.ETLPackageGroupId = bg.ETLPackageGroupId
     JOIN ref.ETLBatchStatus rbs
       ON eb.ETLBatchStatusId = rbs.ETLBatchStatusId
     JOIN ref.ETLPackageExecutionStatus reps

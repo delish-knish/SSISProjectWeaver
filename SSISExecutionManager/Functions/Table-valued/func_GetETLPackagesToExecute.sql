@@ -13,13 +13,13 @@ AS
         ,ep.Use32BitDtExecInd
        FROM
          dbo.[func_GetETLPackagesForBatchExecution](@ETLBatchExecutionId) bp
-         JOIN [ctl].ETLPackage ep WITH (NOLOCK)
+         JOIN [cfg].ETLPackage ep WITH (NOLOCK)
            ON bp.ETLPackageId = ep.ETLPackageId
          JOIN ctl.ETLBatch eb WITH (NOLOCK)
            ON bp.ETLBatchId = eb.ETLBatchId
-         JOIN ctl.[ETLBatch_ETLPackageGroup] ebebp WITH (NOLOCK)
+         JOIN [cfg].[ETLBatch_ETLPackageGroup] ebebp WITH (NOLOCK)
            ON eb.ETLBatchId = ebebp.ETLBatchId
-         JOIN ctl.[ETLPackageGroup_ETLPackage] ebpep WITH (NOLOCK)
+         JOIN [cfg].[ETLPackageGroup_ETLPackage] ebpep WITH (NOLOCK)
            ON ebebp.[ETLPackageGroupId] = ebpep.[ETLPackageGroupId]
               AND ep.ETLPackageId = ebpep.ETLPackageId
        WHERE

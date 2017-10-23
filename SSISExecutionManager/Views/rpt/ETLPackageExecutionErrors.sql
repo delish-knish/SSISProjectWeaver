@@ -1,9 +1,8 @@
 ﻿CREATE VIEW [rpt].[ETLPackageExecutionErrors]
 AS
   SELECT TOP 1000
-    eb.[ETLBatchExecutionId]                    AS [ETLBatchId]
-    ,eb.[CallingJobName]              AS [CallingJobName]
-    --,eb.Periodicity                  AS [Periodicity]
+    eb.[ETLBatchExecutionId]         AS [ETLBatchExecutionId]
+    ,eb.[CallingJobName]             AS [CallingJobName]
     ,p.SSISDBProjectName             AS [SSISDBProjectName]
     ,p.SSISDBPackageName             AS [SSISDBPackageName]
     ,[ETLPackageExecutionErrorId]    AS [ETLPackageExecutionErrorId]
@@ -16,7 +15,7 @@ AS
     ,[ETLPackageRestartDateTime]     AS [ETLPackageRestartDateTime]
   FROM
     log.ETLPackageExecutionError eper
-    JOIN ctl.ETLPackage p
+    JOIN [cfg].ETLPackage p
       ON eper.ETLPackageId = p.ETLPackageId
     JOIN ctl.[ETLBatchExecution] eb
       ON eper.[ETLBatchExecutionId] = eb.[ETLBatchExecutionId]
@@ -24,4 +23,3 @@ AS
       ON eper.[ETLPackageExecutionErrorTypeId] = et.[ETLPackageExecutionErrorTypeId]
   ORDER  BY
     [ETLPackageExecutionErrorId] DESC 
-    

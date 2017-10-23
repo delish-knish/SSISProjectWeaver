@@ -3,7 +3,7 @@
                                                             @SQLCommandId INT,
                                                             @EnabledInd   BIT
 AS
-    MERGE [ctl].[ETLBatch_ETLPackage_SQLCommandCondition] AS Target
+    MERGE [cfg].[ETLBatch_ETLPackage_SQLCommandCondition] AS Target
     USING (SELECT
              @ETLBatchId
             ,@ETLPackageId

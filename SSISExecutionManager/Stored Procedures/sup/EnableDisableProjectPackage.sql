@@ -24,8 +24,8 @@ AS
            ,LastUpdatedDate = GETDATE()
            ,LastUpdatedUser = SUSER_SNAME()
 	FROM 
-		ctl.ETLPackageGroup_ETLPackage epgep
-		JOIN ctl.ETLPackage ep ON epgep.ETLPackageId = ep.ETLPackageId
+		[cfg].ETLPackageGroup_ETLPackage epgep
+		JOIN [cfg].ETLPackage ep ON epgep.ETLPackageId = ep.ETLPackageId
     WHERE
       @SSISDBFolderName = SSISDBFolderName
       AND @SSISDBProjectName = SSISDBProjectName

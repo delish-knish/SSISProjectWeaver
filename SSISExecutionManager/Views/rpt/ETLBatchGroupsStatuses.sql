@@ -10,15 +10,15 @@ AS
    ,IIF([dbo].[func_IsPackageGroupComplete] (ebe.[ETLBatchExecutionId], ebp.ETLPackageGroupId) = 1, MAX(CAST(ex.end_time AS DATETIME2)), NULL) AS GroupEndDateTime
   FROM
     ctl.ETLBatchExecution ebe
-    JOIN [ctl].[ETLBatch_ETLPackageGroup] b
+    JOIN [cfg].[ETLBatch_ETLPackageGroup] b
       ON ebe.ETLBatchId = b.ETLBatchId
     JOIN ctl.ETLBatch eb
       ON ebe.ETLBatchId = eb.ETLBatchId
-    JOIN [ctl].[ETLPackageGroup] ebp
+    JOIN [cfg].[ETLPackageGroup] ebp
       ON b.[ETLPackageGroupId] = ebp.[ETLPackageGroupId]
-    JOIN ctl.ETLPackageGroup_ETLPackage grppkg
+    JOIN [cfg].ETLPackageGroup_ETLPackage grppkg
       ON ebp.[ETLPackageGroupId] = grppkg.[ETLPackageGroupId]
-    JOIN ctl.ETLPackage ep
+    JOIN [cfg].ETLPackage ep
       ON grppkg.ETLPackageId = ep.ETLPackageId
          AND EntryPointETLPackageId IS NULL
     LEFT JOIN [ctl].[ETLBatchSSISDBExecutions] ebsdbe

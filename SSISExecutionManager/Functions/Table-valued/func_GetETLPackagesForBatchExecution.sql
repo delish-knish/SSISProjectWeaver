@@ -15,11 +15,11 @@ AS
                 ,ISNULL(exe.ExecutionId, em.ExecutionId) AS ExecutionId --Executables aren't logged until complete so if none found, check the event_messages table.
                FROM
                  [ctl].[ETLBatchExecution] eb 
-                 JOIN ctl.[ETLBatch_ETLPackageGroup] epeps 
+                 JOIN [cfg].[ETLBatch_ETLPackageGroup] epeps 
                    ON eb.[ETLBatchId] = epeps.[ETLBatchId]
-                 JOIN ctl.[ETLPackageGroup_ETLPackage] epgep 
+                 JOIN [cfg].[ETLPackageGroup_ETLPackage] epgep 
                    ON epeps.ETLPackageGroupId = epgep.ETLPackageGroupId
-                 JOIN [ctl].ETLPackage ep 
+                 JOIN [cfg].ETLPackage ep 
                    ON epgep.ETLPackageId = ep.ETLPackageId
                  OUTER APPLY (SELECT TOP 1
                                 e.execution_id AS ExecutionId
@@ -51,7 +51,7 @@ AS
                                   ,MAX(SSISDBExecutionId) AS SSISDBExecutionId
                                  FROM
                                    ctl.ETLBatchSSISDBExecutions a 
-                                   JOIN ctl.ETLPackage b
+                                   JOIN [cfg].ETLPackage b
                                      ON a.ETLPackageId = b.ETLPackageId
                                  WHERE
                                   [ETLBatchExecutionId] = @ETLBatchExecutionId
@@ -112,7 +112,7 @@ AS
                       d.ETLPackageId
                      ,SUM(Iif(Isnull(pesbep.ETLPackageExecutionStatusId, -1) NOT IN (0, 2), 1, 0)) AS DependenciesNotMetCount
                     FROM
-                      [ctl].[ETLPackage_ETLPackageDependency] d 
+                      [cfg].[ETLPackage_ETLPackageDependency] d 
                       JOIN pkg bep
                         ON d.DependedOnETLPackageId = bep.ETLPackageId
                       OUTER APPLY dbo.func_GetETLPackageExecutionStatusesFromSSISDB(bep.ExecutionId) pesbep
@@ -123,7 +123,7 @@ AS
                       d.ETLPackageId
                      ,SUM(Iif(Isnull(pesbep.ETLPackageExecutionStatusId, -1) NOT IN (0, 2), 1, 0)) AS DependenciesNotMetCount
                     FROM
-                      [ctl].[ETLPackage_ETLPackageDependency] d 
+                      [cfg].[ETLPackage_ETLPackageDependency] d 
                       JOIN pkg bep
                         ON d.DependedOnETLPackageId = bep.ETLPackageId
                       OUTER APPLY dbo.func_GetETLPackageExecutionStatusesFromSSISDB(bep.ExecutionId) pesbep
@@ -135,18 +135,18 @@ AS
                      ,bbg.ETLBatchId
                      ,SUM(Iif(Isnull(pesbep.ETLPackageExecutionStatusId, -1) NOT IN (0, 2), 1, 0)) AS DependenciesNotMetCount
                     FROM
-                      ctl.ETLPackage ep
-                      JOIN [ctl].ETLPackageGroup_ETLPackage bg
+                      [cfg].ETLPackage ep
+                      JOIN [cfg].ETLPackageGroup_ETLPackage bg
                         ON ep.ETLPackageId = bg.ETLPackageId
-                      JOIN [ctl].ETLPackageGroup epg
+                      JOIN [cfg].ETLPackageGroup epg
                         ON bg.ETLPackageGroupId = epg.ETLPackageGroupId
-                      JOIN [ctl].ETLBatch_ETLPackageGroup bbg
+                      JOIN [cfg].ETLBatch_ETLPackageGroup bbg
                         ON epg.ETLPackageGroupId = bbg.ETLPackageGroupId
-                      JOIN [ctl].ETLPackageGroup_ETLPackageGroupDependency bgd
+                      JOIN [cfg].ETLPackageGroup_ETLPackageGroupDependency bgd
                         ON epg.ETLPackageGroupId = bgd.ETLPackageGroupId
-                      JOIN [ctl].ETLPackageGroup epgd
+                      JOIN [cfg].ETLPackageGroup epgd
                         ON bgd.DependedOnETLPackageGroupId = epgd.ETLPackageGroupId
-                      JOIN [ctl].ETLPackageGroup_ETLPackage pgepd
+                      JOIN [cfg].ETLPackageGroup_ETLPackage pgepd
                         ON epgd.ETLPackageGroupId = pgepd.ETLPackageGroupId
                       JOIN [pkg] bep
                         ON pgepd.ETLPackageId = bep.ETLPackageId

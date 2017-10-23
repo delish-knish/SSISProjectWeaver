@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [cfg].[SaveETLPackageGroup] @ETLPackageGroupId          INT = NULL,
                                            @ETLPackageGroup        VARCHAR(250)
 AS
-    MERGE [ctl].[ETLPackageGroup] AS Target
+    MERGE [cfg].[ETLPackageGroup] AS Target
     USING (SELECT
              @ETLPackageGroupId
              ,@ETLPackageGroup) AS source ( ETLPackageGroupId, ETLPackageGroup)

@@ -24,7 +24,7 @@ AS
           DELETE FROM ctl.ETLBatchExecution
           WHERE  ETLBatchId = @ETLBatchId;
 
-          DELETE FROM ctl.[ETLBatch_ETLPackageGroup]
+          DELETE FROM [cfg].[ETLBatch_ETLPackageGroup]
           WHERE  ETLBatchId = @ETLBatchId;
 
           DELETE FROM ctl.ETLBatch

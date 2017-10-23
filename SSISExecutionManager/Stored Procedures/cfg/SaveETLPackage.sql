@@ -17,7 +17,7 @@ AS
     SET @EntryPointETLPackageId = (SELECT
                                      ETLPackageId
                                    FROM
-                                     [ctl].ETLPackage
+                                     [cfg].ETLPackage
                                    WHERE
                                     SSISDBPackageName = @EntryPointSSISDBPackageName)
 
@@ -43,7 +43,7 @@ AS
 
     ELSE --Save the ETLPackage row
       BEGIN
-          MERGE [ctl].ETLPackage AS Target
+          MERGE [cfg].ETLPackage AS Target
           USING (SELECT
                    @SSISDBPackageName
                    ,@SSISDBProjectName

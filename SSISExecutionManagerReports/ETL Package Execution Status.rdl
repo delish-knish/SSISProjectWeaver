@@ -20,6 +20,7 @@
         </QueryParameters>
         <CommandText>SELECT p.[ETLBatchExecutionId],
        p.[ETLBatchName],
+       p.[ETLPackageGroupId],
        p.[ETLPackageId],
        p.[SSISDBExecutionId],
        p.[SSISDBFolderName], 
@@ -36,8 +37,7 @@
 FROM   [rpt].[ETLPackageExecutionStatuses] p
 JOIN [rpt].[ETLBatchExecutions] b ON p.[ETLBatchExecutionId] = b.[ETLBatchExecutionId]
 WHERE p.[ETLBatchExecutionId] = @ETLBatchExecutionId
-ORDER  BY Isnull([ExecutionStartDateTime], '9999-12-31') , [SSISDBProjectName]
-</CommandText>
+ORDER  BY Isnull([ExecutionStartDateTime], '9999-12-31') , [SSISDBProjectName]</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
@@ -48,6 +48,10 @@ ORDER  BY Isnull([ExecutionStartDateTime], '9999-12-31') , [SSISDBProjectName]
         <Field Name="ETLBatchName">
           <DataField>ETLBatchName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ETLPackageGroupId">
+          <DataField>ETLPackageGroupId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="ETLPackageId">
           <DataField>ETLPackageId</DataField>
@@ -1198,6 +1202,9 @@ Fields!PackageExecutionStatus.Value = "Canceled", "Salmon"
                                                                         </Parameter>
                                                                         <Parameter Name="SSISDBFolderName">
                                                                           <Value>=Fields!SSISDBFolderName.Value</Value>
+                                                                        </Parameter>
+                                                                        <Parameter Name="ETLPackageGroupId">
+                                                                          <Value>=Fields!ETLPackageGroupId.Value</Value>
                                                                         </Parameter>
                                                                       </Parameters>
                                                                     </Drillthrough>

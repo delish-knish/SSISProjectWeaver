@@ -22,13 +22,13 @@ AS
      ,@OverrideSSISDBLoggingLevelId = epgep.OverrideSSISDBLoggingLevelId
 	 ,@HasParamETLBatchExecutionId = ep.HasParamETLBatchExecutionId
     FROM
-      [ctl].ETLPackage ep
+      [cfg].ETLPackage ep
       JOIN [$(SSISDB)].[catalog].[packages] pkg
         ON ep.SSISDBPackageName = pkg.[name]
       JOIN [$(SSISDB)].[catalog].[projects] prj
         ON pkg.project_id = prj.project_id
            AND prj.[name] = ep.SSISDBProjectName
-	  JOIN [ctl].ETLPackageGroup_ETLPackage epgep
+	  JOIN [cfg].ETLPackageGroup_ETLPackage epgep
 		ON ep.ETLPackageId = epgep.ETLPackageId
 			AND epgep.ETLPackageGroupId = @ETLPackageGroupId
       JOIN [$(SSISDB)].[catalog].[folders] fld
@@ -82,7 +82,7 @@ AS
       @ExecutionId
 
     --Set the ReadyForExecutionInd on the package so that it is not picked up
-    UPDATE [ctl].ETLPackageGroup_ETLPackage
+    UPDATE [cfg].ETLPackageGroup_ETLPackage
     SET    ReadyForExecutionInd = 0
     WHERE
       ETLPackageId = @ETLPackageId

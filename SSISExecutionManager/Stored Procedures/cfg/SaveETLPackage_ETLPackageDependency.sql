@@ -5,14 +5,14 @@ AS
     DECLARE @IsETLPackageAnEntryPointInd BIT = (SELECT
          EntryPointPackageInd
        FROM
-         [ctl].ETLPackage
+         [cfg].ETLPackage
        WHERE
         ETLPackageId = @ETLPackageId)
 
 	DECLARE @IsDependedOnETLPackageAnEntryPointInd BIT = (SELECT
          EntryPointPackageInd
        FROM
-         [ctl].ETLPackage
+         [cfg].ETLPackage
        WHERE
         ETLPackageId = @DependedOnETLPackageId)
 
@@ -23,7 +23,7 @@ AS
 		END
 	ELSE
       BEGIN
-          MERGE [ctl].[ETLPackage_ETLPackageDependency] AS Target
+          MERGE [cfg].[ETLPackage_ETLPackageDependency] AS Target
           USING (SELECT
                    @ETLPackageId
                    ,@DependedOnETLPackageId

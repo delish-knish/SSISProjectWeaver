@@ -17,7 +17,7 @@ AS
     [log].[ETLPackageExecutionLongRunning] eplr
     JOIN [$(SSISDB)].[catalog].[executions] x
       ON eplr.SSISDBExecutionId = x.execution_id
-    LEFT JOIN ctl.ETLPackage p
+    LEFT JOIN [cfg].ETLPackage p
            ON x.folder_name = p.SSISDBFolderName
               AND x.project_name = p.SSISDBProjectName
               AND x.package_name = p.SSISDBPackageName

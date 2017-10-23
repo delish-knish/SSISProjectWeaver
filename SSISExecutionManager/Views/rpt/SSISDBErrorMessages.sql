@@ -22,7 +22,7 @@ AS
     [$(SSISDB)].[catalog].[event_messages] m
     JOIN [$(SSISDB)].[catalog].[executions] x
       ON m.operation_id = x.execution_id
-    JOIN ctl.ETLPackage p
+    JOIN [cfg].ETLPackage p
       ON x.folder_name = p.SSISDBFolderName
          AND x.project_name = p.SSISDBProjectName
          AND x.package_name = p.SSISDBPackageName

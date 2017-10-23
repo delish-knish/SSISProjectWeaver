@@ -6,7 +6,7 @@ AS
     SELECT
       @ETLPackageId = ETLPackageId
     FROM
-      ctl.ETLPackage
+      [cfg].ETLPackage
     WHERE
       ETLPackageId = @ETLPackageId
        OR ( SSISDBPackageName = @SSISDBPackageName
@@ -29,16 +29,16 @@ AS
 		  DELETE FROM [log].ETLPackageExecutionError
           WHERE  ETLPackageId = @ETLPackageId;
 
-          DELETE FROM ctl.[ETLPackageGroup_ETLPackage]
+          DELETE FROM [cfg].[ETLPackageGroup_ETLPackage]
           WHERE  ETLPackageId = @ETLPackageId;
 
-          DELETE FROM ctl.[ETLBatch_ETLPackage_SQLCommandCondition]
+          DELETE FROM [cfg].[ETLBatch_ETLPackage_SQLCommandCondition]
           WHERE  ETLPackageId = @ETLPackageId;
 
-		  DELETE FROM ctl.[ETLPackage_ETLPackageDependency]
+		  DELETE FROM [cfg].[ETLPackage_ETLPackageDependency]
           WHERE  ETLPackageId = @ETLPackageId;
 		  
-          DELETE FROM ctl.ETLPackage
+          DELETE FROM [cfg].ETLPackage
           WHERE  ETLPackageId = @ETLPackageId;
       END
 

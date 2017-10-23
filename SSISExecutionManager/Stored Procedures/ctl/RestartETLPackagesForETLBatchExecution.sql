@@ -17,7 +17,7 @@ AS
         ,SSISDBExecutionId
       FROM
         log.ETLPackageExecutionError e
-        JOIN ctl.ETLPackage ep
+        JOIN [cfg].ETLPackage ep
           ON e.ETLPackageId = ep.ETLPackageId
       WHERE
         e.ETLPackageExecutionErrorTypeId = 2 --unexpected termination

@@ -15,14 +15,14 @@ AS
     ,epgb.[SupportSeverityLevelId]
     ,ep.[Comments]
   FROM
-    ctl.ETLPackage ep
-    LEFT JOIN ctl.ETLPackage epp
+    [cfg].ETLPackage ep
+    LEFT JOIN [cfg].ETLPackage epp
            ON ep.EntryPointETLPackageId = epp.ETLPackageId
-    JOIN ctl.ETLPackageGroup_ETLPackage epgb
+    JOIN [cfg].ETLPackageGroup_ETLPackage epgb
       ON ep.ETLPackageId = epgb.ETLPackageId
-    JOIN ctl.ETLBatch_ETLPackageGroup ebpgb
+    JOIN [cfg].ETLBatch_ETLPackageGroup ebpgb
       ON epgb.ETLPackageGroupId = ebpgb.ETLPackageGroupId
-    JOIN ctl.ETLPackageGroup epg
+    JOIN [cfg].ETLPackageGroup epg
       ON epgb.ETLPackageGroupId = epg.ETLPackageGroupId
   WHERE
     epgb.EnabledInd = 0

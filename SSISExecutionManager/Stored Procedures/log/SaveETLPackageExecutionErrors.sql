@@ -25,7 +25,7 @@ AS
       [$(SSISDB)].[catalog].[executions] e
       JOIN ctl.ETLBatchSSISDBExecutions ebe
         ON e.execution_id = ebe.SSISDBExecutionId
-      JOIN ctl.ETLPackage p
+      JOIN [cfg].ETLPackage p
         ON e.folder_name = p.SSISDBFolderName
            AND e.project_name = p.SSISDBProjectName
            AND e.package_name = p.SSISDBPackageName
@@ -90,15 +90,15 @@ AS
     SET    RemainingRetryAttempts = IIF(IIF(pp.ETLPackageId IS NOT NULL, pepgep.RemainingRetryAttempts, epgep.RemainingRetryAttempts) > 0, IIF(pp.ETLPackageId IS NOT NULL, pepgep.RemainingRetryAttempts, epgep.RemainingRetryAttempts) - 1, 0)
            ,ReadyForExecutionInd = IIF(IIF(pp.ETLPackageId IS NOT NULL, pepgep.RemainingRetryAttempts, epgep.RemainingRetryAttempts) > 0, 1, 0)
     FROM   [log].[ETLPackageExecutionError] e
-           JOIN [ctl].ETLPackageGroup_ETLPackage epgep
+           JOIN [cfg].ETLPackageGroup_ETLPackage epgep
              ON e.ETLPackageId = epgep.ETLPackageId
                 AND e.ETLPackageGroupId = epgep.ETLPackageGroupId
-           JOIN ctl.ETLPackage p
+           JOIN [cfg].ETLPackage p
              ON epgep.ETLPackageId = p.ETLPackageId
            CROSS APPLY [dbo].[func_GetETLPackageExecutionStatusesFromSSISDB] (e.SSISDBExecutionId) s
-           LEFT JOIN ctl.ETLPackage pp
+           LEFT JOIN [cfg].ETLPackage pp
                   ON p.EntryPointETLPackageId = pp.ETLPackageId
-           JOIN [ctl].ETLPackageGroup_ETLPackage pepgep
+           JOIN [cfg].ETLPackageGroup_ETLPackage pepgep
              ON pepgep.ETLPackageId = ISNULL(pp.ETLPackageId, p.ETLPackageId)
                 AND e.ETLPackageGroupId = pepgep.ETLPackageGroupId
     WHERE

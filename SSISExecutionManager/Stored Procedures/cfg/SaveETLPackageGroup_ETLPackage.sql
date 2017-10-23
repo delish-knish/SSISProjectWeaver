@@ -20,7 +20,7 @@ AS
     DECLARE @EntryPointETLPackageId BIGINT = (SELECT
          EntryPointETLPackageId
        FROM
-         [ctl].ETLPackage
+         [cfg].ETLPackage
        WHERE
         ETLPackageId = @ETLPackageId)
 
@@ -45,7 +45,7 @@ AS
 
     ELSE --Save the ETLPackage row
       BEGIN
-          MERGE [ctl].[ETLPackageGroup_ETLPackage] AS Target
+          MERGE [cfg].[ETLPackageGroup_ETLPackage] AS Target
           USING (SELECT
                    @ETLPackageGroupId
                    ,@ETLPackageId

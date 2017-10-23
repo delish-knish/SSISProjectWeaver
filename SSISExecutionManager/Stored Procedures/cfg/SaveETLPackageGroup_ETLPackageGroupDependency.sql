@@ -2,7 +2,7 @@
                                                                        @DependedOnETLPackageGroupId INT,
                                                                        @EnabledInd                  BIT
 AS
-    MERGE [ctl].[ETLPackageGroup_ETLPackageGroupDependency] AS Target
+    MERGE [cfg].[ETLPackageGroup_ETLPackageGroupDependency] AS Target
     USING (SELECT
              @ETLPackageGroupId
             ,@DependedOnETLPackageGroupId

@@ -2,7 +2,7 @@
                                                                        @ETLPackageId INT,
                                                                        @SQLCommandId INT
 AS
-    DELETE FROM ctl.[ETLBatch_ETLPackage_SQLCommandCondition]
+    DELETE FROM [cfg].[ETLBatch_ETLPackage_SQLCommandCondition]
     WHERE  ETLBatchId = @ETLBatchId
            AND ETLPackageId = @ETLPackageId
            AND SQLCommandId = @SQLCommandId

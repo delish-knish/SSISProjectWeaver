@@ -132,7 +132,7 @@
     <Build Include="Stored Procedures\ops\SendSSISErrorEmail.sql" />
     <Build Include="Stored Procedures\sqlcmd\CheckAndWaitForCompetingJobs.sql" />
     <Build Include="Stored Procedures\sup\EnableDisableProjectPackage.sql" />
-    <Build Include="Stored Procedures\sup\ManuallyExecutePackageForBatch.sql" />
+    <Build Include="Stored Procedures\sup\ExecutePackageForBatch.sql" />
     <Build Include="Stored Procedures\sup\ResetProjectPackageForNormalExecution.sql" />
     <Build Include="Stored Procedures\sup\RestartPackageForETLBatch.sql" />
     <Build Include="Security\Schemas\cfg.sql" />
@@ -147,12 +147,6 @@
     <Build Include="Tables\cfg\Configuration.sql" />
     <Build Include="Tables\ctl\ETLBatchExecution.sql" />
     <Build Include="Tables\ctl\ETLBatchSSISDBExecutions.sql" />
-    <Build Include="Tables\ctl\ETLPackage.sql" />
-    <Build Include="Tables\ctl\ETLBatch_ETLPackageGroup.sql" />
-    <Build Include="Tables\ctl\ETLBatch_ETLPackage_SQLCommandCondition.sql" />
-    <Build Include="Tables\ctl\ETLPackage_ETLPackageDependency.sql" />
-    <Build Include="Tables\ctl\ETLBatch.sql" />
-    <Build Include="Tables\ctl\SQLCommand.sql" />
     <Build Include="Tables\log\ETLBatchExecutionEvent.sql" />
     <Build Include="Tables\log\ETLPackageExecution.sql" />
     <Build Include="Tables\log\ETLPackageExecutionError.sql" />
@@ -175,10 +169,7 @@
     <Build Include="Views\rpt\ETLPackageExecutionStatuses.sql" />
     <Build Include="Views\rpt\ETLPackagesSQLCommandTriggers.sql" />
     <Build Include="Views\rpt\SSISDBErrorMessages.sql" />
-    <Build Include="Tables\ctl\ETLPackageGroup.sql" />
-    <Build Include="Tables\ctl\ETLPackageGroup_ETLPackage.sql" />
-    <Build Include="Views\rpt\ETLBatchPhasesETLPackages.sql" />
-    <None Include="Tables\ctl\ETLPackageGroup_SQLCommand.sql" />
+    <Build Include="Views\rpt\ETLPackageGroupETLPackages.sql" />
     <Build Include="Functions\Scalar-valued\func_GetETLBatchPhaseName.sql" />
     <None Include="Scripts\Sync ETLPackage Configurations.sql" />
     <Build Include="Stored Procedures\sqlcmd\SQLCommandConditionExample.sql" />
@@ -200,8 +191,6 @@
     <Build Include="Views\rpt\ETLPackageGroupExecutions.sql" />
     <Build Include="Stored Procedures\ops\SendCompleteBatchExecutionStatistics.sql" />
     <None Include="Tables\ctl\DropCreateIndexesTable.sql" />
-    <None Include="Tables\ctl\ETLPackage_DropCreateIndexesTable.sql" />
-    <Build Include="Tables\ctl\ETLPackageGroup_ETLPackageGroupDependency.sql" />
     <Build Include="Stored Procedures\cfg\DeleteETLPackageGroup_ETLPackageGroupDependency.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLPackageGroup_ETLPackageGroupDependency.sql" />
     <Build Include="Views\rpt\ETLPackageGroupDependencies.sql" />
@@ -215,7 +204,6 @@
     <Build Include="Tables\ref\SSISDBLoggingLevel.sql" />
     <Build Include="Views\rpt\ETLBatchGroupsStatuses.sql" />
     <Build Include="Stored Procedures\ops\SendETLBatchGroupsStatusesNotification.sql" />
-    <Build Include="Tables\ctl\ETLBatch_SQLCommandCondition.sql" />
     <Build Include="Stored Procedures\ctl\AreETLBatchSQLCommandConditionsMet.sql" />
     <Build Include="Functions\Scalar-valued\func_IsETLBatchExecutionTimedOut.sql" />
     <Build Include="Functions\Table-valued\func_GetETLBatchExecutionSSISDBExecutionSummary.sql" />
@@ -226,6 +214,18 @@
     <Build Include="Stored Procedures\util\GetDiskSpace.sql" />
     <Build Include="Views\rpt\ETLPackagesInFailedState.sql" />
     <Build Include="Stored Procedures\util\CopyDatabase.sql" />
+    <Build Include="Tables\cfg\ETLBatch.sql" />
+    <Build Include="Tables\cfg\ETLBatch_ETLPackage_SQLCommandCondition.sql" />
+    <Build Include="Tables\cfg\ETLBatch_SQLCommandCondition.sql" />
+    <Build Include="Tables\cfg\ETLBatch_ETLPackageGroup.sql" />
+    <Build Include="Tables\cfg\ETLPackage.sql" />
+    <None Include="Tables\cfg\ETLPackage_DropCreateIndexesTable.sql" />
+    <Build Include="Tables\cfg\ETLPackage_ETLPackageDependency.sql" />
+    <Build Include="Tables\cfg\ETLPackageGroup_ETLPackage.sql" />
+    <Build Include="Tables\cfg\ETLPackageGroup_ETLPackageGroupDependency.sql" />
+    <None Include="Tables\cfg\ETLPackageGroup_SQLCommand.sql" />
+    <Build Include="Tables\cfg\SQLCommand.sql" />
+    <Build Include="Tables\cfg\ETLPackageGroup.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="References\SSISDB.dacpac" />

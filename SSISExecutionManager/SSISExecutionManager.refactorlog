@@ -378,4 +378,65 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[InsertETLBatchExecutionEvent]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="49d6edfa-c344-42a0-b2cc-6ced8702a72c" ChangeDateTime="10/23/2017 16:49:36">
+    <Property Name="ElementName" Value="[sup].[ManuallyExecutePackageForETLBatch]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[sup]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[ExecutePackageForETLBatch]" />
+  </Operation>
+  <Operation Name="Move Schema" Key="372a911c-231a-4d12-b89e-ed544ce9b6ba" ChangeDateTime="10/23/2017 16:54:34">
+    <Property Name="ElementName" Value="[ctl].[SQLCommand]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="NewSchema" Value="cfg" />
+    <Property Name="IsNewSchemaExternal" Value="False" />
+  </Operation>
+  <Operation Name="Move Schema" Key="42378d48-e0eb-42be-9654-579e2321a2f7" ChangeDateTime="10/23/2017 16:54:48">
+    <Property Name="ElementName" Value="[ctl].[ETLBatch_ETLPackage_SQLCommandCondition]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="NewSchema" Value="cfg" />
+    <Property Name="IsNewSchemaExternal" Value="False" />
+  </Operation>
+  <Operation Name="Move Schema" Key="6b9ea59c-3ddf-464a-8c66-88e62f37f0f6" ChangeDateTime="10/23/2017 16:55:00">
+    <Property Name="ElementName" Value="[ctl].[ETLBatch_ETLPackageGroup]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="NewSchema" Value="cfg" />
+    <Property Name="IsNewSchemaExternal" Value="False" />
+  </Operation>
+  <Operation Name="Move Schema" Key="e9cf798b-944d-459d-998f-afbc7a886507" ChangeDateTime="10/23/2017 16:55:18">
+    <Property Name="ElementName" Value="[ctl].[ETLBatch_SQLCommandCondition]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="NewSchema" Value="cfg" />
+    <Property Name="IsNewSchemaExternal" Value="False" />
+  </Operation>
+  <Operation Name="Move Schema" Key="6d709e0a-d61f-49d2-b90c-c3750dd70ba8" ChangeDateTime="10/23/2017 16:55:32">
+    <Property Name="ElementName" Value="[ctl].[ETLPackage]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="NewSchema" Value="cfg" />
+    <Property Name="IsNewSchemaExternal" Value="False" />
+  </Operation>
+  <Operation Name="Move Schema" Key="74763d2d-0e75-4449-9e06-ecdd94fd4491" ChangeDateTime="10/23/2017 16:55:52">
+    <Property Name="ElementName" Value="[ctl].[ETLPackage_ETLPackageDependency]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="NewSchema" Value="cfg" />
+    <Property Name="IsNewSchemaExternal" Value="False" />
+  </Operation>
+  <Operation Name="Move Schema" Key="28d9308f-bfb4-41ae-a316-c27904feaad6" ChangeDateTime="10/23/2017 16:56:10">
+    <Property Name="ElementName" Value="[ctl].[ETLPackageGroup_ETLPackage]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="NewSchema" Value="cfg" />
+    <Property Name="IsNewSchemaExternal" Value="False" />
+  </Operation>
+  <Operation Name="Move Schema" Key="4a7528be-c3a1-4a15-ae71-c4e37c374720" ChangeDateTime="10/23/2017 16:56:21">
+    <Property Name="ElementName" Value="[ctl].[ETLPackageGroup_ETLPackageGroupDependency]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="NewSchema" Value="cfg" />
+    <Property Name="IsNewSchemaExternal" Value="False" />
+  </Operation>
+  <Operation Name="Move Schema" Key="be81525a-fd61-43da-939f-675482afc107" ChangeDateTime="10/23/2017 16:58:10">
+    <Property Name="ElementName" Value="[ctl].[ETLPackageGroup]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="NewSchema" Value="cfg" />
+    <Property Name="IsNewSchemaExternal" Value="False" />
+  </Operation>
 </Operations>

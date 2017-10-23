@@ -7,8 +7,8 @@ AS
    ,epgdon.ETLPackageGroup           AS DependedOnPackageGroup
    ,epgd.EnabledInd                  AS EnabledInd
   FROM
-    [ctl].[ETLPackageGroup_ETLPackageGroupDependency] epgd
-    JOIN [ctl].ETLPackageGroup epg
+    [cfg].[ETLPackageGroup_ETLPackageGroupDependency] epgd
+    JOIN [cfg].ETLPackageGroup epg
       ON epgd.ETLPackageGroupId = epg.ETLPackageGroupId
-    JOIN [ctl].ETLPackageGroup epgdon
+    JOIN [cfg].ETLPackageGroup epgdon
       ON epgdon.ETLPackageGroupId = epgd.DependedOnETLPackageGroupId 

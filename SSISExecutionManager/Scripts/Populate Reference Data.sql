@@ -212,7 +212,8 @@ VALUES
 	(15,'Executing SQL Command'),
 	(16,'SQL Command(s) Executed'),
 	(18,'SQL Command-based Condition Evaluated'),
-	(19,'SQL Command Execution Error')
+	(19,'SQL Command Execution Error'),
+	(20, 'User-initiated Package Execution')
 
 MERGE ref.[ETLBatchExecutionEventType] AS Target
 USING Sync_ETLBatchEventType AS Source ON (Target.[ETLBatchExecutionEventTypeId] = Source.[ETLBatchEventTypeId])
@@ -228,8 +229,8 @@ DROP TABLE Sync_ETLBatchEventType;
 
 -------------------------------------------------------------------------------------
 
-SET IDENTITY_INSERT ctl.ETLPackage ON;
-MERGE ctl.ETLPackage AS Target
+SET IDENTITY_INSERT [cfg].ETLPackage ON;
+MERGE [cfg].ETLPackage AS Target
 USING (SELECT
          0                                AS ETLPackageId
          ,'N/A'                           AS SSISDBFolderName
@@ -312,7 +313,7 @@ WHEN NOT MATCHED BY TARGET THEN
           ,Use32BitDtExecInd
           ,SupportSeverityLevelId
           ,Comments); 
-SET IDENTITY_INSERT ctl.ETLPackage OFF;
+SET IDENTITY_INSERT [cfg].ETLPackage OFF;
 
 -------------------------------------------------------------------------------------
 

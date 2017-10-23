@@ -23,8 +23,8 @@ AS
     ,b.[SupportSeverityLevelId]
     ,b.[Comments]
   FROM
-    [ctl].[ETLPackageGroup_ETLPackage] b
-    JOIN ctl.[ETLPackageGroup] ebp
+    [cfg].[ETLPackageGroup_ETLPackage] b
+    JOIN [cfg].[ETLPackageGroup] ebp
       ON b.[ETLPackageGroupId] = ebp.[ETLPackageGroupId]
-    JOIN ctl.ETLPackage ep
+    JOIN [cfg].ETLPackage ep
       ON b.ETLPackageId = ep.ETLPackageId 

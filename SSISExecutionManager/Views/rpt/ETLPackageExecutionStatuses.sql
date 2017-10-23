@@ -3,6 +3,7 @@ AS
   SELECT
     ebe.[ETLBatchExecutionId]
     ,eps.[ETLBatchName]
+	,epgep.ETLPackageGroupId
     ,ep.[ETLPackageId]
     ,pkg.SSISDBExecutionId
     ,ep.[SSISDBFolderName]
@@ -18,10 +19,10 @@ AS
   FROM
     ctl.[ETLBatchExecution] ebe WITH (NOLOCK)
     CROSS APPLY [dbo].[func_GetETLPackagesForBatchExecution] (ebe.[ETLBatchExecutionId]) pkg
-    JOIN [ctl].ETLPackageGroup_ETLPackage epgep
+    JOIN [cfg].ETLPackageGroup_ETLPackage epgep
       ON pkg.ETLPackageId = epgep.ETLPackageId
          AND pkg.ETLPackageGroupId = epgep.ETLPackageGroupId
-    JOIN ctl.[ETLPackage] ep WITH (NOLOCK)
+    JOIN [cfg].[ETLPackage] ep WITH (NOLOCK)
       ON pkg.ETLPackageId = ep.ETLPackageId
     JOIN ctl.[ETLBatch] eps WITH (NOLOCK)
       ON ebe.[ETLBatchId] = eps.[ETLBatchId]

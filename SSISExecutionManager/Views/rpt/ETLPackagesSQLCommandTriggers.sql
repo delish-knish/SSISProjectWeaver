@@ -12,10 +12,10 @@ AS
    ,sc.RequiresETLBatchIdParameterInd
    ,b.EnabledInd
   FROM
-    [ctl].[ETLBatch_ETLPackage_SQLCommandCondition] b
-    JOIN ctl.SQLCommand sc
+    [cfg].[ETLBatch_ETLPackage_SQLCommandCondition] b
+    JOIN [cfg].SQLCommand sc
       ON b.SQLCommandId = sc.SQLCommandId
-    JOIN ctl.ETLPackage ep
+    JOIN [cfg].ETLPackage ep
       ON b.[ETLPackageId] = ep.[ETLPackageId]
     JOIN ctl.ETLBatch eb
       ON b.ETLBatchId = eb.ETLBatchId 

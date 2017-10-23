@@ -2,7 +2,7 @@
 													@ETLPackageGroupId	INT
 AS
 
-          MERGE [ctl].[ETLBatch_ETLPackageGroup] AS Target
+          MERGE [cfg].[ETLBatch_ETLPackageGroup] AS Target
           USING (SELECT
                    @ETLBatchId
                    ,@ETLPackageGroupId) AS source (ETLBatchId, ETLPackageGroupId )

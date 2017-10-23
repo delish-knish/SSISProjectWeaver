@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [cfg].[DeleteETLPackageGroup_ETLPackage] @ETLPackageId    INT,
 															 @ETLPackageGroupId INT
 AS
-    DELETE FROM ctl.[ETLPackageGroup_ETLPackage]
+    DELETE FROM [cfg].[ETLPackageGroup_ETLPackage]
     WHERE  ETLPackageId = @ETLPackageId
            AND [ETLPackageGroupId] = @ETLPackageGroupId
 

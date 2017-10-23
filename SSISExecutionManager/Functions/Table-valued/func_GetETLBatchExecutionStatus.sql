@@ -28,7 +28,7 @@ AS
          [dbo].[func_GetETLPackagesForBatchExecution] (@ETLBatchExecutionId) epb
          JOIN ctl.[ETLBatchExecution] eb WITH (NOLOCK)
            ON @ETLBatchExecutionId = eb.[ETLBatchExecutionId]
-         JOIN [ctl].ETLPackage ep WITH (NOLOCK)
+         JOIN [cfg].ETLPackage ep WITH (NOLOCK)
            ON epb.ETLPackageId = ep.ETLPackageId
          LEFT JOIN (SELECT
                       execution_id

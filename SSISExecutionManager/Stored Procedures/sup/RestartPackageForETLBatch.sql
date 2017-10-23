@@ -14,8 +14,8 @@ AS
            ,IgnoreDependenciesInd = @IgnoreDependenciesInd
            ,LastUpdatedDate = GETDATE()
            ,LastUpdatedUser = SUSER_SNAME()
-    FROM   ctl.ETLPackageGroup_ETLPackage epgep
-           JOIN ctl.ETLPackage ep
+    FROM   [cfg].ETLPackageGroup_ETLPackage epgep
+           JOIN [cfg].ETLPackage ep
              ON epgep.ETLPackageId = ep.ETLPackageId
     WHERE
       @SSISDBFolderName = SSISDBFolderName

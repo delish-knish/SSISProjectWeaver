@@ -14,7 +14,7 @@ AS
     ,be.[Description]					AS [Description]
   FROM
     [log].[ETLBatchExecutionEvent] be
-    LEFT JOIN ctl.ETLPackage p
+    LEFT JOIN [cfg].ETLPackage p
            ON be.ETLPackageId = p.ETLPackageId
     JOIN ctl.[ETLBatchExecution] eb
       ON be.[ETLBatchExecutionId] = eb.[ETLBatchExecutionId]

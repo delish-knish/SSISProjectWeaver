@@ -22,7 +22,7 @@ AS
     JOIN [$(SSISDB)].catalog.executables ex
       ON st.executable_id = ex.executable_id
          AND st.execution_id = ex.execution_id
-    JOIN ctl.ETLPackage pkg
+    JOIN [cfg].ETLPackage pkg
       ON ex.package_name = pkg.SSISDBPackageName
     JOIN ctl.ETLBatchSSISDBExecutions ebe
       ON ex.execution_id = ebe.SSISDBExecutionId
