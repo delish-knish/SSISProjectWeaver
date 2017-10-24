@@ -32,7 +32,7 @@
         </QueryParameters>
         <CommandText>DECLARE	@SSISExecutionId bigint
 
-EXEC	[sup].[ManuallyExecutePackageForETLBatch]
+EXEC	[sup].[ExecutePackageForETLBatch]
 		@ETLBatchExecutionId = @ETLBatchExecutionId,
 		@ETLPackageGroupId = @ETLPackageGroupId,
 		@SSISDBFolderName = @SSISDBFolderName , 

@@ -147,7 +147,7 @@ WHERE
   ,[ErrorMessage]
   ,[ETLPackageRestartDateTime]
 FROM   [log].[ETLPackageExecutionError] err
-       JOIN ctl.ETLPackage p
+       JOIN cfg.ETLPackage p
          ON err.ETLPackageId = p.ETLPackageId
 WHERE
    [ETLBatchExecutionId] = @ETLBatchExecutionId</CommandText>
@@ -346,7 +346,7 @@ ORDER  BY
       ,[ErrorDateTime]
   FROM 
       [rpt].[ETLPackagesInFailedState] fs
-      JOIN [ctl].[ETLPackage] ep ON fs.ETLPackageId = ep.ETLPackageId
+      JOIN [cfg].[ETLPackage] ep ON fs.ETLPackageId = ep.ETLPackageId
 WHERE
        ETLBatchExecutionId= @ETLBatchExecutionId</CommandText>
       </Query>

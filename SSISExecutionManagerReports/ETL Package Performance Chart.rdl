@@ -63,7 +63,7 @@ ORDER  BY
 	[ETLPackageId]
 	,[SSISDBProjectName] + '.' + [SSISDBPackageName] AS Name
 FROM
-	[ctl].[ETLPackage]
+	[cfg].[ETLPackage]
 WHERE
 	ETLPackageId &gt; 0
 ORDER BY 
