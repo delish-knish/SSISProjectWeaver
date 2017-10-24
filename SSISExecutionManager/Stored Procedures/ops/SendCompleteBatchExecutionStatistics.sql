@@ -1,7 +1,8 @@
 ﻿CREATE PROCEDURE [ops].[SendCompletedBatchExecutionStatistics]
-													@ETLBatchExecutionId INT
+													@ETLBatchExecutionId INT,
+													@EmailRecipientsOverride VARCHAR(MAX) = NULL
 AS
-	DECLARE @EmailRecipients VARCHAR(MAX) = ( [dbo].[func_GetConfigurationValue] ('Email Recipients - Monitors') ),
+	DECLARE @EmailRecipients VARCHAR(MAX) = ( ISNULL(@EmailRecipientsOverride,[dbo].[func_GetConfigurationValue] ('Email Recipients - Monitors')) ),
 	@InclueDisabledPackages BIT = ( IIF([dbo].[func_GetConfigurationValue] ('Report Disabled Packages') = 'True', 1, 0) ),
     @tableHTML NVARCHAR(MAX),
 	@ETLBatchName NVARCHAR(255),

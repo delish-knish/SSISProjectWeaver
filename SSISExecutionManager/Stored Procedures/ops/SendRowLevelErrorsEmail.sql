@@ -2,8 +2,11 @@
 													@EmailSubject       NVARCHAR(MAX),
                                                     @TimeIntervalInHours TINYINT = 24, 
 													@ETLBatchExecutionId INT = NULL,
-													@EmailRecipients VARCHAR(MAX)
+													@EmailRecipientsOverride VARCHAR(MAX) = NULL
 AS
+	DECLARE @EmailRecipients VARCHAR(MAX) = ( ISNULL(@EmailRecipientsOverride,[dbo].[func_GetConfigurationValue] ('Email Recipients - Monitors')) );
+
+
     DECLARE @tableHTML NVARCHAR(MAX)
 
     SET @tableHTML = N'<H1>Row-level Errors Logged ' + IIF(@ETLBatchExecutionId IS NOT NULL, 'for Batch Execution ' + CAST(@ETLBatchExecutionId AS VARCHAR(10)), 'in Past ' + CAST(@TimeIntervalInHours AS VARCHAR) + ' Hours') + '</H1>'
