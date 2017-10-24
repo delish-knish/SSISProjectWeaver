@@ -1,11 +1,9 @@
 ﻿CREATE PROCEDURE [ops].[SendRowLevelErrorsEmail]
 													@EmailSubject       NVARCHAR(MAX),
                                                     @TimeIntervalInHours TINYINT = 24, 
-													@ETLBatchExecutionId INT = NULL
+													@ETLBatchExecutionId INT = NULL,
+													@EmailRecipients VARCHAR(MAX)
 AS
-	DECLARE @EmailRecipients VARCHAR(MAX) = ( [dbo].[func_GetConfigurationValue] ('Email Recipients - Monitors') );
-
-
     DECLARE @tableHTML NVARCHAR(MAX)
 
     SET @tableHTML = N'<H1>Row-level Errors Logged ' + IIF(@ETLBatchExecutionId IS NOT NULL, 'for Batch Execution ' + CAST(@ETLBatchExecutionId AS VARCHAR(10)), 'in Past ' + CAST(@TimeIntervalInHours AS VARCHAR) + ' Hours') + '</H1>'
