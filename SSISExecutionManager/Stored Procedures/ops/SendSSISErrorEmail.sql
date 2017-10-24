@@ -1,10 +1,11 @@
 ﻿CREATE PROCEDURE [ops].[SendSSISErrorsEmail] @EmailBodyHeader     NVARCHAR(MAX),
                                              @EmailSubject        NVARCHAR(MAX),
                                              @ExecutionId         BIGINT,
-                                             @TimeIntervalInHours TINYINT
+                                             @TimeIntervalInHours TINYINT,
+											 @EmailRecipientsOverride VARCHAR(MAX) = NULL
 AS
     --Get values from Config table
-    DECLARE @EmailRecipients VARCHAR(MAX) = ( [dbo].[func_GetConfigurationValue] ('Email Recipients - Monitors') );
+    DECLARE @EmailRecipients VARCHAR(MAX) = ( ISNULL(@EmailRecipientsOverride,[dbo].[func_GetConfigurationValue] ('Email Recipients - Monitors')) );
 
     DECLARE @ErrorCount INT,
      @HTMLTable NVARCHAR(MAX),

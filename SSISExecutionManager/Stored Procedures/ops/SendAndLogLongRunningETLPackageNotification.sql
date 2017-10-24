@@ -1,8 +1,9 @@
 ﻿CREATE PROCEDURE [ops].[SendAndLogLongRunningETLPackageNotification] 
+													@EmailRecipientsOverride VARCHAR(MAX) = NULL
 AS
 
 	--Get values from Config table
-    DECLARE @EmailRecipients           VARCHAR(MAX) = ( [dbo].[func_GetConfigurationValue] ('Email Recipients - Monitors') );
+    DECLARE @EmailRecipients           VARCHAR(MAX) = ( ISNULL(@EmailRecipientsOverride,[dbo].[func_GetConfigurationValue] ('Email Recipients - Monitors')) );
     --------------------------------------
     --Declare variables
     --------------------------------------
