@@ -50,9 +50,9 @@ INSERT INTO [cfg].[ETLBatch_ETLPackageGroup] ([ETLBatch_ETLPackageGroup], [ETLBa
 INSERT INTO [cfg].[ETLBatch_ETLPackageGroup] ([ETLBatch_ETLPackageGroup], [ETLBatchId], [ETLPackageGroupId], [CreatedDate], [CreatedUser]) VALUES (2, 1, 2, '20160616 19:39:42.0066667', N'MicrosoftAccount\orders@elish.net')
 INSERT INTO [cfg].[ETLBatch_ETLPackageGroup] ([ETLBatch_ETLPackageGroup], [ETLBatchId], [ETLPackageGroupId], [CreatedDate], [CreatedUser]) VALUES (3, 1, 3, '20160616 19:39:52.7566667', N'MicrosoftAccount\orders@elish.net')
 SET IDENTITY_INSERT [cfg].[ETLBatch_ETLPackageGroup] OFF
-SET IDENTITY_INSERT [ctl].[ETLBatch] ON
-INSERT INTO [ctl].[ETLBatch] ([ETLBatchId], [ETLBatchName], [ETLBatchDescription], [CreatedDate], [CreatedUser], [LastUpdatedDate], [LastUpdatedUser]) VALUES (1, N'Daily Data Warehouse Load', N'This batch includes all groups and packages necessary for the daily data warehouse load.', '20160614 18:20:23.3400000', N'MicrosoftAccount\orders@elish.net', '20160614 18:20:23.3400000', N'MicrosoftAccount\orders@elish.net')
-SET IDENTITY_INSERT [ctl].[ETLBatch] OFF
+SET IDENTITY_INSERT [cfg].[ETLBatch] ON
+INSERT INTO [cfg].[ETLBatch] ([ETLBatchId], [ETLBatchName], [ETLBatchDescription], [CreatedDate], [CreatedUser], [LastUpdatedDate], [LastUpdatedUser]) VALUES (1, N'Daily Data Warehouse Load', N'This batch includes all groups and packages necessary for the daily data warehouse load.', '20160614 18:20:23.3400000', N'MicrosoftAccount\orders@elish.net', '20160614 18:20:23.3400000', N'MicrosoftAccount\orders@elish.net')
+SET IDENTITY_INSERT [cfg].[ETLBatch] OFF
 SET IDENTITY_INSERT [cfg].[ETLPackage_ETLPackageDependency] ON
 INSERT INTO [cfg].[ETLPackage_ETLPackageDependency] ([ETLPackage_ETLPackageDependencyId], [ETLPackageId], [DependedOnETLPackageId], [EnabledInd], [Comments], [CreatedDate], [CreatedUser], [LastUpdatedDate], [LastUpdatedUser]) VALUES (1, 5, 12, 1, N'ProjectB_Package1.dtsx won''t execute until ProjectA_Package2.dtsx completes successfully.', '20160614 18:17:22.1666667', N'MicrosoftAccount\orders@elish.net', '20160614 18:17:22.1666667', N'MicrosoftAccount\orders@elish.net')
 SET IDENTITY_INSERT [cfg].[ETLPackage_ETLPackageDependency] OFF
@@ -61,7 +61,7 @@ ALTER TABLE [cfg].[ETLPackage_ETLPackageDependency]
 ALTER TABLE [cfg].[ETLPackage_ETLPackageDependency]
     ADD CONSTRAINT [FK_ETLPackage_ETLPackageDependency_ETLPackage_DependentOn] FOREIGN KEY ([DependedOnETLPackageId]) REFERENCES [cfg].[ETLPackage] ([ETLPackageId])
 ALTER TABLE [cfg].[ETLBatch_ETLPackageGroup]
-    ADD CONSTRAINT [FK_ETLBatch_ETLPackageGroup_ETLBatch] FOREIGN KEY ([ETLBatchId]) REFERENCES [ctl].[ETLBatch] ([ETLBatchId])
+    ADD CONSTRAINT [FK_ETLBatch_ETLPackageGroup_ETLBatch] FOREIGN KEY ([ETLBatchId]) REFERENCES [cfg].[ETLBatch] ([ETLBatchId])
 ALTER TABLE [cfg].[ETLBatch_ETLPackageGroup]
     ADD CONSTRAINT [FK_ETLBatch_ETLPackageGroup_ETLPackageGroup] FOREIGN KEY ([ETLPackageGroupId]) REFERENCES [cfg].[ETLPackageGroup] ([ETLPackageGroupId])
 ALTER TABLE [cfg].[ETLPackageGroup_ETLPackage]

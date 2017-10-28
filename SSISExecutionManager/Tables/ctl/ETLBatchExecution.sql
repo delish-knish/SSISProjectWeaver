@@ -19,7 +19,7 @@
      ,[LastUpdatedUser]                                   VARCHAR (50) CONSTRAINT [DF_ETLBatchExecution_LastUpdatedUser] DEFAULT (SUSER_SNAME()) NOT NULL,
      CONSTRAINT [PK_ETLBatchExecution] PRIMARY KEY ([ETLBatchExecutionId]),
      CONSTRAINT [FK_ETLBatchExecution_ETLBatchStatus] FOREIGN KEY (ETLBatchStatusId) REFERENCES ref.ETLBatchStatus([ETLBatchStatusId]), 
-    CONSTRAINT [FK_ETLBatchExecution_ETLBatch] FOREIGN KEY ([ETLBatchId]) REFERENCES ctl.[ETLBatch]([ETLBatchId])
+    CONSTRAINT [FK_ETLBatchExecution_ETLBatch] FOREIGN KEY ([ETLBatchId]) REFERENCES [cfg].[ETLBatch]([ETLBatchId])
   );
 
 GO

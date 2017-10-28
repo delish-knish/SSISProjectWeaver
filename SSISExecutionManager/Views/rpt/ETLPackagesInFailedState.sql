@@ -5,6 +5,7 @@ AS
              exe.ETLBatchExecutionId
              ,exe.SSISDBExecutionId
              ,s.ETLExecutionStatusId
+             ,exe.ETLPackageGroupId
              ,s.ETLPackageId
              ,s.StartDateTime
            FROM
@@ -13,6 +14,7 @@ AS
   SELECT
     fex.ETLBatchExecutionId
     ,fex.ETLPackageId
+    ,fex.ETLPackageGroupId
     ,LastPackageFailureStartTime
     ,LastPackageSuccessStartTime
     ,fex.FirstErrorMessage
@@ -20,6 +22,7 @@ AS
   FROM
     (SELECT
        ex.ETLBatchExecutionId
+       ,ex.ETLPackageGroupId
        ,ex.ETLPackageId
        ,MAX(ex.StartDateTime)  AS LastPackageFailureStartTime
        ,MAX(err.ErrorMessage)  AS FirstErrorMessage
@@ -39,6 +42,7 @@ AS
       ex.ETLExecutionStatusId IN ( 3, 4, 6 )
      GROUP  BY
       ex.ETLBatchExecutionId
+      ,ex.ETLPackageGroupId
       ,ex.ETLPackageId
      HAVING
       COUNT(*) > 0) fex
@@ -56,6 +60,6 @@ AS
                HAVING
                 COUNT(*) > 0) sex
            ON fex.ETLPackageId = sex.ETLPackageId
-		   AND fex.ETLBatchExecutionId = sex.ETLBatchExecutionId
+              AND fex.ETLBatchExecutionId = sex.ETLBatchExecutionId
   WHERE
     ISNULL(sex.LastPackageSuccessStartTime, '1900-01-01') < fex.LastPackageFailureStartTime 

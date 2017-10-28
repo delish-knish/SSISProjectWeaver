@@ -1,4 +1,4 @@
-﻿CREATE TABLE [ctl].[ETLBatch]
+﻿CREATE TABLE [cfg].[ETLBatch]
   (
      [ETLBatchId]                 INT IDENTITY(1, 1) NOT NULL
     ,[ETLBatchName]               VARCHAR(250) CONSTRAINT [DF_ETLBatch_ETLBatchtName] DEFAULT ('None given') NOT NULL

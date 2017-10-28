@@ -340,6 +340,7 @@ ORDER  BY
       ,[SSISDBFolderName]
       ,[SSISDBProjectName]
       ,[SSISDBPackageName]
+      ,[ETLPackageGroupId]
       ,[LastPackageFailureStartTime]
       ,[LastPackageSuccessStartTime]
       ,[FirstErrorMessage]
@@ -366,6 +367,10 @@ WHERE
         <Field Name="SSISDBPackageName">
           <DataField>SSISDBPackageName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ETLPackageGroupId">
+          <DataField>ETLPackageGroupId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="LastPackageFailureStartTime">
           <DataField>LastPackageFailureStartTime</DataField>
@@ -2904,6 +2909,9 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
                                     <Parameter Name="SSISDBFolderName">
                                       <Value>=Fields!SSISDBFolderName.Value</Value>
                                     </Parameter>
+                                    <Parameter Name="ETLPackageGroupId">
+                                      <Value>=Fields!ETLPackageGroupId.Value</Value>
+                                    </Parameter>
                                   </Parameters>
                                 </Drillthrough>
                               </Action>
@@ -2922,6 +2930,7 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>

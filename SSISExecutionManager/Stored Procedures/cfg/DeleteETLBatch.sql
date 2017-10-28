@@ -3,7 +3,7 @@ AS
     SELECT
       @ETLBatchId = ETLBatchId
     FROM
-      ctl.ETLBatch
+      [cfg].ETLBatch
     WHERE
       ETLBatchId = @ETLBatchId;
 
@@ -27,7 +27,7 @@ AS
           DELETE FROM [cfg].[ETLBatch_ETLPackageGroup]
           WHERE  ETLBatchId = @ETLBatchId;
 
-          DELETE FROM ctl.ETLBatch
+          DELETE FROM [cfg].ETLBatch
           WHERE  ETLBatchId = @ETLBatchId;
       END
 

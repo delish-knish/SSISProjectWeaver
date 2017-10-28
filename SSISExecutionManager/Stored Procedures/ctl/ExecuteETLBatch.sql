@@ -28,7 +28,7 @@ AS
       DECLARE @ETLBatchExecutionId					INT = NULL,
               @PreviousETLBatchExecutionStatusId	INT = NULL,
 			  @ErrorEmailRecipients					VARCHAR(MAX) = ( [dbo].[func_GetConfigurationValue] ('Email Recipients - Default') ),
-              @BatchStartedWithinMinutes			VARCHAR(MAX) = ISNULL((SELECT MinutesBackToContinueBatch FROM ctl.ETLBatch WHERE ETLBatchId = @ETLBatchId), 1440),
+              @BatchStartedWithinMinutes			VARCHAR(MAX) = ISNULL((SELECT MinutesBackToContinueBatch FROM [cfg].ETLBatch WHERE ETLBatchId = @ETLBatchId), 1440),
               @PollingDelayETLBatch					CHAR(8) = ( [dbo].[func_GetConfigurationValue] ('ETL Batch Polling Delay') ),
 			  @SendBatchCompleteEmailInd			BIT,
 			  @PollingDelaySQLCommandCondition		CHAR(8) = ( [dbo].[func_GetConfigurationValue] ('Default SQL Command Condition Evaluation Polling Delay') );

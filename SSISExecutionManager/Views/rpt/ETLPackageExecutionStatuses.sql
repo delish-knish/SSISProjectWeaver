@@ -24,7 +24,7 @@ AS
          AND pkg.ETLPackageGroupId = epgep.ETLPackageGroupId
     JOIN [cfg].[ETLPackage] ep WITH (NOLOCK)
       ON pkg.ETLPackageId = ep.ETLPackageId
-    JOIN ctl.[ETLBatch] eps WITH (NOLOCK)
+    JOIN [cfg].[ETLBatch] eps WITH (NOLOCK)
       ON ebe.[ETLBatchId] = eps.[ETLBatchId]
     LEFT JOIN ref.ETLExecutionStatus rees WITH (NOLOCK)
            ON pkg.ETLExecutionStatusId = rees.ETLExecutionStatusId

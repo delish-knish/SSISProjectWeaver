@@ -11,7 +11,7 @@
      CONSTRAINT [PK_ETLBatch_SQLCommandCondition] PRIMARY KEY ([ETLBatch_SQLCommandConditionId]),
      CONSTRAINT [AK_ETLBatch_SQLCommandCondition_ETLPackageId_SQLCommandId] UNIQUE ([ETLBatchId], [SQLCommandId]),
      CONSTRAINT [FK_ETLBatch_SQLCommandCondition_SQLCommand] FOREIGN KEY (SQLCommandId) REFERENCES [cfg].SQLCommand(SQLCommandId),
-     CONSTRAINT [FK_ETLBatch_ETLBatch_SQLCommandCondition_ETLBatch] FOREIGN KEY ([ETLBatchId]) REFERENCES ctl.ETLBatch([ETLBatchId]),
+     CONSTRAINT [FK_ETLBatch_ETLBatch_SQLCommandCondition_ETLBatch] FOREIGN KEY ([ETLBatchId]) REFERENCES [cfg].ETLBatch([ETLBatchId]),
   )
 
 GO 

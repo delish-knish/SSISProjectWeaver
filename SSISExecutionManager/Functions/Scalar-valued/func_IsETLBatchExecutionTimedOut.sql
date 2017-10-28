@@ -12,7 +12,7 @@ AS
       DECLARE @BatchStartedWithinMinutes INT = ISNULL((SELECT
                   MinutesBackToContinueBatch
                 FROM
-                  ctl.ETLBatch
+                  [cfg].ETLBatch
                 WHERE
                  ETLBatchId = @ETLBatchId), 1440);
 

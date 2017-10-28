@@ -28,7 +28,7 @@ AS
       ON ex.execution_id = ebe.SSISDBExecutionId
     JOIN ctl.ETLBatchExecution eb
       ON ebe.ETLBatchExecutionId = eb.ETLBatchExecutionId
-    JOIN ctl.ETLBatch b
+    JOIN [cfg].ETLBatch b
       ON eb.ETLBatchId = b.ETLBatchId
   ORDER  BY
     st.[start_time] DESC 

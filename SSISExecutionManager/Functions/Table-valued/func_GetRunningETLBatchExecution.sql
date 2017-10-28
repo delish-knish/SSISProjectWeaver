@@ -12,7 +12,7 @@ AS
         ,eb.SendBatchCompleteEmailInd
        FROM
          ctl.[ETLBatchExecution] ebe (NOLOCK)
-         JOIN ctl.[ETLBatch] eb (NOLOCK)
+         JOIN [cfg].[ETLBatch] eb (NOLOCK)
            ON ebe.ETLBatchId = eb.ETLBatchId
          OUTER APPLY [dbo].[func_GetETLBatchExecutionSSISDBExecutionSummary] (ebe.ETLBatchExecutionId) xsum
        WHERE

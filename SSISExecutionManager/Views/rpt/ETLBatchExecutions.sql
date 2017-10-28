@@ -20,7 +20,7 @@ AS
     ctl.[ETLBatchExecution] eb
     JOIN ref.ETLBatchStatus rebs
       ON eb.ETLBatchStatusId = rebs.ETLBatchStatusId
-    JOIN ctl.[ETLBatch] eps
+    JOIN [cfg].[ETLBatch] eps
       ON eb.[ETLBatchId] = eps.[ETLBatchId]
     OUTER APPLY (SELECT TOP 1
                    b.[ETLBatchExecutionId]

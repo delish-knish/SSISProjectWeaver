@@ -13,7 +13,7 @@ AS
     ,epgb.[BypassEntryPointInd]
     ,epgb.[IgnoreDependenciesInd]
     ,epgb.[SupportSeverityLevelId]
-    ,ep.[Comments]
+    ,epgb.[Comments] --use comments at this level as they should be the most accurate
   FROM
     [cfg].ETLPackage ep
     LEFT JOIN [cfg].ETLPackage epp

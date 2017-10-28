@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [ops].[SendAndLogLongRunningETLPackageNotification] 
 													@EmailRecipientsOverride VARCHAR(MAX) = NULL
+													,@MinimumPackageRunTimeToIncl SMALLINT = 45
 AS
 
 	--Get values from Config table
@@ -13,8 +14,7 @@ AS
             @AverageExecutionTime INT,
             @EMailBody            VARCHAR(4000),
             @CRLF                 CHAR(2) = CHAR(13) + CHAR(10),
-            @ETLPackageRunTime    INT,
-			@MinimumPackageRunTimeToIncl SMALLINT = 45
+            @ETLPackageRunTime    INT
 
   BEGIN
       ---------------------------------------------------------------------------------
@@ -39,8 +39,8 @@ AS
                  ( AVG(iif(a.Max_Execution_time_ch2 < 5, NULL, a.Max_Execution_time_ch2)) * 1.25 ) + 1
                FROM
                  (SELECT
-                    CAST(start_time AS DATE)                             AS Max_date_ch
-                    ,MAX(DATEDIFF(minute, sub.start_time, sub.end_time)) AS Max_Execution_time_ch2
+                   -- CAST(start_time AS DATE)                             AS Max_date_ch
+                    MAX(DATEDIFF(minute, sub.start_time, sub.end_time)) AS Max_Execution_time_ch2
                   FROM
                     [$(SSISDB)].[catalog].[executions] sub
                   WHERE
@@ -52,17 +52,15 @@ AS
                                                                                                       [$(SSISDB)].[catalog].[executions]
                                                                                                     WHERE
                                                                                                      execution_id = e.execution_id)) BETWEEN -180 AND 180
-                  GROUP  BY
-                   CAST(start_time AS DATE))a)                                        Average_Execution_Time_With_Lift
+                  --GROUP  BY
+                  -- CAST(start_time AS DATE)
+				   )a)                                        Average_Execution_Time_With_Lift
            FROM
-             [$(SSISDB)].[catalog].[executions] e WITH (NOLOCK)
+             [$(SSISDB)].[catalog].[executions] e
+			 LEFT JOIN [log].ETLPackageExecutionLongRunning epelr ON e.execution_id = epelr.SSISDBExecutionId
            WHERE
-            status NOT IN ( 1, 3, 4, 6,
-                            7, 9 )
-            AND execution_id NOT IN (SELECT
-                                       epelr.SSISDBExecutionId
-                                     FROM
-                                       [log].ETLPackageExecutionLongRunning epelr)) a
+            status IN (2,5,8) --Running, Pending, Stopping
+            AND epelr.SSISDBExecutionId IS NULL) a
         WHERE
           ( package_run_time > Average_Execution_Time_With_Lift )
           AND ( package_run_time > @MinimumPackageRunTimeToIncl )

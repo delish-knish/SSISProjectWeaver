@@ -4,7 +4,7 @@
                                       @MinutesBackToContinueBatch INT,
 									  @SendBatchCompleteEmailInd BIT
 AS
-    MERGE [ctl].[ETLBatch] AS Target
+    MERGE [cfg].[ETLBatch] AS Target
     USING (SELECT
              @ETLBatchId
             ,@ETLBatchName

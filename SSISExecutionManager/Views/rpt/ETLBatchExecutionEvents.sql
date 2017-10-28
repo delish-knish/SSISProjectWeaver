@@ -22,7 +22,7 @@ AS
       ON eb.ETLBatchStatusId = ebs.ETLBatchStatusId
     JOIN ref.[ETLBatchExecutionEventType] ebet
       ON be.[ETLBatchExecutionEventTypeId] = ebet.[ETLBatchExecutionEventTypeId]
-    JOIN ctl.[ETLBatch] eps
+    JOIN [cfg].[ETLBatch] eps
       ON eb.[ETLBatchId] = eps.[ETLBatchId]
   ORDER  BY
     [ETLBatchExecutionEventId] DESC 

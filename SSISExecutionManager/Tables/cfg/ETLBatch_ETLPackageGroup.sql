@@ -9,7 +9,7 @@
     ,[LastUpdatedDate]          DATETIME2 (7) CONSTRAINT [DF_ETLBatch_ETLPackageGroup_LastUpdatedDate] DEFAULT (GETDATE()) NOT NULL
     ,[LastUpdatedUser]          VARCHAR (50) CONSTRAINT [DF_ETLBatch_ETLPackageGroup_LastUpdatedUser] DEFAULT (SUSER_SNAME()) NOT NULL,
      CONSTRAINT [PK_ETLBatch_ETLPackageGroup] PRIMARY KEY CLUSTERED ([ETLBatch_ETLPackageGroup] ASC),
-     CONSTRAINT [FK_ETLBatch_ETLPackageGroup_ETLBatch] FOREIGN KEY ([ETLBatchId]) REFERENCES [ctl].[ETLBatch] ([ETLBatchId]),
+     CONSTRAINT [FK_ETLBatch_ETLPackageGroup_ETLBatch] FOREIGN KEY ([ETLBatchId]) REFERENCES [cfg].[ETLBatch] ([ETLBatchId]),
      CONSTRAINT [FK_ETLBatch_ETLPackageGroup_ETLPackageGroup] FOREIGN KEY ([ETLPackageGroupId]) REFERENCES [cfg].[ETLPackageGroup] ([ETLPackageGroupId]),
      CONSTRAINT [AK_ETLBatch_ETLPackageGroup_ETLBatchId_ETLPackageGroupId] UNIQUE NONCLUSTERED ([ETLBatchId] ASC, [ETLPackageGroupId] ASC)
   );

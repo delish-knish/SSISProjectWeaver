@@ -12,7 +12,7 @@ AS
     ctl.ETLBatchExecution ebe
     JOIN [cfg].[ETLBatch_ETLPackageGroup] b
       ON ebe.ETLBatchId = b.ETLBatchId
-    JOIN ctl.ETLBatch eb
+    JOIN [cfg].ETLBatch eb
       ON ebe.ETLBatchId = eb.ETLBatchId
     JOIN [cfg].[ETLPackageGroup] ebp
       ON b.[ETLPackageGroupId] = ebp.[ETLPackageGroupId]

@@ -6,7 +6,7 @@
 AS
     DECLARE @EventDescription           VARCHAR(MAX)
             ,@PollingDelay              CHAR(8) = (ISNULL(@PollingDelayOverride, ([dbo].[func_GetConfigurationValue] ('Default SQL Command Condition Evaluation Polling Delay'))))
-            ,@BatchStartedWithinMinutes INT = (TRY_CAST(ISNULL((SELECT  MinutesBackToContinueBatch FROM ctl.ETLBatch WHERE ETLBatchId = @ETLBatchId), 1440) AS INT))
+            ,@BatchStartedWithinMinutes INT = (TRY_CAST(ISNULL((SELECT  MinutesBackToContinueBatch FROM [cfg].ETLBatch WHERE ETLBatchId = @ETLBatchId), 1440) AS INT))
             ,@ETLBatchExecutionId       INT = NULL;
 
     --Get running ETLBatch if there is one

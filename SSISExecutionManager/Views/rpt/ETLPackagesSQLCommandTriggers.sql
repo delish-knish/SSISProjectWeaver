@@ -17,5 +17,5 @@ AS
       ON b.SQLCommandId = sc.SQLCommandId
     JOIN [cfg].ETLPackage ep
       ON b.[ETLPackageId] = ep.[ETLPackageId]
-    JOIN ctl.ETLBatch eb
+    JOIN [cfg].ETLBatch eb
       ON b.ETLBatchId = eb.ETLBatchId 

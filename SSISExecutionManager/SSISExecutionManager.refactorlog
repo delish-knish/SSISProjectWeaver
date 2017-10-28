@@ -439,4 +439,10 @@
     <Property Name="NewSchema" Value="cfg" />
     <Property Name="IsNewSchemaExternal" Value="False" />
   </Operation>
+  <Operation Name="Move Schema" Key="c8432a58-ad16-4e40-9ec6-9c0bf7dfa287" ChangeDateTime="10/25/2017 18:55:56">
+    <Property Name="ElementName" Value="[ctl].[ETLBatch]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="NewSchema" Value="cfg" />
+    <Property Name="IsNewSchemaExternal" Value="False" />
+  </Operation>
 </Operations>
