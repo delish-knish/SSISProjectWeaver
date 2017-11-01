@@ -10,8 +10,8 @@ AS
     ,ep.[SSISDBPackageName]
     ,ep.[EntryPointPackageInd]
     ,epp.SSISDBPackageName AS [EntryPointETLPackageName]
-    ,epgb.[BypassEntryPointInd]
-    ,epgb.[IgnoreDependenciesInd]
+    ,epgb.[BypassEntryPointDefaultInd]
+    ,epgb.[IgnoreDependenciesDefaultInd]
     ,epgb.[SupportSeverityLevelId]
     ,epgb.[Comments] --use comments at this level as they should be the most accurate
   FROM

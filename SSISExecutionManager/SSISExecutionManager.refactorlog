@@ -445,4 +445,74 @@
     <Property Name="NewSchema" Value="cfg" />
     <Property Name="IsNewSchemaExternal" Value="False" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="4cb9d975-9aec-4d50-81a6-47433c688ec5" ChangeDateTime="11/01/2017 15:43:57">
+    <Property Name="ElementName" Value="[cfg].[ETLPackageGroup_ETLPackage].[IgnoreForBatchCompleteInd]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[cfg].[ETLPackageGroup_ETLPackage]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[IgnoreForBatchCompleteDefaultInd]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a3cc9080-38db-47d8-ad51-974d36af7fa6" ChangeDateTime="11/01/2017 15:44:34">
+    <Property Name="ElementName" Value="[cfg].[ETLPackageGroup_ETLPackage].[BypassEntryPointInd]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[cfg].[ETLPackageGroup_ETLPackage]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[BypassEntryPointDefaultInd]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5fb6a670-2a4d-43a3-9a29-43180a44271b" ChangeDateTime="11/01/2017 15:44:53">
+    <Property Name="ElementName" Value="[cfg].[ETLPackageGroup_ETLPackage].[IgnoreDependenciesInd]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[cfg].[ETLPackageGroup_ETLPackage]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[IgnoreDependenciesDefaultInd]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4813c7a5-3feb-4d80-99a0-383588e91920" ChangeDateTime="11/01/2017 15:46:07">
+    <Property Name="ElementName" Value="[cfg].[ETLPackageGroup_ETLPackage].[MaximumRetryAttempts]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[cfg].[ETLPackageGroup_ETLPackage]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[MaximumRetryAttemptsDefault]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="97beb50e-a7e2-4590-84fc-9abfc8869b0f" ChangeDateTime="11/01/2017 15:46:18">
+    <Property Name="ElementName" Value="[cfg].[ETLPackageGroup_ETLPackage].[RemainingRetryAttempts]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[cfg].[ETLPackageGroup_ETLPackage]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[RemainingRetryAttemptsDefault]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="244ad949-463c-4bab-b25e-5850fd3d7143" ChangeDateTime="11/01/2017 16:08:10">
+    <Property Name="ElementName" Value="[rpt].[ETLBatchesETLPackagesSQLCommandConditions]" />
+    <Property Name="ElementType" Value="SqlView" />
+    <Property Name="ParentElementName" Value="[rpt]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[ETLPackageGroupsETLPackagesSQLCommandConditions]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="20b3e41e-8f9a-485c-a069-8081464f73b0" ChangeDateTime="11/01/2017 16:12:56">
+    <Property Name="ElementName" Value="[cfg].[ETLBatch_ETLPackage_SQLCommandCondition]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[cfg]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[ETLPackageGroup_ETLPackage_SQLCommandCondition]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="30ded99f-13bf-4639-9ed1-b61c8d392842" ChangeDateTime="11/01/2017 16:13:42">
+    <Property Name="ElementName" Value="[cfg].[ETLPackageGroup_ETLPackage_SQLCommandCondition].[ETLBatch_ETLPackage_SQLCommandConditionId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[cfg].[ETLPackageGroup_ETLPackage_SQLCommandCondition]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ETLPackageGroup_ETLPackage_SQLCommandConditionId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e828e755-a54f-4c25-84fb-4787372df7a8" ChangeDateTime="11/01/2017 16:17:28">
+    <Property Name="ElementName" Value="[cfg].[ETLBatch_DeleteETLPackage_SQLCommandCondition]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[cfg]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[DeleteETLPackageGroup_ETLPackage_SQLCommandCondition]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5b840d16-bde8-43d3-8bb9-41292c1847a0" ChangeDateTime="11/01/2017 16:22:10">
+    <Property Name="ElementName" Value="[cfg].[SaveETLPackage_SQLCommandCondition]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[cfg]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[SaveETLPackageGroup_ETLPackage_SQLCommandCondition]" />
+  </Operation>
 </Operations>

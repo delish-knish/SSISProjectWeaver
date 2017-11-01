@@ -68,11 +68,11 @@ AS
              AND target.ETLPackageId = source.ETLPackageId
           WHEN Matched THEN
             UPDATE SET EnabledInd = source.EnabledInd
-                       ,[IgnoreForBatchCompleteInd] = source.IgnoreForBatchCompleteInd
+                       ,[IgnoreForBatchCompleteDefaultInd] = source.IgnoreForBatchCompleteInd
                        ,ReadyForExecutionInd = source.ReadyForExecutionInd
-                       ,BypassEntryPointInd = source.BypassEntryPointInd
-                       ,IgnoreDependenciesInd = source.IgnoreDependenciesInd
-                       ,MaximumRetryAttempts = source.MaximumRetryAttempts
+                       ,[BypassEntryPointDefaultInd] = source.BypassEntryPointInd
+                       ,[IgnoreDependenciesDefaultInd] = source.IgnoreDependenciesInd
+                       ,[MaximumRetryAttemptsDefault] = source.MaximumRetryAttempts
                        ,OverrideSSISDBLoggingLevelId = source.OverrideSSISDBLoggingLevelId
                        ,ExecuteSundayInd = source.ExecuteSundayInd
                        ,ExecuteMondayInd = source.ExecuteMondayInd
@@ -88,11 +88,11 @@ AS
             INSERT ([ETLPackageGroupId]
                     ,ETLPackageId
                     ,EnabledInd
-                    ,IgnoreForBatchCompleteInd
+                    ,[IgnoreForBatchCompleteDefaultInd]
                     ,ReadyForExecutionInd
-                    ,BypassEntryPointInd
-                    ,IgnoreDependenciesInd
-                    ,MaximumRetryAttempts
+                    ,[BypassEntryPointDefaultInd]
+                    ,[IgnoreDependenciesDefaultInd]
+                    ,[MaximumRetryAttemptsDefault]
                     ,OverrideSSISDBLoggingLevelId
                     ,ExecuteSundayInd
                     ,ExecuteMondayInd

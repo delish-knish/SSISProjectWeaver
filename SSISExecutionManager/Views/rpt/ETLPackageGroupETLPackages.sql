@@ -5,13 +5,13 @@ AS
     ,ebp.[ETLPackageGroup]
     ,b.ETLPackageId
     ,ep.SSISDBPackageName
-    ,b.[IgnoreForBatchCompleteInd]
+    ,b.[IgnoreForBatchCompleteDefaultInd]
     ,b.[EnabledInd]
     ,b.[ReadyForExecutionInd]
-    ,b.[BypassEntryPointInd]
-    ,b.[IgnoreDependenciesInd]
-    ,b.[MaximumRetryAttempts]
-    ,b.[RemainingRetryAttempts]
+    ,b.[BypassEntryPointDefaultInd]
+    ,b.[IgnoreDependenciesDefaultInd]
+    ,b.[MaximumRetryAttemptsDefault]
+    ,b.[RemainingRetryAttemptsDefault]
     ,b.[OverrideSSISDBLoggingLevelId]
     ,b.[ExecuteSundayInd]
     ,b.[ExecuteMondayInd]

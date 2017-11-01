@@ -87,8 +87,8 @@ AS
     --If a package that has a failure logged is still in a failed state then mark it as Ready For Execution and decrease the Remaining Retry Attempts by one
     --ToDo: make this sql statement more straightforward
     UPDATE pepgep
-    SET    RemainingRetryAttempts = IIF(IIF(pp.ETLPackageId IS NOT NULL, pepgep.RemainingRetryAttempts, epgep.RemainingRetryAttempts) > 0, IIF(pp.ETLPackageId IS NOT NULL, pepgep.RemainingRetryAttempts, epgep.RemainingRetryAttempts) - 1, 0)
-           ,ReadyForExecutionInd = IIF(IIF(pp.ETLPackageId IS NOT NULL, pepgep.RemainingRetryAttempts, epgep.RemainingRetryAttempts) > 0, 1, 0)
+    SET    [RemainingRetryAttemptsDefault] = IIF(IIF(pp.ETLPackageId IS NOT NULL, pepgep.[RemainingRetryAttemptsDefault], epgep.[RemainingRetryAttemptsDefault]) > 0, IIF(pp.ETLPackageId IS NOT NULL, pepgep.[RemainingRetryAttemptsDefault], epgep.[RemainingRetryAttemptsDefault]) - 1, 0)
+           ,ReadyForExecutionInd = IIF(IIF(pp.ETLPackageId IS NOT NULL, pepgep.[RemainingRetryAttemptsDefault], epgep.[RemainingRetryAttemptsDefault]) > 0, 1, 0)
     FROM   [log].[ETLPackageExecutionError] e
            JOIN [cfg].ETLPackageGroup_ETLPackage epgep
              ON e.ETLPackageId = epgep.ETLPackageId
@@ -103,7 +103,7 @@ AS
                 AND e.ETLPackageGroupId = pepgep.ETLPackageGroupId
     WHERE
       ETLBatchExecutionId = @ETLBatchExecutionId
-      AND epgep.RemainingRetryAttempts > 0
+      AND epgep.[RemainingRetryAttemptsDefault] > 0
       AND pepgep.ETLPackageId = ISNULL(pp.ETLPackageId, s.ETLPackageId)
       AND s.ETLPackageExecutionStatusId = 1
       AND [dbo].[func_GetLastPackageExecutionStatus] (@ETLBatchExecutionId, ISNULL(pp.ETLPackageId, s.ETLPackageId)) <> 5;

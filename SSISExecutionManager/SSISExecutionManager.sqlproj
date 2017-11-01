@@ -180,13 +180,13 @@
     <Build Include="Stored Procedures\cfg\DeleteETLPackageGroup.sql" />
     <None Include="Stored Procedures\cfg\DeleteETLPackageGroup_SQLCommand.sql" />
     <Build Include="Stored Procedures\cfg\DeleteETLPackage_ETLPackageDependency.sql" />
-    <Build Include="Stored Procedures\cfg\DeleteETLPackage_SQLCommandCondition.sql" />
+    <Build Include="Stored Procedures\cfg\DeleteETLPackageGroup_ETLPackage_SQLCommandCondition.sql" />
     <Build Include="Stored Procedures\cfg\DeleteSQLCommand.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLBatch_ETLPackageGroup.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLPackageGroup.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLPackageGroup_ETLPackage.sql" />
     <None Include="Stored Procedures\cfg\SaveETLPackageGroup_SQLCommand.sql" />
-    <Build Include="Stored Procedures\cfg\SaveETLPackage_SQLCommandCondition.sql" />
+    <Build Include="Stored Procedures\cfg\SaveETLPackageGroup_ETLPackage_SQLCommandCondition.sql" />
     <Build Include="Stored Procedures\ops\SendRowLevelErrorsEmail.sql" />
     <Build Include="Views\rpt\ETLPackageGroupExecutions.sql" />
     <Build Include="Stored Procedures\ops\SendCompleteBatchExecutionStatistics.sql" />
@@ -215,7 +215,7 @@
     <Build Include="Views\rpt\ETLPackagesInFailedState.sql" />
     <Build Include="Stored Procedures\util\CopyDatabase.sql" />
     <Build Include="Tables\cfg\ETLBatch.sql" />
-    <Build Include="Tables\cfg\ETLBatch_ETLPackage_SQLCommandCondition.sql" />
+    <Build Include="Tables\cfg\ETLPackageGroup_ETLPackage_SQLCommandCondition.sql" />
     <Build Include="Tables\cfg\ETLBatch_SQLCommandCondition.sql" />
     <Build Include="Tables\cfg\ETLBatch_ETLPackageGroup.sql" />
     <Build Include="Tables\cfg\ETLPackage.sql" />
@@ -226,6 +226,7 @@
     <None Include="Tables\cfg\ETLPackageGroup_SQLCommand.sql" />
     <Build Include="Tables\cfg\SQLCommand.sql" />
     <Build Include="Tables\cfg\ETLPackageGroup.sql" />
+    <Build Include="Stored Procedures\cfg\SaveETLBatch_SQLCommandCondition.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="References\SSISDB.dacpac" />

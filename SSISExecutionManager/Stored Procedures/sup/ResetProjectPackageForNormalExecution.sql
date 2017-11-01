@@ -5,8 +5,8 @@ AS
     /*The purpose of this stored procedure is to reset indicators on packages to a "normal execution" state.*/
 
     UPDATE epgep
-    SET    BypassEntryPointInd = 0
-           ,IgnoreDependenciesInd = 0
+    SET    [BypassEntryPointDefaultInd] = 0
+           ,[IgnoreDependenciesDefaultInd] = 0
            ,ReadyForExecutionInd = NULL
            ,LastUpdatedDate = GETDATE()
            ,LastUpdatedUser = SUSER_SNAME()

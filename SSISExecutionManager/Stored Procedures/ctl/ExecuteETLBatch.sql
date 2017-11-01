@@ -144,7 +144,7 @@ AS
 						END
 					ELSE
 					BEGIN
-						EXEC   [ctl].[AreETLBatchSQLCommandConditionsMet] @ETLBatchId, @ETLBatchExecutionId, @ConditionsMetInd OUT;
+						EXEC   [ctl].[AreETLBatchSQLCommandConditionsMet] @ETLBatchId, @ETLBatchExecutionId, @SSISEnvironmentName, @ConditionsMetInd OUT;
 						IF @ConditionsMetInd = 1
 						BEGIN
 							EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId = @ETLBatchExecutionId, @ETLBatchStatusId = @ETLBatchExecutionCreatedStatusId;

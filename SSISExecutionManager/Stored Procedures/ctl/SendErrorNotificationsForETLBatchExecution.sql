@@ -26,7 +26,7 @@ AS
         ,ISNULL(rssl.SupportSeverityLevelCd, 1)                                   AS SupportSeverityLevelCd
         ,CAST(err.ErrorDateTime AS DATETIME2(0))                                  AS ErrorDateTime
         ,err.ErrorMessage
-        ,COALESCE(pepgep.RemainingRetryAttempts, epgep.RemainingRetryAttempts, 0) AS RemainingRetryAttempts
+        ,COALESCE(pepgep.[RemainingRetryAttemptsDefault], epgep.[RemainingRetryAttemptsDefault], 0) AS RemainingRetryAttempts
       FROM
         [log].[ETLPackageExecutionError] err
         --Limit errors to the first error per package for the batch 

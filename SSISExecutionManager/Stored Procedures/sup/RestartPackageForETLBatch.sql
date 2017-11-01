@@ -10,8 +10,8 @@ AS
 
     UPDATE epgep
     SET    ReadyForExecutionInd = 1
-           ,BypassEntryPointInd = @BypassEntryPointPackageInd
-           ,IgnoreDependenciesInd = @IgnoreDependenciesInd
+           ,[BypassEntryPointDefaultInd] = @BypassEntryPointPackageInd
+           ,[IgnoreDependenciesDefaultInd] = @IgnoreDependenciesInd
            ,LastUpdatedDate = GETDATE()
            ,LastUpdatedUser = SUSER_SNAME()
     FROM   [cfg].ETLPackageGroup_ETLPackage epgep

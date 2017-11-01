@@ -29,7 +29,7 @@ AS
           g.EnabledInd = 1
           AND b.EnabledInd = 1
           AND p.EntryPointPackageInd = 1
-          AND ( b.IgnoreForBatchCompleteInd = 0
+          AND ( b.[IgnoreForBatchCompleteDefaultInd] = 0
                  OR x.[status] IN ( 7, 9 ) )
           AND bx.ETLBatchExecutionId = @ETLBatchExecutionId
           AND b.ETLPackageGroupId = @ETLPackageGroupId
