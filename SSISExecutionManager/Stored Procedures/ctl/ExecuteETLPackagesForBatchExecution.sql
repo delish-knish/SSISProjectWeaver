@@ -57,7 +57,8 @@ AS
                 ON b.SQLCommandId = sc.SQLCommandId
             WHERE
               epgep.ETLPackageGroup_ETLPackageId = @ETLPackageGroup_ETLPackageId
-              AND b.EnabledInd = 1;
+              AND b.EnabledInd = 1
+			  AND epgep.IgnoreSQLCommandConditionsDefaultInd = 0;
 
           OPEN SQLCommandCursor
 

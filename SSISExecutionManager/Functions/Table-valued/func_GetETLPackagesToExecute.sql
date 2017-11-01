@@ -13,6 +13,7 @@ AS
 		,epg.ETLPackageGroup
         ,bp.DependenciesNotMetCount
         ,ep.Use32BitDtExecInd
+		,epgep.IgnoreSQLCommandConditionsDefaultInd
        FROM
          dbo.[func_GetETLPackagesForBatchExecution](@ETLBatchExecutionId) bp
          JOIN [cfg].ETLPackage ep 

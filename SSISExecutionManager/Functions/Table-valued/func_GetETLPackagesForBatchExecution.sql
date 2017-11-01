@@ -74,8 +74,8 @@ AS
                        OR ExecuteThursdayInd = Iif(eb.DayOfWeekName = 'Thursday', 1, NULL)
                        OR ExecuteFridayInd = Iif(eb.DayOfWeekName = 'Friday', 1, NULL)
                        OR ExecuteSaturdayInd = Iif(eb.DayOfWeekName = 'Saturday', 1, NULL) )
-                AND ( DAY(eb.StartDateTime) = epgep.ExecuteNDayOfMonth
-                       OR epgep.ExecuteNDayOfMonth = 0 ))
+                AND ( DAY(eb.StartDateTime) = epgep.[ExecuteNthDayOfMonth]
+                       OR epgep.[ExecuteNthDayOfMonth] = 0 ))
       SELECT
          pkg.ETLBatchId                           AS ETLBatchId
          ,pkg.ETLPackageId                        AS ETLPackageId

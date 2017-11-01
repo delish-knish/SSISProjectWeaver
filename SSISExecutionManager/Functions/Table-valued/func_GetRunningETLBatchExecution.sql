@@ -10,9 +10,10 @@ AS
         ,ebe.StartDateTime
         ,ebe.ETLBatchId
         ,eb.SendBatchCompleteEmailInd
+		,ebe.IgnoreSQLCommandConditionsInd
        FROM
-         ctl.[ETLBatchExecution] ebe (NOLOCK)
-         JOIN [cfg].[ETLBatch] eb (NOLOCK)
+         ctl.[ETLBatchExecution] ebe 
+         JOIN [cfg].[ETLBatch] eb 
            ON ebe.ETLBatchId = eb.ETLBatchId
          OUTER APPLY [dbo].[func_GetETLBatchExecutionSSISDBExecutionSummary] (ebe.ETLBatchExecutionId) xsum
        WHERE

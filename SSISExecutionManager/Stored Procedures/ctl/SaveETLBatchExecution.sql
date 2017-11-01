@@ -2,6 +2,7 @@
                                       @SSISEnvironmentName                               VARCHAR(128) = NULL,
                                       @CallingJobName                                   VARCHAR(128) = NULL,
                                       @ETLBatchId										 INT = NULL,
+									  @IgnoreSQLCommandConditionsInd BIT  = 0,
                                       @StartDateTime                                     DATETIME2 = NULL,
                                       @EndDateTime                                       DATETIME2 = NULL,
                                       @TotalEntryPointPackageCount                       SMALLINT = NULL,

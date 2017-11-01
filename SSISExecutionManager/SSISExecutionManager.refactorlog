@@ -515,4 +515,11 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[SaveETLPackageGroup_ETLPackage_SQLCommandCondition]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="ab18695e-5224-4aaa-bfe3-47cffc0d3007" ChangeDateTime="11/01/2017 18:40:53">
+    <Property Name="ElementName" Value="[cfg].[ETLPackageGroup_ETLPackage].[ExecuteNDayOfMonth]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[cfg].[ETLPackageGroup_ETLPackage]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ExecuteNthDayOfMonth]" />
+  </Operation>
 </Operations>
