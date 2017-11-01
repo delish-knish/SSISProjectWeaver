@@ -14,6 +14,10 @@ PRINT 'Started populating database'
 PRINT 'Started Sync cfg.Configurations.sql'
 		:r "Sync Configurations.sql"
 PRINT 'Completed Sync cfg.Configurations.sql'
+
+PRINT 'Started Populate Reference Data.sql'
+		:r "Populate Reference Data.sql"
+PRINT 'Completed Populate Reference Data.sql'
 -----------------------------------------------------------------------------------
 /*IF $(DeployExample) = 1
 BEGIN

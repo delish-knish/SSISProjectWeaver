@@ -3,6 +3,7 @@
      [ETLPackageExecutionId]             BIGINT IDENTITY(1, 1)
      ,[SSISDBExecutionId]                INT NOT NULL --Need this to keep these rows unique since the same package could be executed twice during a batch
      ,[ETLBatchId]                       INT NOT NULL
+     ,[ETLPackageGroupId]                INT NULL
      ,[ETLPackageId]                     INT NOT NULL
      ,[StartDateTime]                    DATETIME2 NOT NULL
      ,[EndDateTime]                      DATETIME2 NULL
@@ -18,7 +19,8 @@
      CONSTRAINT [FK_ETLPackageExecution_ETLPackage] FOREIGN KEY ([ETLPackageId]) REFERENCES [cfg].ETLPackage([ETLPackageId]),
      CONSTRAINT [FK_ETLPackageExecution_ETLBatch] FOREIGN KEY ([ETLBatchId]) REFERENCES [cfg].[ETLBatch]([ETLBatchId]),
      CONSTRAINT [FK_ETLPackageExecution_ETLPackageExecutionStatus] FOREIGN KEY (ETLPackageExecutionStatusId) REFERENCES ref.ETLPackageExecutionStatus(ETLPackageExecutionStatusId),
-     CONSTRAINT [AK_ETLPackageExecution_SSISDBExecutionId_ETLPackageId] UNIQUE (SSISDBExecutionId, ETLPackageId)
+     CONSTRAINT [AK_ETLPackageExecution_SSISDBExecutionId_ETLPackageId] UNIQUE (SSISDBExecutionId, ETLPackageId),
+     CONSTRAINT [FK_ETLPackageExecution_ETLPackageGroup] FOREIGN KEY ([ETLPackageGroupId]) REFERENCES cfg.ETLPackageGroup([ETLPackageGroupId])
   )
 
 GO
@@ -34,4 +36,9 @@ CREATE INDEX [IX_ETLPackageExecution_ETLBatchId]
 GO
 
 CREATE INDEX [IX_ETLPackageExecution_ETLPackageExecutionStatusId]
-  ON [log].[ETLPackageExecution] (ETLPackageExecutionStatusId) 
+  ON [log].[ETLPackageExecution] (ETLPackageExecutionStatusId)
+
+GO
+
+CREATE INDEX [IX_ETLPackageExecution_ETLPackageGroupIdETLPackageId]
+  ON [log].[ETLPackageExecution] (ETLPackageGroupId, ETLPackageId) 
