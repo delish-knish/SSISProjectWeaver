@@ -46,6 +46,8 @@ AS
             DECLARE @ParamDefinition   NVARCHAR(MAX) = N'@ConditionMetInd BIT OUTPUT'
                     ,@EventDescription VARCHAR(MAX);
 
+			SET @EmailRecipients = ( ISNULL([dbo].[func_GetConfigurationValue] (@NotificationEmailConfigurationCd), [dbo].[func_GetConfigurationValue] ('EMAILMON')) );
+
             EXECUTE sp_executesql
               @SQLCommand
              ,@ParamDefinition
