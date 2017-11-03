@@ -132,9 +132,9 @@
     <Build Include="Stored Procedures\ops\SendSSISErrorEmail.sql" />
     <Build Include="Stored Procedures\sqlcmd\CheckAndWaitForCompetingJobs.sql" />
     <Build Include="Stored Procedures\sup\EnableDisableProjectPackage.sql" />
-    <Build Include="Stored Procedures\sup\ExecutePackageForBatch.sql" />
+    <Build Include="Stored Procedures\sup\ExecutePackageForETLBatch.sql" />
     <Build Include="Stored Procedures\sup\ResetProjectPackageForNormalExecution.sql" />
-    <Build Include="Stored Procedures\sup\RestartPackageForETLBatch.sql" />
+    <None Include="Stored Procedures\sup\RestartPackageForETLBatch.sql" />
     <Build Include="Security\Schemas\cfg.sql" />
     <Build Include="Security\Schemas\ctl.sql" />
     <Build Include="Security\Schemas\log.sql" />
