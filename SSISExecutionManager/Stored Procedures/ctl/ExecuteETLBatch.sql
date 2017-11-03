@@ -22,7 +22,7 @@ AS
     DECLARE @EndETLBatchExecutionInd BIT = 0,
 			@LoopCounter			 INT = 0;
 
-   WHILE @ETLBatchExecutionStatusId NOT IN (5,8,9) --While batch is not in the "Complete" state, hasn't timed out, and hasn't encountered an exception
+   WHILE @ETLBatchExecutionStatusId NOT IN (@ETLBatchExecutionCompleteStatusId,@ETLBatchExecutionTimeOutStatusId,@ETLBatchExecutionExceptionStatusId) --While batch is not in the "Complete" state, hasn't timed out, and hasn't encountered an exception
    BEGIN
    BEGIN TRY
       --Get values from Config table
@@ -74,19 +74,25 @@ AS
               EXEC ctl.[RestartETLPackagesForETLBatchExecution] @ETLBatchExecutionId,@ErrorEmailRecipients;
 
             --If the batch has just been marked as complete
-            IF @ETLBatchExecutionStatusId IN (@ETLBatchExecutionCompleteStatusId, @ETLBatchExecutionCanceledStatusId) --Was already completed, has just completed, or was manually canceled 
+            IF @ETLBatchExecutionStatusId IN (@ETLBatchExecutionCompleteStatusId, @ETLBatchExecutionCanceledStatusId) --Was already completed, has just completed, or was canceled 
               BEGIN
-                  --Archive the execution stats of the packages for the batch
+				--Archive the execution stats of the packages for the batch
                   EXEC [log].SaveETLPackageExecutions @ETLBatchExecutionId = @ETLBatchExecutionId;
 
-                  IF @ETLBatchExecutionStatusId = @ETLBatchExecutionCompleteStatusId
+				  --Successful completion
+				  IF @ETLBatchExecutionStatusId = @ETLBatchExecutionCompleteStatusId
 				  BEGIN
 					SET @EventDescription = 'Batch completed';
 
 					EXEC [log].[InsertETLBatchExecutionEvent] 5,@ETLBatchExecutionId,NULL,@EventDescription;
 				  END
-				  ELSE --Canceled
+
+				  --Canceled
+				  --TODO: This code block might never be reached.
+				  IF @ETLBatchExecutionStatusId = @ETLBatchExecutionCanceledStatusId 
 				  BEGIN
+					EXEC ctl.StopAllPackagesForETLBatchExecution @ETLBatchExecutionId;
+
 					SET @EventDescription = 'Batch canceled';
 
 					EXEC [log].[InsertETLBatchExecutionEvent] 6,@ETLBatchExecutionId,NULL,@EventDescription;
@@ -136,7 +142,15 @@ AS
 				BEGIN
 					SET @ETLBatchExecutionStatusId = ( dbo.func_GetETLBatchStatusId(@ETLBatchExecutionId) );
 
-					--TODO: If canceled, break
+					IF @ETLBatchExecutionStatusId = @ETLBatchExecutionCanceledStatusId
+					BEGIN
+						EXEC ctl.StopAllPackagesForETLBatchExecution @ETLBatchExecutionId;
+						
+						SET @EventDescription = 'Batch canceled';
+
+						EXEC [log].[InsertETLBatchExecutionEvent] 6,@ETLBatchExecutionId,NULL,@EventDescription;
+						BREAK;
+					END
 
 					IF [dbo].[func_IsETLBatchExecutionTimedOut] (@ETLBatchExecutionId) = 1 OR @ETLBatchExecutionStatusId = @ETLBatchExecutionCanceledStatusId --Time out the batch 
 						BEGIN

@@ -227,6 +227,7 @@
     <Build Include="Tables\cfg\SQLCommand.sql" />
     <Build Include="Tables\cfg\ETLPackageGroup.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLBatch_SQLCommandCondition.sql" />
+    <Build Include="Stored Procedures\ctl\StopAllPackagesForETLBatchExecution.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="References\SSISDB.dacpac" />

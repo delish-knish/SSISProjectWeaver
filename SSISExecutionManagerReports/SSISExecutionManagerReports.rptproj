@@ -38,16 +38,16 @@
       <FullPath>ETL Package Execution Status.rdl</FullPath>
     </ProjectItem>
     <ProjectItem>
+      <Name>ETL Package Executions Gantt Chart.rdl</Name>
+      <FullPath>ETL Package Executions Gantt Chart.rdl</FullPath>
+    </ProjectItem>
+    <ProjectItem>
       <Name>ETL Package Performance Chart.rdl</Name>
       <FullPath>ETL Package Performance Chart.rdl</FullPath>
     </ProjectItem>
     <ProjectItem>
       <Name>Execute ETL Package.rdl</Name>
       <FullPath>Execute ETL Package.rdl</FullPath>
-    </ProjectItem>
-    <ProjectItem>
-      <Name>ETL Package Executions Gantt Chart.rdl</Name>
-      <FullPath>ETL Package Executions Gantt Chart.rdl</FullPath>
     </ProjectItem>
   </Reports>
   <Configurations>

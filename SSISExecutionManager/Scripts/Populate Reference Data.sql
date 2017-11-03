@@ -213,7 +213,8 @@ VALUES
 	(16,'SQL Command(s) Executed'),
 	(18,'SQL Command-based Condition Evaluated'),
 	(19,'SQL Command Execution Error'),
-	(20, 'User-initiated Package Execution')
+	(20, 'User-initiated Package Execution'),
+	(21, 'Package stopped')
 
 MERGE ref.[ETLBatchExecutionEventType] AS Target
 USING Sync_ETLBatchEventType AS Source ON (Target.[ETLBatchExecutionEventTypeId] = Source.[ETLBatchEventTypeId])
