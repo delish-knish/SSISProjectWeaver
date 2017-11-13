@@ -11,18 +11,22 @@ Post-Deployment Script Template
 */
 PRINT 'Started populating database'
 -----------------------------------------------------------------------------------
+PRINT 'Started Populate Reference Data.sql'
+		:r "Populate Reference Data.sql"
+PRINT 'Completed Populate Reference Data.sql'
+-----------------------------------------------------------------------------------
 PRINT 'Started Sync cfg.Configurations.sql'
 		:r "Sync Configurations.sql"
 PRINT 'Completed Sync cfg.Configurations.sql'
 -----------------------------------------------------------------------------------
-IF $(DeployExample) = 1
-BEGIN
-	PRINT 'Started Setting Up Example Projects.sql'
-		:r ".\Example 1 Setup\Configure SSIS Catalog and Deploy Example1 Projects.sql"
-		:r ".\Example 1 Setup\Populate Example1 Metadata.sql"
-		:r ".\Example 1 Setup\Create Example 1 SQL Agent Job.sql"
-	PRINT 'Started Setting Up Example Projects.sql'
-END
+--IF $(DeployExample) = 1
+--BEGIN
+--	PRINT 'Started Setting Up Example Projects.sql'
+--		:r ".\Example 1 Setup\Configure SSIS Catalog and Deploy Example1 Projects.sql"
+--		:r ".\Example 1 Setup\Populate Example1 Metadata.sql"
+--		:r ".\Example 1 Setup\Create Example 1 SQL Agent Job.sql"
+--	PRINT 'Started Setting Up Example Projects.sql'
+--END
 -----------------------------------------------------------------------------------
 
 PRINT 'Completed populating database'

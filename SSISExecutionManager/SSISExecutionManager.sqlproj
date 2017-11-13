@@ -232,8 +232,6 @@
     <None Include="Scripts\Example 1 Setup\Configure SSIS Catalog and Deploy Example1 Projects.sql" />
     <None Include="Scripts\Example 1 Setup\Populate Example1 Metadata.sql" />
     <None Include="Scripts\Example 1 Setup\Deploy Example1 SSIS Projects.bat" />
-    <None Include="QA.publish.xml" />
-    <None Include="Prod.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
@@ -264,17 +262,9 @@
       <DefaultValue>support@youremail.com</DefaultValue>
       <Value>$(SqlCmdVar__5)</Value>
     </SqlCmdVariable>
-    <SqlCmdVariable Include="ExampleProjectsRootFolder">
-      <DefaultValue>Z:\Source Code\Repos\SSISProjectWeaver\</DefaultValue>
-      <Value>$(SqlCmdVar__9)</Value>
-    </SqlCmdVariable>
     <SqlCmdVariable Include="SolutionRootDir">
       <DefaultValue>C:\Source Code\Repos\SSISProjectWeaver\</DefaultValue>
       <Value>$(SqlCmdVar__6)</Value>
-    </SqlCmdVariable>
-    <SqlCmdVariable Include="DeployExample">
-      <DefaultValue>1</DefaultValue>
-      <Value>$(SqlCmdVar__7)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="SSISDB">
       <DefaultValue>SSISDB</DefaultValue>
