@@ -49,6 +49,10 @@
       <Name>Execute ETL Package.rdl</Name>
       <FullPath>Execute ETL Package.rdl</FullPath>
     </ProjectItem>
+    <ProjectItem>
+      <Name>ETL Packages.rdl</Name>
+      <FullPath>ETL Packages.rdl</FullPath>
+    </ProjectItem>
   </Reports>
   <Configurations>
     <Configuration>

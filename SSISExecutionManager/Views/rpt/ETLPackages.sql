@@ -2,14 +2,15 @@
 AS
   SELECT
     ep.[ETLPackageId]
-    ,[SSISDBFolderName]
-    ,[SSISDBProjectName]
-    ,[SSISDBPackageName]
-    ,[EntryPointPackageInd]
-    ,[EntryPointETLPackageId]
-    ,[HasParamETLBatchExecutionId]
-    ,[Use32BitDtExecInd]
-    ,[Comments]
+    ,ep.[SSISDBFolderName]
+    ,ep.[SSISDBProjectName]
+    ,ep.[SSISDBPackageName]
+    ,ep.[EntryPointPackageInd]
+    ,ep.[EntryPointETLPackageId]
+	,epep.SSISDBPackageName AS EntryPointPackageName
+    ,ep.[HasParamETLBatchExecutionId]
+    ,ep.[Use32BitDtExecInd]
+    ,ep.[Comments]
     ,ped.AverageExecutionDurationInMinutes
     ,ped.FirstExecutionDate
     ,ped.LastExecutionDate
@@ -19,6 +20,7 @@ AS
     ,ISNULL(pg.GroupInstancesCount, 0) AS PackageGroupInstancesCount
   FROM
     [cfg].[ETLPackage] ep
+	LEFT JOIN [cfg].[ETLPackage] epep ON ep.EntryPointETLPackageId = epep.ETLPackageId
     JOIN (SELECT
             ETLPackageId
             ,AVG(ExecutionDurationInMinutes) AS AverageExecutionDurationInMinutes
