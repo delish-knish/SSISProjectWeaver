@@ -102,7 +102,7 @@
                     <Value>ETL Packages</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
-                      <FontSize>24pt</FontSize>
+                      <FontSize>14pt</FontSize>
                       <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
@@ -111,7 +111,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>textbox1</rd:DefaultName>
-            <Height>0.43in</Height>
+            <Height>0.33972in</Height>
             <Width>16in</Width>
             <Style>
               <PaddingLeft>2pt</PaddingLeft>
@@ -124,7 +124,7 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>0.79167in</Width>
+                  <Width>0.65278in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1in</Width>
@@ -133,13 +133,13 @@
                   <Width>1in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.36111in</Width>
+                  <Width>2.5625in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.88889in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.72917in</Width>
+                  <Width>2.5625in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.04861in</Width>
@@ -185,9 +185,9 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Package Id</Value>
+                                  <Value>Package </Value>
                                   <Style>
-                                    <FontFamily />
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>#666666</Color>
                                   </Style>
@@ -195,7 +195,23 @@
                               </TextRuns>
                               <Style>
                                 <FontFamily />
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Id</Value>
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>#666666</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <FontFamily />
+                                <TextAlign>Left</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -207,6 +223,7 @@
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>Silver</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -227,7 +244,7 @@
                                 <TextRun>
                                   <Value>SSISDB Folder</Value>
                                   <Style>
-                                    <FontFamily />
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>#666666</Color>
                                   </Style>
@@ -244,6 +261,7 @@
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>Silver</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -264,7 +282,7 @@
                                 <TextRun>
                                   <Value>SSISDB Project</Value>
                                   <Style>
-                                    <FontFamily />
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>#666666</Color>
                                   </Style>
@@ -281,6 +299,7 @@
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>Silver</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -301,7 +320,7 @@
                                 <TextRun>
                                   <Value>SSISDB Package </Value>
                                   <Style>
-                                    <FontFamily />
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>#666666</Color>
                                   </Style>
@@ -318,6 +337,7 @@
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>Silver</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -338,7 +358,7 @@
                                 <TextRun>
                                   <Value>Entry Point Package Id</Value>
                                   <Style>
-                                    <FontFamily />
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>#666666</Color>
                                   </Style>
@@ -358,6 +378,7 @@
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>Silver</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -378,7 +399,7 @@
                                 <TextRun>
                                   <Value>Entry Point Package</Value>
                                   <Style>
-                                    <FontFamily />
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>#666666</Color>
                                   </Style>
@@ -395,6 +416,7 @@
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>Silver</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -412,9 +434,9 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Has ETLBatchExecutionId Param</Value>
+                                  <Value>Execution Id Param?</Value>
                                   <Style>
-                                    <FontFamily />
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>#666666</Color>
                                   </Style>
@@ -431,6 +453,7 @@
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>Silver</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -451,7 +474,7 @@
                                 <TextRun>
                                   <Value>32Bit</Value>
                                   <Style>
-                                    <FontFamily />
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>#666666</Color>
                                   </Style>
@@ -468,6 +491,7 @@
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>Silver</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -488,7 +512,7 @@
                                 <TextRun>
                                   <Value>Comments</Value>
                                   <Style>
-                                    <FontFamily />
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>#666666</Color>
                                   </Style>
@@ -505,6 +529,7 @@
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>Silver</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -525,7 +550,7 @@
                                 <TextRun>
                                   <Value>Avg Duration(min)</Value>
                                   <Style>
-                                    <FontFamily />
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>#666666</Color>
                                   </Style>
@@ -545,6 +570,7 @@
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>Silver</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -565,7 +591,7 @@
                                 <TextRun>
                                   <Value>First Exec Date</Value>
                                   <Style>
-                                    <FontFamily />
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>#666666</Color>
                                   </Style>
@@ -582,6 +608,7 @@
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>Silver</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -602,7 +629,7 @@
                                 <TextRun>
                                   <Value>Last Exec Date</Value>
                                   <Style>
-                                    <FontFamily />
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>#666666</Color>
                                   </Style>
@@ -619,6 +646,7 @@
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>Silver</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -639,7 +667,7 @@
                                 <TextRun>
                                   <Value>Total Errors Logged</Value>
                                   <Style>
-                                    <FontFamily />
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>#666666</Color>
                                   </Style>
@@ -659,6 +687,7 @@
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>Silver</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -679,7 +708,7 @@
                                 <TextRun>
                                   <Value>Package Dependencies</Value>
                                   <Style>
-                                    <FontFamily />
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>#666666</Color>
                                   </Style>
@@ -699,6 +728,7 @@
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>Silver</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -719,7 +749,7 @@
                                 <TextRun>
                                   <Value>Package Depended On</Value>
                                   <Style>
-                                    <FontFamily />
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>#666666</Color>
                                   </Style>
@@ -739,6 +769,7 @@
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>Silver</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -759,7 +790,7 @@
                                 <TextRun>
                                   <Value>Package Group Instances</Value>
                                   <Style>
-                                    <FontFamily />
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>#666666</Color>
                                   </Style>
@@ -779,6 +810,7 @@
                             <BottomBorder>
                               <Style>Solid</Style>
                             </BottomBorder>
+                            <BackgroundColor>Silver</BackgroundColor>
                             <FontFamily />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -804,13 +836,14 @@
                                 <TextRun>
                                   <Value>=Fields!ETLPackageId.Value</Value>
                                   <Style>
-                                    <FontFamily />
                                     <FontSize>9pt</FontSize>
                                     <Color>#333333</Color>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>ETLPackageId</rd:DefaultName>
@@ -841,7 +874,6 @@
                                 <TextRun>
                                   <Value>=Fields!SSISDBFolderName.Value</Value>
                                   <Style>
-                                    <FontFamily />
                                     <FontSize>9pt</FontSize>
                                     <Color>#333333</Color>
                                   </Style>
@@ -878,7 +910,6 @@
                                 <TextRun>
                                   <Value>=Fields!SSISDBProjectName.Value</Value>
                                   <Style>
-                                    <FontFamily />
                                     <FontSize>9pt</FontSize>
                                     <Color>#333333</Color>
                                   </Style>
@@ -915,7 +946,6 @@
                                 <TextRun>
                                   <Value>=Fields!SSISDBPackageName.Value</Value>
                                   <Style>
-                                    <FontFamily />
                                     <FontSize>9pt</FontSize>
                                     <Color>#333333</Color>
                                   </Style>
@@ -952,13 +982,14 @@
                                 <TextRun>
                                   <Value>=Fields!EntryPointETLPackageId.Value</Value>
                                   <Style>
-                                    <FontFamily />
                                     <FontSize>9pt</FontSize>
                                     <Color>#333333</Color>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>EntryPointETLPackageId</rd:DefaultName>
@@ -989,7 +1020,6 @@
                                 <TextRun>
                                   <Value>=Fields!EntryPointPackageName.Value</Value>
                                   <Style>
-                                    <FontFamily />
                                     <FontSize>9pt</FontSize>
                                     <Color>#333333</Color>
                                   </Style>
@@ -1025,7 +1055,6 @@
                                 <TextRun>
                                   <Value>=Fields!HasParamETLBatchExecutionId.Value</Value>
                                   <Style>
-                                    <FontFamily />
                                     <FontSize>9pt</FontSize>
                                     <Color>#333333</Color>
                                   </Style>
@@ -1062,7 +1091,6 @@
                                 <TextRun>
                                   <Value>=Fields!Use32BitDtExecInd.Value</Value>
                                   <Style>
-                                    <FontFamily />
                                     <FontSize>9pt</FontSize>
                                     <Color>#333333</Color>
                                   </Style>
@@ -1099,7 +1127,6 @@
                                 <TextRun>
                                   <Value>=Fields!Comments.Value</Value>
                                   <Style>
-                                    <FontFamily />
                                     <FontSize>9pt</FontSize>
                                     <Color>#333333</Color>
                                   </Style>
@@ -1136,7 +1163,6 @@
                                 <TextRun>
                                   <Value>=Fields!AverageExecutionDurationInMinutes.Value</Value>
                                   <Style>
-                                    <FontFamily />
                                     <FontSize>9pt</FontSize>
                                     <Color>#333333</Color>
                                   </Style>
@@ -1173,7 +1199,6 @@
                                 <TextRun>
                                   <Value>=Fields!FirstExecutionDate.Value</Value>
                                   <Style>
-                                    <FontFamily />
                                     <FontSize>9pt</FontSize>
                                     <Color>#333333</Color>
                                   </Style>
@@ -1210,7 +1235,6 @@
                                 <TextRun>
                                   <Value>=Fields!LastExecutionDate.Value</Value>
                                   <Style>
-                                    <FontFamily />
                                     <FontSize>9pt</FontSize>
                                     <Color>#333333</Color>
                                   </Style>
@@ -1247,7 +1271,6 @@
                                 <TextRun>
                                   <Value>=Fields!TotalErrorsLoggedCount.Value</Value>
                                   <Style>
-                                    <FontFamily />
                                     <FontSize>9pt</FontSize>
                                     <Color>#333333</Color>
                                   </Style>
@@ -1284,7 +1307,6 @@
                                 <TextRun>
                                   <Value>=Fields!PackageDependencyCount.Value</Value>
                                   <Style>
-                                    <FontFamily />
                                     <FontSize>9pt</FontSize>
                                     <Color>#333333</Color>
                                   </Style>
@@ -1321,7 +1343,6 @@
                                 <TextRun>
                                   <Value>=Fields!PackageDependedOnCount.Value</Value>
                                   <Style>
-                                    <FontFamily />
                                     <FontSize>9pt</FontSize>
                                     <Color>#333333</Color>
                                   </Style>
@@ -1358,7 +1379,6 @@
                                 <TextRun>
                                   <Value>=Fields!PackageGroupInstancesCount.Value</Value>
                                   <Style>
-                                    <FontFamily />
                                     <FontSize>9pt</FontSize>
                                     <Color>#333333</Color>
                                   </Style>
@@ -1429,17 +1449,28 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>ETLPackages</DataSetName>
-            <Top>0.43in</Top>
+            <SortExpressions>
+              <SortExpression>
+                <Value>=Fields!SSISDBFolderName.Value</Value>
+              </SortExpression>
+              <SortExpression>
+                <Value>=Fields!SSISDBProjectName.Value</Value>
+              </SortExpression>
+              <SortExpression>
+                <Value>=Fields!SSISDBPackageName.Value</Value>
+              </SortExpression>
+            </SortExpressions>
+            <Top>0.405in</Top>
             <Height>0.43in</Height>
-            <Width>17.35417in</Width>
+            <Width>18.25in</Width>
             <ZIndex>1</ZIndex>
             <Style />
           </Tablix>
         </ReportItems>
-        <Height>0.86in</Height>
+        <Height>0.835in</Height>
         <Style />
       </Body>
-      <Width>19.19444in</Width>
+      <Width>18.25in</Width>
       <Page>
         <LeftMargin>1in</LeftMargin>
         <RightMargin>1in</RightMargin>
