@@ -100,7 +100,7 @@ WHERE
   ,package_name AS SSISDBPackageName
   ,CAST(start_time AS DATETIME2) AS StartDateTime
 FROM   SSISDB.[catalog].executions ex
-       JOIN ctl.ETLBatchSSISDBExecutions exm
+       JOIN [rpt].[ETLBatchSSISDBExecutions] exm
          ON ex.execution_id = exm.SSISDBExecutionId
 WHERE
   [status] = 2 
@@ -146,9 +146,8 @@ WHERE
   ,[ErrorDateTime]
   ,[ErrorMessage]
   ,[ETLPackageRestartDateTime]
-FROM   [log].[ETLPackageExecutionError] err
-       JOIN cfg.ETLPackage p
-         ON err.ETLPackageId = p.ETLPackageId
+FROM   
+  [rpt].[ETLPackageExecutionErrors] err       
 WHERE
    [ETLBatchExecutionId] = @ETLBatchExecutionId</CommandText>
       </Query>
@@ -262,15 +261,14 @@ WHERE
   ,[ExecutionDurationInMinutes]
   ,CAST([ExecutionDurationInMinutes] / 60 AS VARCHAR) + ':' + CAST([ExecutionDurationInMinutes] % 60 AS VARCHAR) AS ExecutionDurationString
   ,[DayOfWeekName]
-  ,bs.ETLBatchStatus
+  ,ETLBatchStatus
 FROM   
-	[ctl].[ETLBatchExecution] be
-	JOIN [ref].[ETLBatchStatus] bs ON be.ETLBatchStatusId = bs.ETLBatchStatusId
+	[rpt].[ETLBatchExecutions] be
 WHERE
-  [ETLBatchId] = (SELECT
-                    ETLBatchId
-                  FROM   [ctl].ETLBatchExecution
-	  WHERE ETLBatchExecutionId = @ETLBatchExecutionId    )
+  ETLBatchExecutionId = (SELECT
+                    ETLBatchExecutionId
+                  FROM   [rpt].ETLBatchExecutions
+	  WHERE ETLBatchExecutionId = @ETLBatchExecutionId  )
   AND [StartDateTime] &gt;= DATEADD(DAY,-60, GETDATE())
 ORDER  BY
   [StartDateTime] </CommandText>
@@ -347,7 +345,6 @@ ORDER  BY
       ,[ErrorDateTime]
   FROM 
       [rpt].[ETLPackagesInFailedState] fs
-      JOIN [cfg].[ETLPackage] ep ON fs.ETLPackageId = ep.ETLPackageId
 WHERE
        ETLBatchExecutionId= @ETLBatchExecutionId</CommandText>
       </Query>
@@ -2930,7 +2927,6 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>

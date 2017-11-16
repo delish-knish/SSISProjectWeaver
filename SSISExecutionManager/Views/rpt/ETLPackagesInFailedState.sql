@@ -14,6 +14,9 @@ AS
   SELECT
     fex.ETLBatchExecutionId
     ,fex.ETLPackageId
+    ,fex.SSISDBFolderName
+    ,fex.SSISDBProjectName
+    ,fex.SSISDBPackageName
     ,fex.ETLPackageGroupId
     ,LastPackageFailureStartTime
     ,LastPackageSuccessStartTime
@@ -24,6 +27,9 @@ AS
        ex.ETLBatchExecutionId
        ,ex.ETLPackageGroupId
        ,ex.ETLPackageId
+       ,ep.SSISDBFolderName
+       ,ep.SSISDBProjectName
+       ,ep.SSISDBPackageName
        ,MAX(ex.StartDateTime)  AS LastPackageFailureStartTime
        ,MAX(err.ErrorMessage)  AS FirstErrorMessage
        ,MAX(err.ErrorDateTime) AS ErrorDateTime
@@ -38,12 +44,17 @@ AS
                      ex.[SSISDBExecutionId] = err.[SSISDBExecutionId]
                     ORDER  BY
                      ErrorDateTime ASC) err
+       JOIN cfg.ETLPackage ep
+         ON ex.ETLPackageId = ep.ETLPackageId
      WHERE
       ex.ETLExecutionStatusId IN ( 3, 4, 6 )
      GROUP  BY
       ex.ETLBatchExecutionId
       ,ex.ETLPackageGroupId
       ,ex.ETLPackageId
+      ,ep.SSISDBFolderName
+      ,ep.SSISDBProjectName
+      ,ep.SSISDBPackageName
      HAVING
       COUNT(*) > 0) fex
     LEFT JOIN (SELECT

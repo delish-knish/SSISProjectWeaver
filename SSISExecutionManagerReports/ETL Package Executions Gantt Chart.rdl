@@ -57,9 +57,9 @@ ORDER BY
   ,[ETLPackageGroup]
   ,[ETLPackageExecutionStatus]
 FROM   
-	[SSISExecutionManager].[rpt].[ETLPackageExecutions] 
+  [rpt].[ETLPackageExecutionHistory] 
 WHERE
-	([ETLBatchExecutionId] = @ETLBatchExecutionId) AND ([ETLPackageGroupId] = @ETLPackageGroupId OR @ETLPackageGroupId IS NULL)</CommandText>
+  ([ETLBatchExecutionId] = @ETLBatchExecutionId) AND ([ETLPackageGroupId] = @ETLPackageGroupId OR @ETLPackageGroupId IS NULL)</CommandText>
       </Query>
       <Fields>
         <Field Name="ETLBatchExecutionId">

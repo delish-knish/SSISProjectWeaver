@@ -23,7 +23,7 @@ AS
           DELETE FROM [log].[ETLBatchExecutionEvent]
           WHERE  ETLPackageId = @ETLPackageId;
 
-          DELETE FROM [log].ETLPackageExecution
+          DELETE FROM [log].[ETLPackageExecutionHistory]
           WHERE  ETLPackageId = @ETLPackageId;
 
 		  DELETE FROM [log].ETLPackageExecutionError

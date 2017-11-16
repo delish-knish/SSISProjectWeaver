@@ -18,7 +18,11 @@
             <Value>=Parameters!SSISDBExecutionId.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT * FROM rpt.ETLPackageExecutionErrors WHERE SSISDBExecutionId = @SSISDBExecutionId </CommandText>
+        <CommandText>SELECT * 
+FROM 
+  rpt.ETLPackageExecutionErrors 
+WHERE 
+  SSISDBExecutionId = @SSISDBExecutionId </CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>

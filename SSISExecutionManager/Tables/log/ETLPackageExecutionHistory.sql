@@ -1,4 +1,4 @@
-﻿CREATE TABLE [log].[ETLPackageExecution]
+﻿CREATE TABLE [log].[ETLPackageExecutionHistory]
   (
      [ETLPackageExecutionId]             BIGINT IDENTITY(1, 1)
      ,[SSISDBExecutionId]                INT NOT NULL --Need this to keep these rows unique since the same package could be executed twice during a batch
@@ -26,19 +26,19 @@
 GO
 
 CREATE INDEX [IX_ETLPackageExecution_ETLPackageId]
-  ON [log].[ETLPackageExecution] (ETLPackageId)
+  ON [log].[ETLPackageExecutionHistory] (ETLPackageId)
 
 GO
 
 CREATE INDEX [IX_ETLPackageExecution_ETLBatchId]
-  ON [log].[ETLPackageExecution] (ETLBatchId)
+  ON [log].[ETLPackageExecutionHistory] (ETLBatchId)
 
 GO
 
 CREATE INDEX [IX_ETLPackageExecution_ETLPackageExecutionStatusId]
-  ON [log].[ETLPackageExecution] (ETLPackageExecutionStatusId)
+  ON [log].[ETLPackageExecutionHistory] (ETLPackageExecutionStatusId)
 
 GO
 
 CREATE INDEX [IX_ETLPackageExecution_ETLPackageGroupIdETLPackageId]
-  ON [log].[ETLPackageExecution] (ETLPackageGroupId, ETLPackageId) 
+  ON [log].[ETLPackageExecutionHistory] (ETLPackageGroupId, ETLPackageId) 

@@ -522,4 +522,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[ExecuteNthDayOfMonth]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="acf4ee29-8e5e-4f26-ac61-0ea9ab2e4c1e" ChangeDateTime="11/16/2017 13:33:45">
+    <Property Name="ElementName" Value="[log].[ETLPackageExecution]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[log]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[ETLPackageExecutionHistory]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="859a7f2f-d44c-41d6-b372-0dd828a16898" ChangeDateTime="11/16/2017 13:35:26">
+    <Property Name="ElementName" Value="[rpt].[ETLPackageExecutions]" />
+    <Property Name="ElementType" Value="SqlView" />
+    <Property Name="ParentElementName" Value="[rpt]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[ETLPackageExecutionHistory]" />
+  </Operation>
 </Operations>

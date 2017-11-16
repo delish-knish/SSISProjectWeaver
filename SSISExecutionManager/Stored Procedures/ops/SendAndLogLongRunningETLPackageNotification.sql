@@ -49,7 +49,7 @@ AS
                   ,AVG([ExecutionDurationInMinutes])                                                                                                                       AS AvgExecutionDurationInMinutes
                   ,CAST(AVG(CAST([ExecutionDurationInMinutes] AS DECIMAL)) * ( CAST(( 100 + @PctGreaterThanAverageToInclude ) AS DECIMAL) / CAST(100 AS DECIMAL) ) AS INT) AS AvgExecutionDurationWithBufferInMinutes
                 FROM
-                  [log].[ETLPackageExecution]
+                  [log].[ETLPackageExecutionHistory]
                 WHERE
                  [ETLPackageExecutionStatusId] = 0
                  AND DATEDIFF(DAY, StartDateTime, GETDATE()) <= @DaysToIncludeInAverageDuration

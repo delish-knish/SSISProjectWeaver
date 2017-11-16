@@ -13,7 +13,7 @@ AS
       [ETLBatchExecutionId] = @ETLBatchExecutionId
 
     --Insert or update packages stats
-    MERGE [log].ETLPackageExecution AS Target
+    MERGE [log].[ETLPackageExecutionHistory] AS Target
 	--ToDo: Determine better way to handle multiple occurrences of the same package (possibly store count of executions)
     USING (SELECT
              ep.SSISDBExecutionId

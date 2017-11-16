@@ -9,7 +9,7 @@ AS
    ,MAX(epe.EndDateTime)                                           AS GroupEndDateTime
    ,DATEDIFF(MINUTE, MIN(epe.StartDateTime), MAX(epe.EndDateTime)) AS GroupExecutionDurationInMinutes
   FROM
-    [log].[ETLPackageExecution] epe
+    [log].[ETLPackageExecutionHistory] epe
     JOIN [ctl].[ETLBatchSSISDBExecutions] ebsdbe
       ON epe.SSISDBExecutionId = ebsdbe.SSISDBExecutionId
     JOIN [cfg].[ETLBatch_ETLPackageGroup] b

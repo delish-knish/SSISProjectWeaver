@@ -1,4 +1,4 @@
-﻿CREATE VIEW [rpt].[ETLPackageExecutions]
+﻿CREATE VIEW [rpt].[ETLPackageExecutionHistory]
 AS
   SELECT
     eb.ETLBatchExecutionId
@@ -17,7 +17,7 @@ AS
     ,reps.ETLPackageExecutionStatus
     ,ex.[ErrorMessage]
   FROM
-    [log].[ETLPackageExecution] ex
+    [log].[ETLPackageExecutionHistory] ex
     JOIN [ctl].[ETLBatchSSISDBExecutions] dbex
       ON ex.SSISDBExecutionId = dbex.SSISDBExecutionId
     JOIN [ctl].[ETLBatchExecution] eb

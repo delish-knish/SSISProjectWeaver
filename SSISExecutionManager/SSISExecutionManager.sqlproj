@@ -148,7 +148,7 @@
     <Build Include="Tables\ctl\ETLBatchExecution.sql" />
     <Build Include="Tables\ctl\ETLBatchSSISDBExecutions.sql" />
     <Build Include="Tables\log\ETLBatchExecutionEvent.sql" />
-    <Build Include="Tables\log\ETLPackageExecution.sql" />
+    <Build Include="Tables\log\ETLPackageExecutionHistory.sql" />
     <Build Include="Tables\log\ETLPackageExecutionError.sql" />
     <Build Include="Tables\log\ETLPackageExecutionLongRunning.sql" />
     <Build Include="Tables\ref\ETLBatchExecutionEventType.sql" />
@@ -162,7 +162,7 @@
     <None Include="Views\rpt\ETLBatchStatsForLatestBatch.sql" />
     <Build Include="Views\rpt\ETLPackageDependencies.sql" />
     <Build Include="Views\rpt\ETLPackageExecutionErrors.sql" />
-    <Build Include="Views\rpt\ETLPackageExecutions.sql" />
+    <Build Include="Views\rpt\ETLPackageExecutionHistory.sql" />
     <Build Include="Views\rpt\ETLPackageLongRunningNotifications.sql" />
     <Build Include="Views\rpt\ETLPackagesDisabled.sql" />
     <Build Include="Views\rpt\ETLBatchesETLBatchGroups.sql" />
@@ -228,6 +228,8 @@
     <Build Include="Tables\cfg\ETLPackageGroup.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLBatch_SQLCommandCondition.sql" />
     <Build Include="Stored Procedures\ctl\StopAllPackagesForETLBatchExecution.sql" />
+    <Build Include="Views\rpt\ETLBatchSSISDBExecutions.sql" />
+    <Build Include="Views\rpt\ETLPackages.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="References\SSISDB.dacpac" />
