@@ -278,7 +278,7 @@
       <Value>$(SqlCmdVar__6)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="DeployExample">
-      <DefaultValue>1</DefaultValue>
+      <DefaultValue>0</DefaultValue>
       <Value>$(SqlCmdVar__7)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="SSISDB">
