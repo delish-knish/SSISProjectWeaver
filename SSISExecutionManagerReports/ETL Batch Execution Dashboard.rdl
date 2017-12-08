@@ -265,8 +265,8 @@ WHERE
 FROM   
 	[rpt].[ETLBatchExecutions] be
 WHERE
-  ETLBatchExecutionId = (SELECT
-                    ETLBatchExecutionId
+  ETLBatchId = (SELECT
+                    ETLBatchId
                   FROM   [rpt].ETLBatchExecutions
 	  WHERE ETLBatchExecutionId = @ETLBatchExecutionId  )
   AND [StartDateTime] &gt;= DATEADD(DAY,-60, GETDATE())

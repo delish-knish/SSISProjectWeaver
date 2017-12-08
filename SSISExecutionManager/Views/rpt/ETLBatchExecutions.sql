@@ -2,6 +2,7 @@
 AS
   SELECT TOP 10000
     eb.[ETLBatchExecutionId]
+	,eb.ETLBatchId
     ,eb.[CallingJobName]
     ,eps.[ETLBatchName]
     ,eb.DayOfWeekName
