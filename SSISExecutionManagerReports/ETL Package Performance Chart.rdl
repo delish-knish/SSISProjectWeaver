@@ -25,7 +25,7 @@
   PackageStartDateTime,
   DATEDIFF(MINUTE, PackageStartDateTime, PackageEndDateTime) AS Duration
 FROM
-  [rpt].[ETLPackageExecutions]
+  [rpt].[ETLPackageExecutionHistory]
 WHERE
   ETLPackageId = @ETLPackageId 
   AND DATEDIFF(DD,PackageStartDateTime, GETDATE()) &lt;=60
@@ -34,21 +34,21 @@ ORDER  BY
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
-        <Field Name="Id">
+        <Field Name="ETLPackageId">
           <DataField>ETLPackageId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="ProjectName">
+        <Field Name="SSISDBProjectName">
           <DataField>SSISDBProjectName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PackageName">
+          <DataField>SSISDBPackageName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="StartDate">
           <DataField>PackageStartDateTime</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="PackageName">
-          <DataField>SSISDBPackageName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Duration">
           <DataField>Duration</DataField>
@@ -63,7 +63,7 @@ ORDER  BY
 	[ETLPackageId]
 	,[SSISDBProjectName] + '.' + [SSISDBPackageName] AS Name
 FROM
-	[ctl].[ETLPackage]
+	[rpt].[ETLPackages]
 WHERE
 	ETLPackageId &gt; 0
 ORDER BY 
@@ -130,6 +130,7 @@ ORDER BY
                       <DataElementOutput>Output</DataElementOutput>
                     </ChartDataPoint>
                   </ChartDataPoints>
+                  <Type>Line</Type>
                   <Style />
                   <ChartEmptyPoints>
                     <Style />

@@ -15,20 +15,21 @@ AS
 			@ETLBatchExecutionConditionsNotMetStatusId			 INT = 12;
 
     --Set up batch variables
-    DECLARE @ETLBatchExecutionStatusId			INT = 0;
+    DECLARE @ETLBatchExecutionStatusId			INT = 0
+	,@IgnoreETLBatchSQLCommandConditionsInd BIT = 0
 
 	--Set up Batch behavior variables
     DECLARE @EndETLBatchExecutionInd BIT = 0,
 			@LoopCounter			 INT = 0;
 
-   WHILE @ETLBatchExecutionStatusId NOT IN (5,8,9) --While batch is not in the "Complete" state, hasn't timed out, and hasn't encountered an exception
+   WHILE @ETLBatchExecutionStatusId NOT IN (@ETLBatchExecutionCompleteStatusId,@ETLBatchExecutionTimeOutStatusId,@ETLBatchExecutionExceptionStatusId) --While batch is not in the "Complete" state, hasn't timed out, and hasn't encountered an exception
    BEGIN
    BEGIN TRY
       --Get values from Config table
       DECLARE @ETLBatchExecutionId					INT = NULL,
               @PreviousETLBatchExecutionStatusId	INT = NULL,
 			  @ErrorEmailRecipients					VARCHAR(MAX) = ( [dbo].[func_GetConfigurationValue] ('Email Recipients - Default') ),
-              @BatchStartedWithinMinutes			VARCHAR(MAX) = ISNULL((SELECT MinutesBackToContinueBatch FROM ctl.ETLBatch WHERE ETLBatchId = @ETLBatchId), 1440),
+              @BatchStartedWithinMinutes			VARCHAR(MAX) = ISNULL((SELECT MinutesBackToContinueBatch FROM [cfg].ETLBatch WHERE ETLBatchId = @ETLBatchId), 1440),
               @PollingDelayETLBatch					CHAR(8) = ( [dbo].[func_GetConfigurationValue] ('ETL Batch Polling Delay') ),
 			  @SendBatchCompleteEmailInd			BIT,
 			  @PollingDelaySQLCommandCondition		CHAR(8) = ( [dbo].[func_GetConfigurationValue] ('Default SQL Command Condition Evaluation Polling Delay') );
@@ -42,6 +43,7 @@ AS
         @ETLBatchExecutionId = ETLBatchExecutionId
         ,@PreviousETLBatchExecutionStatusId = ETLBatchStatusId
 		,@SendBatchCompleteEmailInd = SendBatchCompleteEmailInd
+		,@IgnoreETLBatchSQLCommandConditionsInd = IgnoreSQLCommandConditionsInd
       FROM
         [dbo].[func_GetRunningETLBatchExecution] (@BatchStartedWithinMinutes, @CallingJobName) eb;
 
@@ -72,19 +74,25 @@ AS
               EXEC ctl.[RestartETLPackagesForETLBatchExecution] @ETLBatchExecutionId,@ErrorEmailRecipients;
 
             --If the batch has just been marked as complete
-            IF @ETLBatchExecutionStatusId IN (@ETLBatchExecutionCompleteStatusId, @ETLBatchExecutionCanceledStatusId) --Was already completed, has just completed, or was manually canceled 
+            IF @ETLBatchExecutionStatusId IN (@ETLBatchExecutionCompleteStatusId, @ETLBatchExecutionCanceledStatusId) --Was already completed, has just completed, or was canceled 
               BEGIN
-                  --Archive the execution stats of the packages for the batch
+				--Archive the execution stats of the packages for the batch
                   EXEC [log].SaveETLPackageExecutions @ETLBatchExecutionId = @ETLBatchExecutionId;
 
-                  IF @ETLBatchExecutionStatusId = @ETLBatchExecutionCompleteStatusId
+				  --Successful completion
+				  IF @ETLBatchExecutionStatusId = @ETLBatchExecutionCompleteStatusId
 				  BEGIN
 					SET @EventDescription = 'Batch completed';
 
 					EXEC [log].[InsertETLBatchExecutionEvent] 5,@ETLBatchExecutionId,NULL,@EventDescription;
 				  END
-				  ELSE --Canceled
+
+				  --Canceled
+				  --TODO: This code block might never be reached.
+				  IF @ETLBatchExecutionStatusId = @ETLBatchExecutionCanceledStatusId 
 				  BEGIN
+					EXEC ctl.StopAllPackagesForETLBatchExecution @ETLBatchExecutionId;
+
 					SET @EventDescription = 'Batch canceled';
 
 					EXEC [log].[InsertETLBatchExecutionEvent] 6,@ETLBatchExecutionId,NULL,@EventDescription;
@@ -117,7 +125,9 @@ AS
 					AND EndDateTime IS NULL
 
 				--Seed the ETLBatchExecution table
-				EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId OUT,@SSISEnvironmentName = @SSISEnvironmentName,@CallingJobName = @CallingJobName,@ETLBatchId = @ETLBatchId,@StartDateTime = @CurrentDateTime,@EndDateTime = NULL,@ETLBatchStatusId = 1;
+				--TODO: Cleanup the retrieval of this attribute by encapsulating it in SaveETLBatchExecution
+				SET @IgnoreETLBatchSQLCommandConditionsInd = (SELECT IgnoreSQLCommandConditionsDefaultInd FROM cfg.ETLBatch WHERE ETLBatchId = @ETLBatchId );
+				EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId OUT,@SSISEnvironmentName = @SSISEnvironmentName,@CallingJobName = @CallingJobName,@ETLBatchId = @ETLBatchId,@IgnoreSQLCommandConditionsInd=@IgnoreETLBatchSQLCommandConditionsInd,@StartDateTime = @CurrentDateTime,@EndDateTime = NULL,@ETLBatchStatusId = 1;
 
 				SET @EventDescription = 'Batch created';
 
@@ -132,6 +142,16 @@ AS
 				BEGIN
 					SET @ETLBatchExecutionStatusId = ( dbo.func_GetETLBatchStatusId(@ETLBatchExecutionId) );
 
+					IF @ETLBatchExecutionStatusId = @ETLBatchExecutionCanceledStatusId
+					BEGIN
+						EXEC ctl.StopAllPackagesForETLBatchExecution @ETLBatchExecutionId;
+						
+						SET @EventDescription = 'Batch canceled';
+
+						EXEC [log].[InsertETLBatchExecutionEvent] 6,@ETLBatchExecutionId,NULL,@EventDescription;
+						BREAK;
+					END
+
 					IF [dbo].[func_IsETLBatchExecutionTimedOut] (@ETLBatchExecutionId) = 1 OR @ETLBatchExecutionStatusId = @ETLBatchExecutionCanceledStatusId --Time out the batch 
 						BEGIN
 							IF [dbo].[func_IsETLBatchExecutionTimedOut] (@ETLBatchExecutionId) = 1
@@ -144,17 +164,24 @@ AS
 						END
 					ELSE
 					BEGIN
-						EXEC   [ctl].[AreETLBatchSQLCommandConditionsMet] @ETLBatchId, @ETLBatchExecutionId, @ConditionsMetInd OUT;
-						IF @ConditionsMetInd = 1
-						BEGIN
-							EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId = @ETLBatchExecutionId, @ETLBatchStatusId = @ETLBatchExecutionCreatedStatusId;
-							BREAK; --Stop waiting
-						END
-						ELSE --conditions not met
-						BEGIN
-							EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId = @ETLBatchExecutionId, @ETLBatchStatusId = @ETLBatchExecutionConditionsNotMetStatusId;
+						IF @IgnoreETLBatchSQLCommandConditionsInd = 0
+							BEGIN
+								EXEC   [ctl].[AreETLBatchSQLCommandConditionsMet] @ETLBatchId, @ETLBatchExecutionId, @SSISEnvironmentName, @ConditionsMetInd OUT;
+								IF @ConditionsMetInd = 1
+								BEGIN
+									EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId = @ETLBatchExecutionId, @ETLBatchStatusId = @ETLBatchExecutionCreatedStatusId;
+									BREAK; --Stop waiting
+								END
+								ELSE --conditions not met
+								BEGIN
+									EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId = @ETLBatchExecutionId, @ETLBatchStatusId = @ETLBatchExecutionConditionsNotMetStatusId;
 					
-							WAITFOR DELAY @PollingDelaySQLCommandCondition;
+									WAITFOR DELAY @PollingDelaySQLCommandCondition;
+								END
+							END
+						ELSE --Ignore batch conditions and set @ConditionsMetInd = 1
+						BEGIN
+							SET @ConditionsMetInd = 1
 						END
 					END
 				END

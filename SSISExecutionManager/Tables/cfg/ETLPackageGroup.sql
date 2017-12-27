@@ -1,4 +1,4 @@
-﻿CREATE TABLE [ctl].[ETLPackageGroup]
+﻿CREATE TABLE [cfg].[ETLPackageGroup]
   (
      [ETLPackageGroupId]				INT IDENTITY (1,1) NOT NULL
      ,[ETLPackageGroup]				VARCHAR(50) NULL

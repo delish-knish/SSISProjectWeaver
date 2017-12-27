@@ -8,8 +8,8 @@ AS
     ,ep.[ETLPackageGroup]
 	,b.[EnabledInd]
   FROM
-    [ctl].[ETLBatch_ETLPackageGroup] b
-    JOIN ctl.[ETLBatch] eps
+    [cfg].[ETLBatch_ETLPackageGroup] b
+    JOIN [cfg].[ETLBatch] eps
       ON b.[ETLBatchId] = eps.[ETLBatchId]
-    JOIN ctl.[ETLPackageGroup] ep
+    JOIN [cfg].[ETLPackageGroup] ep
       ON b.[ETLPackageGroupId] = ep.[ETLPackageGroupId] 

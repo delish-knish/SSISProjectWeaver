@@ -1,4 +1,4 @@
-﻿CREATE TABLE [ctl].[SQLCommand]
+﻿CREATE TABLE [cfg].[SQLCommand]
   (
      [SQLCommandId]                              INT IDENTITY (1, 1) NOT NULL
      ,[SQLCommandName]                           VARCHAR (128) NOT NULL

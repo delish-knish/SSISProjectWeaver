@@ -7,12 +7,12 @@ AS
         (SELECT
            CAST(IIF(COUNT(DISTINCT p.ETLPackageId) - COUNT(DISTINCT folder_name + project_name + package_name) = 0, 1, 0) AS BIT) AS IsPackageGroupCompleteInd
          FROM
-           ctl.ETLBatch_ETLPackageGroup g
+           [cfg].ETLBatch_ETLPackageGroup g
            JOIN ctl.ETLBatchExecution bx
              ON g.ETLBatchId = bx.ETLBatchId
-           JOIN ctl.ETLPackageGroup_ETLPackage b
+           JOIN [cfg].ETLPackageGroup_ETLPackage b
              ON g.ETLPackageGroupId = b.ETLPackageGroupId
-           JOIN ctl.ETLPackage p
+           JOIN [cfg].ETLPackage p
              ON b.ETLPackageId = p.ETLPackageId
            JOIN func_GetETLPackagesForBatchExecution (@ETLBatchExecutionId) bex
              ON p.ETLPackageId = bex.ETLPackageId
@@ -28,9 +28,8 @@ AS
          WHERE
           g.EnabledInd = 1
           AND b.EnabledInd = 1
-          AND p.EnabledInd = 1
           AND p.EntryPointPackageInd = 1
-          AND ( b.IgnoreForBatchCompleteInd = 0
+          AND ( b.[IgnoreForBatchCompleteDefaultInd] = 0
                  OR x.[status] IN ( 7, 9 ) )
           AND bx.ETLBatchExecutionId = @ETLBatchExecutionId
           AND b.ETLPackageGroupId = @ETLPackageGroupId

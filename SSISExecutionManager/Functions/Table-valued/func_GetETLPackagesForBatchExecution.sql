@@ -6,29 +6,31 @@ AS
       WITH pkg
            AS (SELECT
                  eb.ETLBatchId
-                ,eb.ETLBatchStatusId
-                ,ep.ETLPackageId
-                ,ep.EntryPointETLPackageId
-                ,ebpspep.IgnoreForBatchCompleteInd
-                ,ISNULL(exe.ExecutionId, em.ExecutionId) AS ExecutionId --Executables aren't logged until complete so if none found, check the event_messages table.
+                 ,eb.ETLBatchStatusId
+                 ,ep.ETLPackageId
+                 ,ep.EntryPointETLPackageId
+                 ,epgep.ETLPackageGroupId
+                 ,epgep.ReadyForExecutionInd
+                 ,epgep.[IgnoreForBatchCompleteDefaultInd]
+                 ,ISNULL(exe.ExecutionId, em.ExecutionId) AS ExecutionId --Executables aren't logged until complete so if none found, check the event_messages table.
                FROM
-                 [ctl].[ETLBatchExecution] eb WITH (NOLOCK)
-                 JOIN ctl.[ETLBatch_ETLPackageGroup] epeps WITH (NOLOCK)
+                 [ctl].[ETLBatchExecution] eb
+                 JOIN [cfg].[ETLBatch_ETLPackageGroup] epeps
                    ON eb.[ETLBatchId] = epeps.[ETLBatchId]
-                 JOIN ctl.[ETLPackageGroup_ETLPackage] ebpspep WITH (NOLOCK)
-                   ON epeps.ETLPackageGroupId = ebpspep.ETLPackageGroupId
-                 JOIN [ctl].ETLPackage ep WITH (NOLOCK)
-                   ON ebpspep.ETLPackageId = ep.ETLPackageId
+                 JOIN [cfg].[ETLPackageGroup_ETLPackage] epgep
+                   ON epeps.ETLPackageGroupId = epgep.ETLPackageGroupId
+                 JOIN [cfg].ETLPackage ep
+                   ON epgep.ETLPackageId = ep.ETLPackageId
                  OUTER APPLY (SELECT TOP 1
                                 e.execution_id AS ExecutionId
                               FROM
-                                [$(SSISDB)].catalog.executables e WITH (NOLOCK)
+                                [$(SSISDB)].catalog.executables e
                                 INNER JOIN (SELECT
                                               [ETLBatchExecutionId]
-                                             ,ETLPackageId
-                                             ,MAX(SSISDBExecutionId) AS SSISDBExecutionId
+                                              ,ETLPackageId
+                                              ,MAX(SSISDBExecutionId) AS SSISDBExecutionId
                                             FROM
-                                              ctl.ETLBatchSSISDBExecutions WITH (NOLOCK)
+                                              ctl.ETLBatchSSISDBExecutions
                                             WHERE
                                              [ETLBatchExecutionId] = @ETLBatchExecutionId
                                             GROUP  BY
@@ -45,11 +47,11 @@ AS
                               FROM
                                 (SELECT
                                    [ETLBatchExecutionId]
-                                  ,a.ETLPackageId
-                                  ,MAX(SSISDBExecutionId) AS SSISDBExecutionId
+                                   ,a.ETLPackageId
+                                   ,MAX(SSISDBExecutionId) AS SSISDBExecutionId
                                  FROM
-                                   ctl.ETLBatchSSISDBExecutions a WITH (NOLOCK)
-                                   JOIN ctl.ETLPackage b
+                                   ctl.ETLBatchSSISDBExecutions a
+                                   JOIN [cfg].ETLPackage b
                                      ON a.ETLPackageId = b.ETLPackageId
                                  WHERE
                                   [ETLBatchExecutionId] = @ETLBatchExecutionId
@@ -57,47 +59,51 @@ AS
                                  GROUP  BY
                                   [ETLBatchExecutionId]
                                   ,a.ETLPackageId) ebse
-                                INNER JOIN [$(SSISDB)].internal.event_messages em WITH (NOLOCK)
+                                INNER JOIN [$(SSISDB)].internal.event_messages em
                                         ON ebse.SSISDBExecutionId = em.operation_id
                               ORDER  BY
                                ExecutionId DESC) em
                WHERE
                 eb.ETLBatchExecutionId = @ETLBatchExecutionId
-                AND ep.EnabledInd = 1
-                AND ebpspep.EnabledInd = 1
+                AND epgep.EnabledInd = 1
                 AND epeps.EnabledInd = 1
-                AND (ExecuteSundayInd = Iif(eb.DayOfWeekName = 'Sunday', 1, NULL)
-                      OR ExecuteMondayInd = Iif(eb.DayOfWeekName = 'Monday', 1, NULL)
-                      OR ExecuteTuesdayInd = Iif(eb.DayOfWeekName = 'Tuesday', 1, NULL)
-                      OR ExecuteWednesdayInd = Iif(eb.DayOfWeekName = 'Wednesday', 1, NULL)
-                      OR ExecuteThursdayInd = Iif(eb.DayOfWeekName = 'Thursday', 1, NULL)
-                      OR ExecuteFridayInd = Iif(eb.DayOfWeekName = 'Friday', 1, NULL)
-                      OR ExecuteSaturdayInd = Iif(eb.DayOfWeekName = 'Saturday', 1, NULL)))
+                AND ( ExecuteSundayInd = Iif(eb.DayOfWeekName = 'Sunday', 1, NULL)
+                       OR ExecuteMondayInd = Iif(eb.DayOfWeekName = 'Monday', 1, NULL)
+                       OR ExecuteTuesdayInd = Iif(eb.DayOfWeekName = 'Tuesday', 1, NULL)
+                       OR ExecuteWednesdayInd = Iif(eb.DayOfWeekName = 'Wednesday', 1, NULL)
+                       OR ExecuteThursdayInd = Iif(eb.DayOfWeekName = 'Thursday', 1, NULL)
+                       OR ExecuteFridayInd = Iif(eb.DayOfWeekName = 'Friday', 1, NULL)
+                       OR ExecuteSaturdayInd = Iif(eb.DayOfWeekName = 'Saturday', 1, NULL) )
+                AND ( DAY(eb.StartDateTime) = epgep.[ExecuteNthDayOfMonth]
+                       OR epgep.[ExecuteNthDayOfMonth] = 0 ))
       SELECT
          pkg.ETLBatchId                           AS ETLBatchId
-        ,pkg.ETLPackageId                         AS ETLPackageId
-        ,pes.StartDateTime                        AS StartDateTime
-        ,pes.EndDateTime                          AS EndDateTime
-        ,pes.ETLExecutionStatusId                 AS ETLExecutionStatusId
-        ,pes.SSISDBExecutionId                    AS SSISDBExecutionId
-        ,pes.MissingSSISDBExecutablesEntryInd     AS MissingSSISDBExecutablesEntryInd
-        ,pkg.IgnoreForBatchCompleteInd            AS IgnoreForBatchCompleteInd
-        ,CASE
+         ,pkg.ETLPackageId                        AS ETLPackageId
+         ,pkg.ETLPackageGroupId
+         ,pkg.ReadyForExecutionInd                AS ReadyForExecutionInd
+         ,pes.StartDateTime                       AS StartDateTime
+         ,pes.EndDateTime                         AS EndDateTime
+         ,pes.ETLExecutionStatusId                AS ETLExecutionStatusId
+         ,pes.SSISDBExecutionId                   AS SSISDBExecutionId
+         ,pes.MissingSSISDBExecutablesEntryInd    AS MissingSSISDBExecutablesEntryInd
+         ,pkg.[IgnoreForBatchCompleteDefaultInd]  AS IgnoreForBatchCompleteInd
+         ,CASE
             WHEN pes.ETLPackageExecutionStatusId = 0 THEN 0 --Succeeded make this first case so that other scenarios don't override it
             WHEN epd.DependenciesNotMetCount > 0
                   OR pepd.DependenciesNotMetCount > 0
                   OR pg.DependenciesNotMetCount > 0 THEN 6 --waiting on dependencies
             WHEN pesprnt.ETLPackageExecutionStatusId = 5
                  AND pes.ETLPackageExecutionStatusId IS NULL THEN 10 --Waiting to be called by Parent (the parent is running but the child is not)
-            WHEN (epd.DependenciesNotMetCount = 0
-                  AND pes.ETLPackageExecutionStatusId IS NULL)
-                  OR (pepd.DependenciesNotMetCount = 0
-                      AND pes.ETLPackageExecutionStatusId IS NULL) THEN 8 --ready to execute
+            WHEN ( epd.DependenciesNotMetCount = 0
+                   AND pes.ETLPackageExecutionStatusId IS NULL )
+                  OR ( pepd.DependenciesNotMetCount = 0
+                       AND pes.ETLPackageExecutionStatusId IS NULL ) THEN 8 --ready to execute
             WHEN pesprnt.ETLPackageExecutionStatusId = 1
                  AND pes.ETLPackageExecutionStatusId IS NULL THEN 11
             ELSE Isnull(pes.ETLPackageExecutionStatusId, 7)
           END                                     AS ETLPackageExecutionStatusId
-        ,Isnull(epd.DependenciesNotMetCount, 0) + Isnull(pepd.DependenciesNotMetCount, 0)
+         ,Isnull(epd.DependenciesNotMetCount, 0)
+          + Isnull(pepd.DependenciesNotMetCount, 0)
           + Isnull(pg.DependenciesNotMetCount, 0) AS DependenciesNotMetCount
        FROM
          pkg
@@ -107,9 +113,9 @@ AS
          OUTER APPLY dbo.func_GetETLPackageExecutionStatusesFromSSISDB(prnt.ExecutionId) pesprnt
          LEFT JOIN (SELECT
                       d.ETLPackageId
-                     ,SUM(Iif(Isnull(pesbep.ETLPackageExecutionStatusId, -1) NOT IN (0, 2), 1, 0)) AS DependenciesNotMetCount
+                      ,SUM(Iif(Isnull(pesbep.ETLPackageExecutionStatusId, -1) NOT IN ( 0, 2 ), 1, 0)) AS DependenciesNotMetCount
                     FROM
-                      [ctl].[ETLPackage_ETLPackageDependency] d WITH (NOLOCK)
+                      [cfg].[ETLPackage_ETLPackageDependency] d
                       JOIN pkg bep
                         ON d.DependedOnETLPackageId = bep.ETLPackageId
                       OUTER APPLY dbo.func_GetETLPackageExecutionStatusesFromSSISDB(bep.ExecutionId) pesbep
@@ -118,9 +124,9 @@ AS
                 ON pkg.ETLPackageId = epd.ETLPackageId
          LEFT JOIN (SELECT
                       d.ETLPackageId
-                     ,SUM(Iif(Isnull(pesbep.ETLPackageExecutionStatusId, -1) NOT IN (0, 2), 1, 0)) AS DependenciesNotMetCount
+                      ,SUM(Iif(Isnull(pesbep.ETLPackageExecutionStatusId, -1) NOT IN ( 0, 2 ), 1, 0)) AS DependenciesNotMetCount
                     FROM
-                      [ctl].[ETLPackage_ETLPackageDependency] d WITH (NOLOCK)
+                      [cfg].[ETLPackage_ETLPackageDependency] d
                       JOIN pkg bep
                         ON d.DependedOnETLPackageId = bep.ETLPackageId
                       OUTER APPLY dbo.func_GetETLPackageExecutionStatusesFromSSISDB(bep.ExecutionId) pesbep
@@ -129,21 +135,21 @@ AS
                 ON prnt.ETLPackageId = pepd.ETLPackageId
          LEFT JOIN (SELECT
                       ep.ETLPackageId
-                     ,bbg.ETLBatchId
-                     ,SUM(Iif(Isnull(pesbep.ETLPackageExecutionStatusId, -1) NOT IN (0, 2), 1, 0)) AS DependenciesNotMetCount
+                      ,bbg.ETLBatchId
+                      ,SUM(Iif(Isnull(pesbep.ETLPackageExecutionStatusId, -1) NOT IN ( 0, 2 ), 1, 0)) AS DependenciesNotMetCount
                     FROM
-                      ctl.ETLPackage ep
-                      JOIN [ctl].ETLPackageGroup_ETLPackage bg
+                      [cfg].ETLPackage ep
+                      JOIN [cfg].ETLPackageGroup_ETLPackage bg
                         ON ep.ETLPackageId = bg.ETLPackageId
-                      JOIN [ctl].ETLPackageGroup epg
+                      JOIN [cfg].ETLPackageGroup epg
                         ON bg.ETLPackageGroupId = epg.ETLPackageGroupId
-                      JOIN [ctl].ETLBatch_ETLPackageGroup bbg
+                      JOIN [cfg].ETLBatch_ETLPackageGroup bbg
                         ON epg.ETLPackageGroupId = bbg.ETLPackageGroupId
-                      JOIN [ctl].ETLPackageGroup_ETLPackageGroupDependency bgd
+                      JOIN [cfg].ETLPackageGroup_ETLPackageGroupDependency bgd
                         ON epg.ETLPackageGroupId = bgd.ETLPackageGroupId
-                      JOIN [ctl].ETLPackageGroup epgd
+                      JOIN [cfg].ETLPackageGroup epgd
                         ON bgd.DependedOnETLPackageGroupId = epgd.ETLPackageGroupId
-                      JOIN [ctl].ETLPackageGroup_ETLPackage pgepd
+                      JOIN [cfg].ETLPackageGroup_ETLPackage pgepd
                         ON epgd.ETLPackageGroupId = pgepd.ETLPackageGroupId
                       JOIN [pkg] bep
                         ON pgepd.ETLPackageId = bep.ETLPackageId
@@ -154,7 +160,7 @@ AS
                 ON pkg.ETLPackageId = pg.ETLPackageId
                    AND pkg.ETLBatchId = pg.ETLBatchId
        WHERE
-        (pes.ETLPackageId = pkg.ETLPackageId
-          OR pes.ETLPackageId IS NULL)
-        AND (pesprnt.ETLPackageId = prnt.ETLPackageId
-              OR pesprnt.ETLPackageId IS NULL)) 
+        ( pes.ETLPackageId = pkg.ETLPackageId
+           OR pes.ETLPackageId IS NULL )
+        AND ( pesprnt.ETLPackageId = prnt.ETLPackageId
+               OR pesprnt.ETLPackageId IS NULL )) 

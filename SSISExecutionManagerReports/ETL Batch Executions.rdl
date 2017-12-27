@@ -20,7 +20,9 @@
         </QueryParameters>
         <CommandText>IF @CancelETLBatchExecutionId IS NOT NULL
 BEGIN
-  EXEC [ctl].[EndETLBatchExecution] @CancelETLBatchExecutionId, 10
+  EXEC [ctl].[EndETLBatchExecution] @CancelETLBatchExecutionId, 10;
+  EXEC ctl.StopAllPackagesForETLBatchExecution @CancelETLBatchExecutionId;
+  EXEC [log].[InsertETLBatchExecutionEvent] 6,@CancelETLBatchExecutionId,NULL,'Batch canceled';
 END
 
 SELECT        ETLBatchExecutionId, CallingJobName, ETLBatchName, DayOfWeekName, StartDateTime, EndDateTime, ExecutionDurationInMinutes, ETLBatchStatus, TotalEntryPointPackageCount, 
@@ -2054,7 +2056,7 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
             <DataSetName>ETLBatchExecutions</DataSetName>
             <Top>0.355in</Top>
             <Height>0.46125in</Height>
-            <Width>12.62501in</Width>
+            <Width>12.625in</Width>
             <ZIndex>1</ZIndex>
             <Style />
           </Tablix>

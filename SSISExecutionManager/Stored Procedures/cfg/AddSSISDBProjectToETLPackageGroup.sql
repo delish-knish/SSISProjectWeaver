@@ -2,14 +2,14 @@
                                                          @SSISDBProjectName VARCHAR(128),
                                                          @ETLPackageGroupId   INT
 AS
-    INSERT INTO [ctl].[ETLPackageGroup_ETLPackage]
+    INSERT INTO [cfg].[ETLPackageGroup_ETLPackage]
                 (ETLPackageId
                  ,[ETLPackageGroupId])
     SELECT
       ep.ETLPackageId
       ,@ETLPackageGroupId
     FROM
-      ctl.ETLPackage ep
+      [cfg].ETLPackage ep
     WHERE
       SSISDBFolderName = @SSISDBFolderName
       AND SSISDBProjectName = @SSISDBProjectName

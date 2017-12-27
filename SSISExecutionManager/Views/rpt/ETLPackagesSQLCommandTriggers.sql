@@ -1,21 +1,21 @@
-﻿CREATE VIEW [rpt].[ETLBatchesETLPackagesSQLCommandConditions]
+﻿CREATE VIEW [rpt].[ETLPackageGroupsETLPackagesSQLCommandConditions]
 AS
   SELECT
-    b.[ETLBatch_ETLPackage_SQLCommandConditionId]
-   ,b.ETLBatchId
-   ,b.ETLPackageId
-   ,ep.SSISDBPackageName
-   ,b.SQLCommandId
-   ,sc.SQLCommandName
-   ,sc.SQLCommand
-   ,sc.SQLCommandDescription
-   ,sc.RequiresETLBatchIdParameterInd
-   ,b.EnabledInd
+    b.[ETLPackageGroup_ETLPackage_SQLCommandConditionId]
+    ,epgep.ETLPackageGroupId
+    ,epgep.ETLPackageId
+    ,ep.SSISDBPackageName
+    ,b.SQLCommandId
+    ,sc.SQLCommandName
+    ,sc.SQLCommand
+    ,sc.SQLCommandDescription
+    ,sc.RequiresETLBatchIdParameterInd
+    ,b.EnabledInd
   FROM
-    [ctl].[ETLBatch_ETLPackage_SQLCommandCondition] b
-    JOIN ctl.SQLCommand sc
+    [cfg].[ETLPackageGroup_ETLPackage_SQLCommandCondition] b
+    JOIN cfg.ETLPackageGroup_ETLPackage epgep
+      ON b.ETLPackageGroup_ETLPackageId = epgep.ETLPackageGroup_ETLPackageId
+    JOIN [cfg].SQLCommand sc
       ON b.SQLCommandId = sc.SQLCommandId
-    JOIN ctl.ETLPackage ep
-      ON b.[ETLPackageId] = ep.[ETLPackageId]
-    JOIN ctl.ETLBatch eb
-      ON b.ETLBatchId = eb.ETLBatchId 
+    JOIN [cfg].ETLPackage ep
+      ON epgep.[ETLPackageId] = ep.[ETLPackageId] 

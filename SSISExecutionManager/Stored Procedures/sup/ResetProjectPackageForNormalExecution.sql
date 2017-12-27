@@ -4,12 +4,15 @@
 AS
     /*The purpose of this stored procedure is to reset indicators on packages to a "normal execution" state.*/
 
-    UPDATE ctl.ETLPackage
-    SET    BypassEntryPointInd = 0
-           ,IgnoreDependenciesInd = 0
+    UPDATE epgep
+    SET    [BypassEntryPointDefaultInd] = 0
+           ,[IgnoreDependenciesDefaultInd] = 0
            ,ReadyForExecutionInd = NULL
            ,LastUpdatedDate = GETDATE()
            ,LastUpdatedUser = SUSER_SNAME()
+    FROM   [cfg].ETLPackageGroup_ETLPackage epgep
+           JOIN [cfg].ETLPackage ep
+             ON epgep.ETLPackageId = ep.ETLPackageId
     WHERE
       @SSISDBFolderName = SSISDBFolderName
       AND ( @SSISDBProjectName = SSISDBProjectName

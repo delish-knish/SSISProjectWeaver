@@ -212,7 +212,9 @@ VALUES
 	(15,'Executing SQL Command'),
 	(16,'SQL Command(s) Executed'),
 	(18,'SQL Command-based Condition Evaluated'),
-	(19,'SQL Command Execution Error')
+	(19,'SQL Command Execution Error'),
+	(20, 'User-initiated Package Execution'),
+	(21, 'Package stopped')
 
 MERGE ref.[ETLBatchExecutionEventType] AS Target
 USING Sync_ETLBatchEventType AS Source ON (Target.[ETLBatchExecutionEventTypeId] = Source.[ETLBatchEventTypeId])
@@ -228,8 +230,8 @@ DROP TABLE Sync_ETLBatchEventType;
 
 -------------------------------------------------------------------------------------
 
-SET IDENTITY_INSERT ctl.ETLPackage ON;
-MERGE ctl.ETLPackage AS Target
+SET IDENTITY_INSERT [cfg].ETLPackage ON;
+MERGE [cfg].ETLPackage AS Target
 USING (SELECT
          0                                AS ETLPackageId
          ,'N/A'                           AS SSISDBFolderName
@@ -237,22 +239,7 @@ USING (SELECT
          ,'Dummy for Unhandled Exceptions'AS SSISDBPackageName
          ,1                               AS EntryPointPackageInd
          ,NULL                            AS EntryPointETLPackageId
-         ,1                               AS EnabledInd
-         ,NULL                            AS ReadyForExecutionInd
-         ,0                               AS BypassEntryPointInd
-         ,0                               AS IgnoreDependenciesInd
-         ,0                               AS InCriticalPathPostTransformProcessesInd
-         ,0                               AS InCriticalPathPostLoadProcessesInd
-         ,0                               AS ExecutePostTransformInd
-         ,0                               AS ExecuteSundayInd
-         ,0                               AS ExecuteMondayInd
-         ,0                               AS ExecuteTuesdayInd
-         ,0                               AS ExecuteWednesdayInd
-         ,0                               AS ExecuteThursdayInd
-         ,0                               AS ExecuteFridayInd
-         ,0                               AS ExecuteSaturdayInd
          ,0                               AS Use32BitDtExecInd
-         ,2                               AS SupportSeverityLevelId
          ,''                              AS Comments) AS Source
 ON ( Target.ETLPackageId = Source.ETLPackageId )
 WHEN MATCHED THEN
@@ -260,59 +247,24 @@ WHEN MATCHED THEN
              ,Target.SSISDBProjectName = Source.SSISDBProjectName
              ,Target.SSISDBPackageName = Source.SSISDBPackageName
              ,Target.EntryPointETLPackageId = Source.EntryPointETLPackageId
-             ,Target.EnabledInd = Source.EnabledInd
-             ,Target.ReadyForExecutionInd = Source.ReadyForExecutionInd
-             ,Target.BypassEntryPointInd = Source.BypassEntryPointInd
-             ,Target.IgnoreDependenciesInd = Source.IgnoreDependenciesInd
-             ,Target.ExecuteSundayInd = Source.ExecuteSundayInd
-             ,Target.ExecuteMondayInd = Source.ExecuteMondayInd
-             ,Target.ExecuteTuesdayInd = Source.ExecuteTuesdayInd
-             ,Target.ExecuteWednesdayInd = Source.ExecuteWednesdayInd
-             ,Target.ExecuteThursdayInd = Source.ExecuteThursdayInd
-             ,Target.ExecuteFridayInd = Source.ExecuteFridayInd
-             ,Target.ExecuteSaturdayInd = Source.ExecuteSaturdayInd
              ,Target.Use32BitDtExecInd = Source.Use32BitDtExecInd
-             ,Target.SupportSeverityLevelId = Source.SupportSeverityLevelId
+			 ,Target.Comments = Source.Comments
 WHEN NOT MATCHED BY TARGET THEN
   INSERT (ETLPackageId
           ,SSISDBFolderName
           ,SSISDBProjectName
           ,SSISDBPackageName
           ,EntryPointETLPackageId
-          ,EnabledInd
-          ,ReadyForExecutionInd
-          ,BypassEntryPointInd
-          ,IgnoreDependenciesInd
-          ,ExecuteSundayInd
-          ,ExecuteMondayInd
-          ,ExecuteTuesdayInd
-          ,ExecuteWednesdayInd
-          ,ExecuteThursdayInd
-          ,ExecuteFridayInd
-          ,ExecuteSaturdayInd
           ,Use32BitDtExecInd
-          ,SupportSeverityLevelId
           ,Comments)
   VALUES (ETLPackageId
           ,SSISDBFolderName
           ,SSISDBProjectName
           ,SSISDBPackageName
           ,EntryPointETLPackageId
-          ,EnabledInd
-          ,ReadyForExecutionInd
-          ,BypassEntryPointInd
-          ,IgnoreDependenciesInd
-          ,ExecuteSundayInd
-          ,ExecuteMondayInd
-          ,ExecuteTuesdayInd
-          ,ExecuteWednesdayInd
-          ,ExecuteThursdayInd
-          ,ExecuteFridayInd
-          ,ExecuteSaturdayInd
           ,Use32BitDtExecInd
-          ,SupportSeverityLevelId
           ,Comments); 
-SET IDENTITY_INSERT ctl.ETLPackage OFF;
+SET IDENTITY_INSERT [cfg].ETLPackage OFF;
 
 -------------------------------------------------------------------------------------
 

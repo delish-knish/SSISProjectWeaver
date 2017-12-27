@@ -1,9 +1,10 @@
 ﻿CREATE PROCEDURE [ops].[SendRowLevelErrorsEmail]
 													@EmailSubject       NVARCHAR(MAX),
                                                     @TimeIntervalInHours TINYINT = 24, 
-													@ETLBatchExecutionId INT = NULL
+													@ETLBatchExecutionId INT = NULL,
+													@EmailRecipientsOverride VARCHAR(MAX) = NULL
 AS
-	DECLARE @EmailRecipients VARCHAR(MAX) = ( [dbo].[func_GetConfigurationValue] ('Email Recipients - Monitors') );
+	DECLARE @EmailRecipients VARCHAR(MAX) = ( ISNULL(@EmailRecipientsOverride,[dbo].[func_GetConfigurationValue] ('Email Recipients - Monitors')) );
 
 
     DECLARE @tableHTML NVARCHAR(MAX)

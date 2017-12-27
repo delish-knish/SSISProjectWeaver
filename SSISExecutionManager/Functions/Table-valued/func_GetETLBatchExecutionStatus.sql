@@ -9,7 +9,7 @@ AS
         ,TotalEntryPointPackageCount = SUM(CAST(ep.EntryPointPackageInd AS TINYINT))
         ,TotalRemainingEntryPointPackageCount = SUM(CAST(ep.EntryPointPackageInd AS TINYINT)) - SUM(IIF(epb.ETLPackageExecutionStatusId IN (0, 2)
                                                                                                          AND ep.EntryPointPackageInd = 1, 1, 0))
-        ,PackagesReadyToExecuteCount = SUM(CAST(ep.ReadyForExecutionInd AS TINYINT))
+        ,PackagesReadyToExecuteCount = SUM(CAST(epb.ReadyForExecutionInd AS TINYINT))
         ,RunningPackageCount = SUM(r.RunningPackageCount)
         ,ETLBatchExecutionStatusId = CASE
                                         WHEN MIN(eb.ETLBatchStatusId) = 10 THEN 10 -- The batch has been manually canceled and we don't want to overwrite that
@@ -28,7 +28,7 @@ AS
          [dbo].[func_GetETLPackagesForBatchExecution] (@ETLBatchExecutionId) epb
          JOIN ctl.[ETLBatchExecution] eb WITH (NOLOCK)
            ON @ETLBatchExecutionId = eb.[ETLBatchExecutionId]
-         JOIN [ctl].ETLPackage ep WITH (NOLOCK)
+         JOIN [cfg].ETLPackage ep WITH (NOLOCK)
            ON epb.ETLPackageId = ep.ETLPackageId
          LEFT JOIN (SELECT
                       execution_id

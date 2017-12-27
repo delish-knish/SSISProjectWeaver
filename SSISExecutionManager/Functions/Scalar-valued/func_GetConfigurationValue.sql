@@ -7,7 +7,8 @@ AS
          FROM
            cfg.Configuration
          WHERE
-          ConfigurationName = @ConfigurationName);
+          ConfigurationName = @ConfigurationName
+		  OR ConfigurationCd = @ConfigurationName);
 
       RETURN @ReturnValue;
   END 

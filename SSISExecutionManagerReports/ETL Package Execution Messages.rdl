@@ -18,7 +18,13 @@
             <Value>=Parameters!SSISDBExecutionId.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT * FROM SSISDB.catalog.event_messages WHERE operation_id = @SSISDBExecutionId ORDER BY message_time DESC</CommandText>
+        <CommandText>SELECT * 
+FROM 
+  SSISDB.catalog.event_messages 
+WHERE 
+  operation_id = @SSISDBExecutionId 
+ORDER BY 
+  message_time DESC</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>

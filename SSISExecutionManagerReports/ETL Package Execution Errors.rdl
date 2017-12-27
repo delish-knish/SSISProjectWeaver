@@ -18,12 +18,16 @@
             <Value>=Parameters!SSISDBExecutionId.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT * FROM rpt.ETLPackageExecutionErrors WHERE SSISDBExecutionId = @SSISDBExecutionId </CommandText>
+        <CommandText>SELECT * 
+FROM 
+  rpt.ETLPackageExecutionErrors 
+WHERE 
+  SSISDBExecutionId = @SSISDBExecutionId </CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
-        <Field Name="ETLBatchId">
-          <DataField>ETLBatchId</DataField>
+        <Field Name="ETLBatchExecutionId">
+          <DataField>ETLBatchExecutionId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="CallingJobName">
@@ -713,7 +717,6 @@
                                               <PaddingBottom>2pt</PaddingBottom>
                                             </Style>
                                           </Textbox>
-                                          <rd:Selected>true</rd:Selected>
                                         </CellContents>
                                       </TablixCell>
                                     </TablixCells>
@@ -820,6 +823,9 @@
             <Width>8.11458in</Width>
             <ZIndex>2</ZIndex>
             <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
               <FontFamily />
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>

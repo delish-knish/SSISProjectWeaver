@@ -1,19 +1,21 @@
-﻿CREATE PROCEDURE [ops].[SendAndLogLongRunningETLPackageNotification] 
+﻿CREATE PROCEDURE [ops].[SendAndLogLongRunningETLPackageNotification] @EmailRecipientsOverride               VARCHAR(MAX) = NULL,
+                                                                     @DaysToIncludeInAverageDuration        SMALLINT = 60,
+                                                                     @MinPackageExecutionsRequired          SMALLINT = 5,
+                                                                     @MinPackageExecutionDurationToConsider SMALLINT = 20,
+                                                                     @PctGreaterThanAverageToInclude        TINYINT = 25
 AS
-
-	--Get values from Config table
-    DECLARE @EmailRecipients           VARCHAR(MAX) = ( [dbo].[func_GetConfigurationValue] ('Email Recipients - Monitors') );
+    --Get values from Config table
+    DECLARE @EmailRecipients VARCHAR(MAX) = ( ISNULL(@EmailRecipientsOverride, [dbo].[func_GetConfigurationValue] ('Email Recipients - Monitors')) );
     --------------------------------------
     --Declare variables
     --------------------------------------
-    DECLARE @SSISDBExecutionId    INT,
-            @SSISDBPackageName    NVARCHAR(4000),
-            @StartTime            DATETIME,
-            @AverageExecutionTime INT,
-            @EMailBody            VARCHAR(4000),
-            @CRLF                 CHAR(2) = CHAR(13) + CHAR(10),
-            @ETLPackageRunTime    INT,
-			@MinimumPackageRunTimeToIncl SMALLINT = 45
+    DECLARE @SSISDBExecutionId     INT
+            ,@SSISDBPackageName    NVARCHAR(4000)
+            ,@StartTime            DATETIME
+            ,@AverageExecutionTime INT
+            ,@EMailBody            VARCHAR(4000)
+            ,@CRLF                 CHAR(2) = CHAR(13) + CHAR(10)
+            ,@ETLPackageRunTime    INT
 
   BEGIN
       ---------------------------------------------------------------------------------
@@ -21,75 +23,90 @@ AS
       ---------------------------------------------------------------------------------
       DECLARE MY_CURSOR CURSOR LOCAL STATIC READ_ONLY FORWARD_ONLY FOR
         SELECT
-          execution_id
-          ,package_name
-          ,start_time
-          ,Package_Run_Time
-          ,Average_Execution_Time_With_Lift / 1.5 Average_Execution_Time
+          e.execution_id
+          ,p.SSISDBPackageName
+          ,e.start_time
+          ,DATEDIFF(minute, e.start_time, isnull(e.end_time, SYSDATETIMEOFFSET())) ExecutionDurationInMinutes
+          ,avgx.AvgExecutionDurationInMinutes
+        --,fx.ETLPackageGroupId
+        --,fx.ETLPackageId
+        --,DATEDIFF(MINUTE, e.start_time, e.end_time) AS ExecutionDurationInMinutes
+        --,avgx.AvgExecutionDurationWithBufferInMinutes
         FROM
-          (SELECT
-             execution_id
-             ,package_name
-             ,status
-             ,start_time
-             ,end_time
-             ,DATEDIFF(minute, e.start_time, isnull(e.end_time, SYSDATETIMEOFFSET())) Package_Run_Time
-             ,(SELECT
-                 ( AVG(iif(a.Max_Execution_time_ch2 < 5, NULL, a.Max_Execution_time_ch2)) * 1.25 ) + 1
-               FROM
-                 (SELECT
-                    CAST(start_time AS DATE)                             AS Max_date_ch
-                    ,MAX(DATEDIFF(minute, sub.start_time, sub.end_time)) AS Max_Execution_time_ch2
-                  FROM
-                    [$(SSISDB)].[catalog].[executions] sub
-                  WHERE
-                   sub.package_name = e.package_name
-                   AND sub.status = 7
-                   AND DATEDIFF(minute, CONVERT(TIME, CONVERT(DATETIME2, sub.start_time, 1), 108), (SELECT
-                                                                                                      CONVERT(TIME, CONVERT(DATETIME2, start_time, 1), 108)
-                                                                                                    FROM
-                                                                                                      [$(SSISDB)].[catalog].[executions]
-                                                                                                    WHERE
-                                                                                                     execution_id = e.execution_id)) BETWEEN -180 AND 180
-                  GROUP  BY
-                   CAST(start_time AS DATE))a)                                        Average_Execution_Time_With_Lift
-           FROM
-             [$(SSISDB)].[catalog].[executions] e WITH (NOLOCK)
-           WHERE
-            status NOT IN ( 1, 3, 4, 6,
-                            7, 9 )
-            AND execution_id NOT IN (SELECT
-                                       epelr.SSISDBExecutionId
-                                     FROM
-                                       [log].ETLPackageExecutionLongRunning epelr)) a
+          ctl.ETLBatchSSISDBExecutions fx
+          JOIN [$(SSISDB)].[catalog].[executions] e
+            ON fx.SSISDBExecutionId = e.execution_id
+          JOIN cfg.ETLPackage p
+            ON fx.ETLPackageId = p.ETLPackageId
+          LEFT JOIN [log].ETLPackageExecutionLongRunning epelr
+                 ON e.execution_id = epelr.SSISDBExecutionId
+          JOIN (SELECT
+                  [ETLPackageGroupId]
+                  ,[ETLPackageId]
+                  ,MIN(StartDateTime)                                                                                                                                      AS MinStartDateTime
+                  ,MAX(StartDateTime)                                                                                                                                      AS MaxStartDateTime
+                  ,COUNT(*)                                                                                                                                                AS PackageExecutionCount
+                  ,AVG([ExecutionDurationInMinutes])                                                                                                                       AS AvgExecutionDurationInMinutes
+                  ,CAST(AVG(CAST([ExecutionDurationInMinutes] AS DECIMAL)) * ( CAST(( 100 + @PctGreaterThanAverageToInclude ) AS DECIMAL) / CAST(100 AS DECIMAL) ) AS INT) AS AvgExecutionDurationWithBufferInMinutes
+                FROM
+                  [log].[ETLPackageExecutionHistory]
+                WHERE
+                 [ETLPackageExecutionStatusId] = 0
+                 AND DATEDIFF(DAY, StartDateTime, GETDATE()) <= @DaysToIncludeInAverageDuration
+                GROUP  BY
+                 [ETLPackageGroupId]
+                 ,[ETLPackageId]
+                HAVING
+                 COUNT(*) >= @MinPackageExecutionsRequired) avgx
+            ON ( fx.[ETLPackageId] = avgx.[ETLPackageId]
+                 AND ( fx.[ETLPackageGroupId] = avgx.[ETLPackageGroupId]
+                        OR avgx.[ETLPackageGroupId] IS NULL ) )
         WHERE
-          ( package_run_time > Average_Execution_Time_With_Lift )
-          AND ( package_run_time > @MinimumPackageRunTimeToIncl )
+          e.[status] IN ( 2, 5, 8 ) --Running, Pending, Stopping
+          AND epelr.SSISDBExecutionId IS NULL
+          AND DATEDIFF(minute, e.start_time, isnull(e.end_time, SYSDATETIMEOFFSET())) >= @MinPackageExecutionDurationToConsider
+          AND DATEDIFF(MINUTE, e.start_time, e.end_time) > avgx.AvgExecutionDurationWithBufferInMinutes
 
       OPEN MY_CURSOR
 
-      FETCH NEXT FROM MY_CURSOR INTO @SSISDBExecutionId, @SSISDBPackageName, @StartTime, @ETLPackageRunTime, @AverageExecutionTime
+      FETCH NEXT FROM MY_CURSOR INTO @SSISDBExecutionId
+                                     ,@SSISDBPackageName
+                                     ,@StartTime
+                                     ,@ETLPackageRunTime
+                                     ,@AverageExecutionTime
 
       WHILE @@FETCH_STATUS = 0
         BEGIN
             SELECT
-              @EMailBody = @@SERVERNAME + @CRLF +
-					N'Severity Level=2' + @CRLF +
-					@SSISDBPackageName + ' has been running for ' + CONVERT(VARCHAR(4000), @ETLPackageRunTime) + ' minutes.  The average execution time is ' + CONVERT(VARCHAR(4000), @AverageExecutionTime) + ' minutes.  The execution event started at ' + CONVERT(VARCHAR(30), @StartTime) + '.'
+              @EMailBody = @@SERVERNAME + @CRLF + N'Severity Level=2'
+                           + @CRLF + @SSISDBPackageName
+                           + ' has been running for '
+                           + CONVERT(VARCHAR(4000), @ETLPackageRunTime)
+                           + ' minutes.  The average execution time is '
+                           + CONVERT(VARCHAR(4000), @AverageExecutionTime)
+                           + ' minutes.  The execution event started at '
+                           + CONVERT(VARCHAR(30), @StartTime) + '.'
 
-            EXEC msdb.dbo.sp_send_dbmail @recipients = @EmailRecipients,@subject = 'Slow Running SSIS Package',@body = @EMailBody
+            EXEC msdb.dbo.sp_send_dbmail
+              @recipients = @EmailRecipients,
+              @subject = 'Slow Running SSIS Package',
+              @body = @EMailBody
 
             INSERT INTO [log].ETLPackageExecutionLongRunning
                         (SSISDBExecutionId
                          ,ExecutionStartTime
-						 ,AverageExecutionTimeMinutes
-						 ,CurrentExectionTimeMinutes)
+                         ,AverageExecutionTimeMinutes
+                         ,CurrentExectionTimeMinutes)
             VALUES      (@SSISDBExecutionId
                          ,CONVERT(DATETIME, @StartTime, 121)
-						 ,@AverageExecutionTime
-						 ,@ETLPackageRunTime)
+                         ,@AverageExecutionTime
+                         ,@ETLPackageRunTime)
 
-            FETCH NEXT FROM MY_CURSOR INTO @SSISDBExecutionId, @SSISDBPackageName, @StartTime, @ETLPackageRunTime, @AverageExecutionTime
+            FETCH NEXT FROM MY_CURSOR INTO @SSISDBExecutionId
+                                           ,@SSISDBPackageName
+                                           ,@StartTime
+                                           ,@ETLPackageRunTime
+                                           ,@AverageExecutionTime
         END
 
       CLOSE MY_CURSOR

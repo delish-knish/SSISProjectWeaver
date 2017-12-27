@@ -18,7 +18,11 @@
             <Value>=Parameters!ETLBatchExecutionId.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT * FROM rpt.ETLBatchExecutionEvents WHERE [ETLBatchExecutionId] = @ETLBatchExecutionId</CommandText>
+        <CommandText>SELECT * 
+FROM 
+  rpt.ETLBatchExecutionEvents 
+WHERE 
+  [ETLBatchExecutionId] = @ETLBatchExecutionId</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>

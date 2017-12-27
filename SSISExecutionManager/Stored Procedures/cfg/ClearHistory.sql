@@ -2,7 +2,7 @@
 AS
     TRUNCATE TABLE [log].[ETLBatchExecutionEvent];
 
-    TRUNCATE TABLE [log].[ETLPackageExecution];
+    TRUNCATE TABLE [log].[ETLPackageExecutionHistory];
 
     TRUNCATE TABLE [log].[ETLPackageExecutionError];
 

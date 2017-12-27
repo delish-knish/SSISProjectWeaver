@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [ctl].[RestartETLPackagesForETLBatchExecution] @ETLBatchId           INT,
+﻿CREATE PROCEDURE [ctl].[RestartETLPackagesForETLBatchExecution] @ETLBatchExecutionId           INT,
                                                        @ErrorEmailRecipients VARCHAR(MAX)
 AS
     /*This stored procedure will set the ReadyForExecutionInd flag on any package in the given batch that has ended unexpectedly	*/
@@ -7,7 +7,8 @@ AS
             @SSISDBProjectName   NVARCHAR(128),
             @SSISDBPackageName   NVARCHAR(260),
             @SSISDBExecutionId   BIGINT,
-            @SSISEnvironmentName NVARCHAR(MAX)
+            @SSISEnvironmentName NVARCHAR(MAX),
+			@ETLPackageGroupId   INT
     DECLARE UnexpectedErrorCursor CURSOR FAST_FORWARD FOR
       SELECT
         ep.ETLPackageId
@@ -15,34 +16,35 @@ AS
         ,SSISDBProjectName
         ,SSISDBPackageName
         ,SSISDBExecutionId
+		,ETLPackageGroupId
       FROM
         log.ETLPackageExecutionError e
-        JOIN ctl.ETLPackage ep
+        JOIN [cfg].ETLPackage ep
           ON e.ETLPackageId = ep.ETLPackageId
       WHERE
         e.ETLPackageExecutionErrorTypeId = 2 --unexpected termination
         AND e.ETLPackageRestartDateTime IS NULL
-		AND e.[ETLBatchExecutionId] = @ETLBatchId
+		AND e.[ETLBatchExecutionId] = @ETLBatchExecutionId
 
     OPEN UnexpectedErrorCursor
 
-    FETCH NEXT FROM UnexpectedErrorCursor INTO @ETLPackageId, @SSISDBFolderName, @SSISDBProjectName, @SSISDBPackageName, @SSISDBExecutionId;
+    FETCH NEXT FROM UnexpectedErrorCursor INTO @ETLPackageId, @SSISDBFolderName, @SSISDBProjectName, @SSISDBPackageName, @SSISDBExecutionId, @ETLPackageGroupId;
 
     WHILE @@FETCH_STATUS = 0
       BEGIN
             BEGIN
-                EXEC sup.RestartPackageForETLBatch @SSISDBFolderName,@SSISDBProjectName,@SSISDBPackageName,0,0
+                EXEC sup.ExecutePackageForETLBatch @ETLBatchExecutionId, @SSISDBFolderName,@SSISDBProjectName,@SSISDBPackageName,@ETLPackageGroupId,@SSISDBExecutionId
 
                 DECLARE @EventDescription VARCHAR(MAX) = 'Restarting package after unexpected termination';
 
-                EXEC [log].[InsertETLBatchExecutionEvent] 13,@ETLBatchId,@ETLPackageId,@EventDescription;
+                EXEC [log].[InsertETLBatchExecutionEvent] 13,@ETLBatchExecutionId,@ETLPackageId,@EventDescription;
 
                 --Set the restart/reflag time 
                 UPDATE [log].ETLPackageExecutionError
                 SET    [ETLPackageRestartDateTime] = GETDATE()
                 WHERE
                   ETLPackageExecutionErrorTypeId = 2 --unexpected termination
-                  AND [ETLBatchExecutionId] = @ETLBatchId
+                  AND [ETLBatchExecutionId] = @ETLBatchExecutionId
                   AND ETLPackageId = @ETLPackageId
                   AND [SSISDBExecutionId] = @SSISDBExecutionId;
 
@@ -57,7 +59,7 @@ AS
                 EXEC msdb.dbo.sp_send_dbmail @recipients = @ErrorEmailRecipients,@subject = 'Packaged Flagged for Restart',@body = @MailBody,@importance = 'High'
             END
 
-          FETCH NEXT FROM UnexpectedErrorCursor INTO @ETLPackageId, @SSISDBFolderName, @SSISDBProjectName, @SSISDBPackageName, @SSISDBExecutionId;
+          FETCH NEXT FROM UnexpectedErrorCursor INTO @ETLPackageId, @SSISDBFolderName, @SSISDBProjectName, @SSISDBPackageName, @SSISDBExecutionId, @ETLPackageGroupId;
       END
 
     CLOSE UnexpectedErrorCursor

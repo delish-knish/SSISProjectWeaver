@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [ctl].[SendErrorNotificationsForETLBatchExecution](@ETLBatchId           INT,
+﻿CREATE PROCEDURE [ctl].[SendErrorNotificationsForETLBatchExecution](@ETLBatchExecutionId  INT,
                                                                     @ErrorEmailRecipients VARCHAR(MAX))
 AS
     DECLARE @SSISDBEventMessageId    BIGINT
@@ -9,7 +9,6 @@ AS
             ,@SSISDBProjectName      NVARCHAR(MAX)
             ,@SSISDBPackageName      NVARCHAR(MAX)
             ,@EntryPointPackageName  NVARCHAR(MAX)
-            ,@SupportSeverityLevelId NVARCHAR(MAX)
             ,@SupportSeverityLevelCd NVARCHAR(MAX)
             ,@ErrorDateTime          DATETIME2(0)
             ,@ErrorMessage           NVARCHAR(MAX)
@@ -17,28 +16,27 @@ AS
     DECLARE PackageCursor CURSOR FAST_FORWARD FOR
       SELECT
         err.SSISDBEventMessageId
-       ,eb.[CallingJobName]
-       ,eb.SSISEnvironmentName
-       ,err.ETLPackageId
-       ,ep.SSISDBFolderName
-       ,ep.SSISDBProjectName
-       ,ep.SSISDBPackageName
-       ,ISNULL(epp.SSISDBPackageName, ep.SSISDBPackageName)           AS EntryPointPackageName
-       ,ep.SupportSeverityLevelId
-       ,rssl.SupportSeverityLevelCd
-       ,CAST(err.ErrorDateTime AS DATETIME2(0))                       AS ErrorDateTime
-       ,err.ErrorMessage
-       ,ISNULL(epp.RemainingRetryAttempts, ep.RemainingRetryAttempts) AS RemainingRetryAttempts
+        ,eb.[CallingJobName]
+        ,eb.SSISEnvironmentName
+        ,err.ETLPackageId
+        ,ep.SSISDBFolderName
+        ,ep.SSISDBProjectName
+        ,ep.SSISDBPackageName
+        ,ISNULL(epp.SSISDBPackageName, ep.SSISDBPackageName)                      AS EntryPointPackageName
+        ,ISNULL(rssl.SupportSeverityLevelCd, 1)                                   AS SupportSeverityLevelCd
+        ,CAST(err.ErrorDateTime AS DATETIME2(0))                                  AS ErrorDateTime
+        ,err.ErrorMessage
+        ,COALESCE(pepgep.[RemainingRetryAttemptsDefault], epgep.[RemainingRetryAttemptsDefault], 0) AS RemainingRetryAttempts
       FROM
         [log].[ETLPackageExecutionError] err
         --Limit errors to the first error per package for the batch 
         --** This logic is flawed when a package is executed multiple times and has failures mutliple times. It will not get the "new" error.
         JOIN (SELECT
                 [ETLBatchExecutionId]
-               ,ETLPackageId
-               ,SSISDBExecutionId
-               ,epee.ETLPackageExecutionErrorTypeId
-               ,MIN(SSISDBEventMessageId) AS SSISDBEventMessageId
+                ,ETLPackageId
+                ,SSISDBExecutionId
+                ,epee.ETLPackageExecutionErrorTypeId
+                ,MIN(SSISDBEventMessageId) AS SSISDBEventMessageId
               FROM
                 [log].[ETLPackageExecutionError] epee
               WHERE
@@ -50,20 +48,27 @@ AS
                ,SSISDBExecutionId) minerr
           ON err.[ETLBatchExecutionId] = minerr.[ETLBatchExecutionId]
              AND err.ETLPackageId = minerr.ETLPackageId
-             AND ((err.SSISDBEventMessageId = minerr.SSISDBEventMessageId
-                    OR (err.SSISDBEventMessageId IS NULL
-                        AND err.SSISDBExecutionId = minerr.SSISDBExecutionId))
-                   OR minerr.ETLPackageExecutionErrorTypeId = 3)
+             AND ( ( err.SSISDBEventMessageId = minerr.SSISDBEventMessageId
+                      OR ( err.SSISDBEventMessageId IS NULL
+                           AND err.SSISDBExecutionId = minerr.SSISDBExecutionId ) )
+                    OR minerr.ETLPackageExecutionErrorTypeId = 3 )
         JOIN ctl.[ETLBatchExecution] eb
           ON err.[ETLBatchExecutionId] = eb.[ETLBatchExecutionId]
-        JOIN ctl.ETLPackage ep
+		JOIN [cfg].ETLPackage ep
           ON err.ETLPackageId = ep.ETLPackageId
-        JOIN ref.SupportSeverityLevel rssl
-          ON ep.SupportSeverityLevelId = rssl.SupportSeverityLevelId
-        LEFT JOIN ctl.ETLPackage epp
+        LEFT JOIN [cfg].[ETLPackageGroup_ETLPackage] epgep
+               ON err.ETLPackageId = epgep.ETLPackageId
+                  AND err.ETLPackageGroupId = epgep.ETLPackageGroupId
+        
+        LEFT JOIN ref.SupportSeverityLevel rssl
+          ON epgep.SupportSeverityLevelId = rssl.SupportSeverityLevelId
+        LEFT JOIN [cfg].ETLPackage epp
                ON ep.EntryPointETLPackageId = epp.ETLPackageId
+        LEFT JOIN [cfg].[ETLPackageGroup_ETLPackage] pepgep
+               ON ep.EntryPointETLPackageId = pepgep.ETLPackageId
+                  AND err.ETLPackageGroupId = pepgep.ETLPackageGroupId
       WHERE
-        eb.[ETLBatchExecutionId] = @ETLBatchId
+        eb.[ETLBatchExecutionId] = @ETLBatchExecutionId
         AND err.EmailNotificationSentDateTime IS NULL
 
     OPEN PackageCursor
@@ -76,7 +81,6 @@ AS
                                        ,@SSISDBProjectName
                                        ,@SSISDBPackageName
                                        ,@EntryPointPackageName
-                                       ,@SupportSeverityLevelId
                                        ,@SupportSeverityLevelCd
                                        ,@ErrorDateTime
                                        ,@ErrorMessage
@@ -89,28 +93,34 @@ AS
                   ,@MailBody NVARCHAR(MAX)
 
           SELECT
-            @MailBody = N'Severity Level: ' + @SupportSeverityLevelCd + @CRLF +
-						N'Server: ' + @@SERVERNAME + @CRLF +
-						N'Job Name: ' + @CallingJobName + @CRLF +
-						N'Project Name: ' + @SSISDBProjectName + @CRLF +
-						N'Package Name: ' + @SSISDBPackageName + @CRLF +
-						N'Entry-point Package Name: ' + @EntryPointPackageName + @CRLF +
-						N'SSIS Environment: ' + @SSISEnvironmentName + @CRLF +
-						N'Error Date/Time: ' + CAST(CONVERT(VARCHAR(30), @ErrorDateTime) AS NVARCHAR(MAX)) + @CRLF +
-						N'Retry Attempts Remaining: ' + CAST(@RemainingRetryAttempts AS VARCHAR(10)) + @CRLF + @CRLF +
-						N'Error Description: ' + @ErrorMessage
+            @MailBody = N'Severity Level: '
+                        + @SupportSeverityLevelCd + @CRLF + N'Server: '
+                        + @@SERVERNAME + @CRLF + N'Job Name: '
+                        + @CallingJobName + @CRLF + N'Project Name: '
+                        + @SSISDBProjectName + @CRLF + N'Package Name: '
+                        + @SSISDBPackageName + @CRLF
+                        + N'Entry-point Package Name: '
+                        + @EntryPointPackageName + @CRLF
+                        + N'SSIS Environment: '
+                        + @SSISEnvironmentName + @CRLF
+                        + N'Error Date/Time: '
+                        + CAST(CONVERT(VARCHAR(30), @ErrorDateTime) AS NVARCHAR(MAX))
+                        + @CRLF + N'Retry Attempts Remaining: '
+                        + CAST(@RemainingRetryAttempts AS VARCHAR(10))
+                        + @CRLF + @CRLF + N'Error Description: '
+                        + @ErrorMessage
 
           EXEC msdb.dbo.sp_send_dbmail
-            @recipients = @ErrorEmailRecipients
-           ,@subject = 'Open Incident'
-           ,@body = @MailBody
-           ,@importance = 'High'
+            @recipients = @ErrorEmailRecipients,
+            @subject = 'Open Incident',
+            @body = @MailBody,
+            @importance = 'High'
 
           --Mark the errors as having a notification sent
           UPDATE [log].ETLPackageExecutionError
           SET    EmailNotificationSentDateTime = GETDATE()
           WHERE
-            [ETLBatchExecutionId] = @ETLBatchId
+            [ETLBatchExecutionId] = @ETLBatchExecutionId
             AND ETLPackageId = @ETLPackageId
 
           FETCH NEXT FROM PackageCursor INTO @SSISDBEventMessageId
@@ -121,7 +131,6 @@ AS
                                              ,@SSISDBProjectName
                                              ,@SSISDBPackageName
                                              ,@EntryPointPackageName
-                                             ,@SupportSeverityLevelId
                                              ,@SupportSeverityLevelCd
                                              ,@ErrorDateTime
                                              ,@ErrorMessage

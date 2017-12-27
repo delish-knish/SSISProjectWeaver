@@ -6,8 +6,8 @@ AS
     DELETE FROM log.ETLPackageExecutionError
     WHERE  [ETLBatchExecutionId] = @ETLBatchExecutionId
 
-	DELETE log.ETLPackageExecution 
-	FROM log.ETLPackageExecution epe
+	DELETE log.[ETLPackageExecutionHistory] 
+	FROM log.[ETLPackageExecutionHistory] epe
 		JOIN ctl.ETLBatchSSISDBExecutions ebs ON epe.SSISDBExecutionId = ebs.SSISDBExecutionId
     WHERE  ebs.[ETLBatchExecutionId] = @ETLBatchExecutionId
 

@@ -19,7 +19,7 @@ AS
         ,RequiresEndETLBatchExecutionParameterInd
         ,FailBatchOnFailureInd
       FROM
-        ctl.SQLCommand sc
+        [cfg].SQLCommand sc
         JOIN ctl.[ETLPackageGroup_SQLCommand] ebpsc
           ON sc.SQLCommandId = ebpsc.SQLCommandId
       WHERE

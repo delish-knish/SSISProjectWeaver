@@ -26,7 +26,7 @@ AS
          ,em.MessageDateTime AS ErrorDateTime
          ,em.[Message]       AS ErrorMessage
        FROM
-         [ctl].ETLPackage ep WITH (NOLOCK)
+         [cfg].ETLPackage ep WITH (NOLOCK)
          JOIN [$(SSISDB)].catalog.executables e WITH (NOLOCK)
            ON ep.SSISDBPackageName = e.package_name
               AND e.package_path = '\Package'

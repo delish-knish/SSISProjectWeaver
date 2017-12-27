@@ -14,7 +14,7 @@ AS
     ,be.[Description]					AS [Description]
   FROM
     [log].[ETLBatchExecutionEvent] be
-    LEFT JOIN ctl.ETLPackage p
+    LEFT JOIN [cfg].ETLPackage p
            ON be.ETLPackageId = p.ETLPackageId
     JOIN ctl.[ETLBatchExecution] eb
       ON be.[ETLBatchExecutionId] = eb.[ETLBatchExecutionId]
@@ -22,7 +22,7 @@ AS
       ON eb.ETLBatchStatusId = ebs.ETLBatchStatusId
     JOIN ref.[ETLBatchExecutionEventType] ebet
       ON be.[ETLBatchExecutionEventTypeId] = ebet.[ETLBatchExecutionEventTypeId]
-    JOIN ctl.[ETLBatch] eps
+    JOIN [cfg].[ETLBatch] eps
       ON eb.[ETLBatchId] = eps.[ETLBatchId]
   ORDER  BY
     [ETLBatchExecutionEventId] DESC 

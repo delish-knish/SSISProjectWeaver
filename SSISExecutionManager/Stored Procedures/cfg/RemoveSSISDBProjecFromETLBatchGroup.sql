@@ -3,8 +3,8 @@
                                                              @ETLPackageGroupId INT
 AS
     DELETE epeps
-    FROM   [ctl].[ETLPackageGroup_ETLPackage] epeps
-           JOIN ctl.ETLPackage ep
+    FROM   [cfg].[ETLPackageGroup_ETLPackage] epeps
+           JOIN [cfg].ETLPackage ep
              ON epeps.ETLPackageId = ep.ETLPackageId
     WHERE  SSISDBFolderName = @SSISDBFolderName
            AND SSISDBProjectName = @SSISDBProjectName

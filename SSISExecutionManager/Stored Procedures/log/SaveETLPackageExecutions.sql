@@ -13,11 +13,12 @@ AS
       [ETLBatchExecutionId] = @ETLBatchExecutionId
 
     --Insert or update packages stats
-    MERGE [log].ETLPackageExecution AS Target
+    MERGE [log].[ETLPackageExecutionHistory] AS Target
 	--ToDo: Determine better way to handle multiple occurrences of the same package (possibly store count of executions)
     USING (SELECT
              ep.SSISDBExecutionId
              ,ep.ETLBatchId
+			 ,ep.ETLPackageGroupId
              ,ep.ETLPackageId
              ,MIN(ep.StartDateTime)
              ,MAX(ep.EndDateTime)
@@ -30,14 +31,16 @@ AS
 		GROUP BY
 			ep.SSISDBExecutionId
              ,ep.ETLBatchId
+			 ,ep.ETLPackageGroupId
              ,ep.ETLPackageId
              ,ep.ETLPackageExecutionStatusId
-             ,ep.MissingSSISDBExecutablesEntryInd) AS source (SSISDBExecutionId, ETLBatchId, ETLPackageId, StartDateTime, EndDateTime, ETLPackageStatusId, MissingSSISDBExecutablesEntryInd)
+             ,ep.MissingSSISDBExecutablesEntryInd) AS source (SSISDBExecutionId, ETLBatchId, ETLPackageGroupId, ETLPackageId, StartDateTime, EndDateTime, ETLPackageStatusId, MissingSSISDBExecutablesEntryInd)
     ON target.SSISDBExecutionId = source.SSISDBExecutionId
        AND target.ETLPackageId = source.ETLPackageId
     WHEN Matched THEN
       UPDATE SET SSISDBExecutionId = source.SSISDBExecutionId
                  ,ETLBatchId = source.ETLBatchId
+				 ,ETLPackageGroupId = source.ETLPackageGroupId
                  ,ETLPackageId = source.ETLPackageId
                  ,StartDateTime = source.StartDateTime
                  ,EndDateTime = source.EndDateTime
@@ -48,6 +51,7 @@ AS
     WHEN NOT MATCHED THEN
       INSERT (SSISDBExecutionId
               ,ETLBatchId
+			  ,ETLPackageGroupId
               ,ETLPackageId
               ,StartDateTime
               ,EndDateTime
@@ -55,12 +59,11 @@ AS
 			  ,MissingSSISDBExecutablesEntryInd)
       VALUES(source.SSISDBExecutionId
              ,source.ETLBatchId
+			 ,source.ETLPackageGroupId
              ,source.ETLPackageId
              ,source.StartDateTime
              ,source.EndDateTime
              ,source. ETLPackageStatusId
 			 ,source.MissingSSISDBExecutablesEntryInd);
-
-	--OPTION (FORCE ORDER);
-
+			 
     RETURN 0 

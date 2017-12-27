@@ -7,6 +7,8 @@ AS
     /*The purpose of this stored procedure is to enable/disable a project (all packages within the project) or a package so that it will be added/removed from currently running 
     and future batches until it is enabled/disabled again. */
 
+	--TODO: Enhance this proc to be at the etl package group level.
+
     IF @EnabledInd = 0
        AND ( @Comments IS NULL
               OR RTRIM(LTRIM(@Comments)) = '' )
@@ -16,11 +18,14 @@ AS
           THROW 50000, @ErrorDescriptionMissingComments, 1;
       END
 
-    UPDATE ctl.ETLPackage
+    UPDATE epgep
     SET    EnabledInd = @EnabledInd
            ,Comments = @Comments
            ,LastUpdatedDate = GETDATE()
            ,LastUpdatedUser = SUSER_SNAME()
+	FROM 
+		[cfg].ETLPackageGroup_ETLPackage epgep
+		JOIN [cfg].ETLPackage ep ON epgep.ETLPackageId = ep.ETLPackageId
     WHERE
       @SSISDBFolderName = SSISDBFolderName
       AND @SSISDBProjectName = SSISDBProjectName
