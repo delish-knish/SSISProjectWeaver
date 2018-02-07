@@ -18,7 +18,7 @@ AS
     EXEC ('USE ' + @TargetDatabaseName + '; DBCC CHECKCONSTRAINTS; USE ' + @CurrentDatabaseName + ';');
 
     DECLARE @SQLConstraints NVARCHAR(4000) = '
-    INSERT FKConstraintViolation
+    INSERT [log].[ForeignKeyConstraintViolation]
            (DatabaseName,
 		    TableName,
             ColumnName,
