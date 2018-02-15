@@ -106,7 +106,7 @@ AS
       AND epgep.[RemainingRetryAttemptsDefault] > 0
       AND pepgep.ETLPackageId = ISNULL(pp.ETLPackageId, s.ETLPackageId)
       AND s.ETLPackageExecutionStatusId = 1
-      AND [dbo].[func_GetLastPackageExecutionStatus] (@ETLBatchExecutionId, ISNULL(pp.ETLPackageId, s.ETLPackageId)) <> 5;
+	  AND [dbo].[func_IsETLPackageRunning] (p.SSISDBFolderName, p.SSISDBProjectName, p.SSISDBPackageName) = 0;
 
     SET @ErrorsRequiringNotificationCount = (SELECT
                                                COUNT(*)
