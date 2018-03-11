@@ -1,4 +1,6 @@
-﻿CREATE FUNCTION [dbo].[func_IsETLPackageRunning] (@FolderName  VARCHAR(128),
+﻿--This will only work for parent packages. Child packages run under the execution of its parent.
+
+CREATE FUNCTION [dbo].[func_IsETLPackageRunning] (@FolderName  VARCHAR(128),
                                                   @ProjectName VARCHAR(128),
                                                   @PackageName VARCHAR(260))
 RETURNS BIT

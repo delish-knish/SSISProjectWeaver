@@ -21,7 +21,7 @@ AS
   FROM
     [cfg].[ETLPackage] ep
 	LEFT JOIN [cfg].[ETLPackage] epep ON ep.EntryPointETLPackageId = epep.ETLPackageId
-    JOIN (SELECT
+    LEFT JOIN (SELECT
             ETLPackageId
             ,AVG(ExecutionDurationInMinutes) AS AverageExecutionDurationInMinutes
             ,MIN(StartDateTime)              AS FirstExecutionDate
