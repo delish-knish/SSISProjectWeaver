@@ -21,7 +21,7 @@ AS
                                         --If total entry point packages for the batch is greater than the total completed entry point packages and nothing is running
                                         WHEN SUM(IIF(ep.EntryPointPackageInd = 1, 1, 0)) - SUM(IIF((epb.ETLPackageExecutionStatusId IN (0, 2)
                                                                                                     AND ep.EntryPointPackageInd = 1), 1, 0)) > 0
-                                             AND ISNULL(SUM(r.RunningPackageCount), 0) = 0 THEN 4 --Halted
+                                             AND SUM(CAST([dbo].[func_IsETLPackageRunning] (ep.SSISDBFolderName, ep.SSISDBProjectName, ep.SSISDBPackageName) AS INT)) = 0 THEN 4 --Halted
                                         WHEN COUNT(*) - SUM(IIF(epb.ETLPackageExecutionStatusId IN (0, 2), 1, 0)) > 0 THEN 6
                                       END
        FROM
