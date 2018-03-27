@@ -1,5 +1,6 @@
 ﻿CREATE VIEW [rpt].[ETLPackageGroupExecutions]
 AS
+--ToDo: replace  [log].[ETLPackageExecutionHistory] with a "live" package execution status table, once created
   SELECT TOP 1000000
     ebsdbe.ETLBatchExecutionId
    ,ebp.[ETLPackageGroupId]

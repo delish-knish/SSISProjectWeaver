@@ -81,7 +81,6 @@
     <Folder Include="Tables\ref" />
     <Folder Include="Views" />
     <Folder Include="Views\rpt" />
-    <Folder Include="Scripts\Example 1 Setup" />
     <Folder Include="Stored Procedures\etl" />
     <Folder Include="Stored Procedures\util" />
   </ItemGroup>
@@ -171,7 +170,6 @@
     <Build Include="Views\rpt\SSISDBErrorMessages.sql" />
     <Build Include="Views\rpt\ETLPackageGroupETLPackages.sql" />
     <Build Include="Functions\Scalar-valued\func_GetETLBatchPhaseName.sql" />
-    <None Include="Scripts\Sync ETLPackage Configurations.sql" />
     <Build Include="Stored Procedures\sqlcmd\SQLCommandConditionExample.sql" />
     <Build Include="Tables\log\ETLPackageExecutionRowLevelError.sql" />
     <Build Include="Stored Procedures\log\InsertETLPackageExecutionRowLevelError.sql" />
@@ -233,10 +231,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="References\SSISDB.dacpac" />
-    <None Include="Scripts\Example 1 Setup\Create Example 1 SQL Agent Job.sql" />
-    <None Include="Scripts\Example 1 Setup\Configure SSIS Catalog and Deploy Example1 Projects.sql" />
-    <None Include="Scripts\Example 1 Setup\Populate Example1 Metadata.sql" />
-    <None Include="Scripts\Example 1 Setup\Deploy Example1 SSIS Projects.bat" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
@@ -266,18 +260,6 @@
     <SqlCmdVariable Include="EmailRecipientsMonitors">
       <DefaultValue>support@youremail.com</DefaultValue>
       <Value>$(SqlCmdVar__5)</Value>
-    </SqlCmdVariable>
-    <SqlCmdVariable Include="ExampleProjectsRootFolder">
-      <DefaultValue>Z:\Source Code\Repos\SSISProjectWeaver\</DefaultValue>
-      <Value>$(SqlCmdVar__9)</Value>
-    </SqlCmdVariable>
-    <SqlCmdVariable Include="SolutionRootDir">
-      <DefaultValue>C:\Source Code\Repos\SSISProjectWeaver\</DefaultValue>
-      <Value>$(SqlCmdVar__6)</Value>
-    </SqlCmdVariable>
-    <SqlCmdVariable Include="DeployExample">
-      <DefaultValue>0</DefaultValue>
-      <Value>$(SqlCmdVar__7)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="SSISDB">
       <DefaultValue>SSISDB</DefaultValue>

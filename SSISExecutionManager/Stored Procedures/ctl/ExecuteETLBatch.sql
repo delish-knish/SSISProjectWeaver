@@ -152,13 +152,10 @@ AS
 						BREAK;
 					END
 
-					IF [dbo].[func_IsETLBatchExecutionTimedOut] (@ETLBatchExecutionId) = 1 OR @ETLBatchExecutionStatusId = @ETLBatchExecutionCanceledStatusId --Time out the batch 
+					IF [dbo].[func_IsETLBatchExecutionTimedOut] (@ETLBatchExecutionId) = 1 --Time out the batch 
 						BEGIN
-							IF [dbo].[func_IsETLBatchExecutionTimedOut] (@ETLBatchExecutionId) = 1
-							BEGIN
-								DECLARE @EndDateTime DATETIME2 = GETDATE();
-								EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId = @ETLBatchExecutionId, @EndDateTime = @EndDateTime, @ETLBatchStatusId = @ETLBatchExecutionTimeOutStatusId;
-							END
+							DECLARE @EndDateTime DATETIME2 = GETDATE();
+							EXEC [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId = @ETLBatchExecutionId, @EndDateTime = @EndDateTime, @ETLBatchStatusId = @ETLBatchExecutionTimeOutStatusId;
 							
 							RETURN 0; --TODO: Revisit this. Does it provide the behavior we want?
 						END

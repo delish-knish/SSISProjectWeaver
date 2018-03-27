@@ -99,8 +99,8 @@ AS
                   OR ( pepd.DependenciesNotMetCount = 0
                        AND pes.ETLPackageExecutionStatusId IS NULL ) THEN 8 --ready to execute
             WHEN pesprnt.ETLPackageExecutionStatusId = 1
-                 AND pes.ETLPackageExecutionStatusId IS NULL THEN 11
-            ELSE Isnull(pes.ETLPackageExecutionStatusId, 7)
+                 AND pes.ETLPackageExecutionStatusId IS NULL THEN 11 --Parent failed
+            ELSE Isnull(pes.ETLPackageExecutionStatusId, 7) --unknown
           END                                     AS ETLPackageExecutionStatusId
          ,Isnull(epd.DependenciesNotMetCount, 0)
           + Isnull(pepd.DependenciesNotMetCount, 0)

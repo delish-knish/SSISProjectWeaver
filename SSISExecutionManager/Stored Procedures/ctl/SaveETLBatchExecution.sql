@@ -1,15 +1,15 @@
-﻿CREATE PROCEDURE [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId                      INT OUTPUT,
-                                      @SSISEnvironmentName                               VARCHAR(128) = NULL,
-                                      @CallingJobName                                   VARCHAR(128) = NULL,
-                                      @ETLBatchId										 INT = NULL,
-									  @IgnoreSQLCommandConditionsInd BIT  = 0,
-                                      @StartDateTime                                     DATETIME2 = NULL,
-                                      @EndDateTime                                       DATETIME2 = NULL,
-                                      @TotalEntryPointPackageCount                       SMALLINT = NULL,
-                                      @TotalRemainingEntryPointPackageCount              SMALLINT = NULL,
-                                      @TotalETLPackageCount                              SMALLINT = NULL,
-                                      @TotalRemainingETLPackageCount                     SMALLINT = NULL,
-                                      @ETLBatchStatusId                                  INT = NULL
+﻿CREATE PROCEDURE [ctl].[SaveETLBatchExecution] @ETLBatchExecutionId                  INT OUTPUT,
+                                               @SSISEnvironmentName                  VARCHAR(128) = NULL,
+                                               @CallingJobName                       VARCHAR(128) = NULL,
+                                               @ETLBatchId                           INT = NULL,
+                                               @IgnoreSQLCommandConditionsInd        BIT = 0,
+                                               @StartDateTime                        DATETIME2 = NULL,
+                                               @EndDateTime                          DATETIME2 = NULL,
+                                               @TotalEntryPointPackageCount          SMALLINT = NULL,
+                                               @TotalRemainingEntryPointPackageCount SMALLINT = NULL,
+                                               @TotalETLPackageCount                 SMALLINT = NULL,
+                                               @TotalRemainingETLPackageCount        SMALLINT = NULL,
+                                               @ETLBatchStatusId                     INT = NULL
 AS
     MERGE [ctl].[ETLBatchExecution] AS Target
     USING (SELECT
@@ -23,10 +23,7 @@ AS
              ,@TotalRemainingEntryPointPackageCount
              ,@TotalETLPackageCount
              ,@TotalRemainingETLPackageCount
-             ,@ETLBatchStatusId
-          ) AS source (ETLBatchExecutionId, SSISEnvironmentName, CallingJobName, ETLBatchId, StartDateTime, EndDateTime, TotalEntryPointPackageCount, TotalRemainingEntryPointPackageCount, TotalETLPackageCount, TotalRemainingETLPackageCount, 
-		  ETLBatchStatusId
-          )
+             ,@ETLBatchStatusId) AS source (ETLBatchExecutionId, SSISEnvironmentName, CallingJobName, ETLBatchId, StartDateTime, EndDateTime, TotalEntryPointPackageCount, TotalRemainingEntryPointPackageCount, TotalETLPackageCount, TotalRemainingETLPackageCount, ETLBatchStatusId )
     ON target.[ETLBatchExecutionId] = source.[ETLBatchExecutionId]
     WHEN Matched THEN
       UPDATE SET SSISEnvironmentName = ISNULL(source.SSISEnvironmentName, target.SSISEnvironmentName)
@@ -50,8 +47,7 @@ AS
               ,TotalRemainingEntryPointPackageCount
               ,TotalETLPackageCount
               ,TotalRemainingETLPackageCount
-              ,ETLBatchStatusId
-    )
+              ,ETLBatchStatusId )
       VALUES(source.SSISEnvironmentName
              ,source.CallingJobName
              ,source.ETLBatchId

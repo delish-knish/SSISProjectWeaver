@@ -88,7 +88,7 @@ AS
     --ToDo: make this sql statement more straightforward
     UPDATE pepgep
     SET    [RemainingRetryAttemptsDefault] = IIF(IIF(pp.ETLPackageId IS NOT NULL, pepgep.[RemainingRetryAttemptsDefault], epgep.[RemainingRetryAttemptsDefault]) > 0, IIF(pp.ETLPackageId IS NOT NULL, pepgep.[RemainingRetryAttemptsDefault], epgep.[RemainingRetryAttemptsDefault]) - 1, 0)
-           ,ReadyForExecutionInd = IIF(IIF(pp.ETLPackageId IS NOT NULL, pepgep.[RemainingRetryAttemptsDefault], epgep.[RemainingRetryAttemptsDefault]) > 0, 1, 0)
+           ,ReadyForExecutionInd = IIF(IIF(pp.ETLPackageId IS NOT NULL, pepgep.[RemainingRetryAttemptsDefault], epgep.[RemainingRetryAttemptsDefault]) - 1 > 0, 1, 0)
     FROM   [log].[ETLPackageExecutionError] e
            JOIN [cfg].ETLPackageGroup_ETLPackage epgep
              ON e.ETLPackageId = epgep.ETLPackageId
