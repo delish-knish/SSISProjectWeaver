@@ -46,12 +46,12 @@
       <FullPath>ETL Package Performance Chart.rdl</FullPath>
     </ProjectItem>
     <ProjectItem>
-      <Name>Execute ETL Package.rdl</Name>
-      <FullPath>Execute ETL Package.rdl</FullPath>
-    </ProjectItem>
-    <ProjectItem>
       <Name>ETL Packages.rdl</Name>
       <FullPath>ETL Packages.rdl</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Execute ETL Package.rdl</Name>
+      <FullPath>Execute ETL Package.rdl</FullPath>
     </ProjectItem>
   </Reports>
   <Configurations>
@@ -87,7 +87,7 @@
       <Options>
         <OutputPath>bin\Release</OutputPath>
         <TargetServerVersion>SSRS2016</TargetServerVersion>
-        <TargetServerURL>http://localhost/ReportServer</TargetServerURL>
+        <TargetServerURL>http://nsmwpuredw01/ReportServer</TargetServerURL>
         <TargetFolder>SSISExecutionManagerReports</TargetFolder>
         <TargetDataSourceFolder>Data Sources</TargetDataSourceFolder>
         <TargetDatasetFolder>Datasets</TargetDatasetFolder>

@@ -10,23 +10,26 @@
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="ETLBatchExecutions">
+    <DataSet Name="ETLBatchExecutionsParamList">
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
-        <CommandText>SELECT TOP 40
-  ETLBatchExecutionId
-  ,CAST(ETLBatchExecutionId AS VARCHAR) + ' ' + ETLBatchName + ' - ' + DayOfWeekName + ' - ' + FORMAT( StartDateTime , 'MM/dd/yyyy h:mmtt', 'en-US' ) AS ETLBatchName
-FROM
- rpt.ETLBatchExecutions
-ORDER BY 
-  ETLBatchExecutionId DESC</CommandText>
+        <QueryParameters>
+          <QueryParameter Name="@MaxBatchesToReturn">
+            <Value>20</Value>
+          </QueryParameter>
+          <QueryParameter Name="@ETLBatchId">
+            <Value>=Parameters!ETLBatchId.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLBatchExecutionsParamList</CommandText>
       </Query>
       <Fields>
-        <Field Name="Id">
+        <Field Name="ETLBatchExecutionId">
           <DataField>ETLBatchExecutionId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="Name">
+        <Field Name="ETLBatchName">
           <DataField>ETLBatchName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
@@ -40,18 +43,8 @@ ORDER BY
             <Value>=Parameters!ETLBatchExecutionId.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT
-  [ETLBatchExecutionId]
-  ,[CallingJobName]
-  ,[ETLBatchName]
-  ,[ETLPackageGroupId]
-  ,[ETLPackageGroup]
-  ,[GroupStartDateTime]
-  ,[GroupEndDateTime]
-FROM   
-  [rpt].[ETLBatchGroupsStatuses] 
-WHERE
-  [ETLBatchExecutionId] = @ETLBatchExecutionId</CommandText>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLBatchGroupStatuses</CommandText>
       </Query>
       <Fields>
         <Field Name="ETLBatchExecutionId">
@@ -61,6 +54,10 @@ WHERE
         <Field Name="CallingJobName">
           <DataField>CallingJobName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ETLBatchId">
+          <DataField>ETLBatchId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="ETLBatchName">
           <DataField>ETLBatchName</DataField>
@@ -84,7 +81,7 @@ WHERE
         </Field>
       </Fields>
     </DataSet>
-    <DataSet Name="CurrentlyRunningETLPackages">
+    <DataSet Name="RunningETLPackages">
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
         <QueryParameters>
@@ -93,18 +90,8 @@ WHERE
             <rd:UserDefined>true</rd:UserDefined>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT
-  exm.ETLBatchExecutionId
-  ,execution_id AS SSISDBExecutionId
-  ,project_name AS SSISDBProjectName
-  ,package_name AS SSISDBPackageName
-  ,CAST(start_time AS DATETIME2) AS StartDateTime
-FROM   SSISDB.[catalog].executions ex
-       JOIN [rpt].[ETLBatchSSISDBExecutions] exm
-         ON ex.execution_id = exm.SSISDBExecutionId
-WHERE
-  [status] = 2 
-  AND exm.ETLBatchExecutionId = @ETLBatchExecutionId</CommandText>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetRunningETLPackages</CommandText>
       </Query>
       <Fields>
         <Field Name="ETLBatchExecutionId">
@@ -138,18 +125,8 @@ WHERE
             <rd:UserDefined>true</rd:UserDefined>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT
-  [ETLBatchExecutionId]
-  ,[SSISDBExecutionId]
-  ,[SSISDBProjectName]
-  ,[SSISDBPackageName]
-  ,[ErrorDateTime]
-  ,[ErrorMessage]
-  ,[ETLPackageRestartDateTime]
-FROM   
-  [rpt].[ETLPackageExecutionErrors] err       
-WHERE
-   [ETLBatchExecutionId] = @ETLBatchExecutionId</CommandText>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLPackageExecutionErrors</CommandText>
       </Query>
       <Fields>
         <Field Name="ETLBatchExecutionId">
@@ -182,7 +159,7 @@ WHERE
         </Field>
       </Fields>
     </DataSet>
-    <DataSet Name="ETLBatchExecution">
+    <DataSet Name="ETLBatchExecutionStatusUnpivoted">
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
         <QueryParameters>
@@ -193,44 +170,12 @@ WHERE
             <Value>=Parameters!ETLBatchExecutionId.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>IF @CancelBatchInd IS NOT NULL
+        <CommandText>IF @CancelBatchInd = 1
 BEGIN
-  EXEC [ctl].[EndETLBatchExecution] @ETLBatchExecutionId, 10
+  EXEC [ctl].[EndETLBatchExecution] @ETLBatchExecutionId, 10;
 END
 
-SELECT [ETLBatchExecutionId], Label, Val
-FROM (
-SELECT [ETLBatchExecutionId]
-	  ,'Batch Execution Id' AS Label
-      ,CAST([ETLBatchExecutionId] AS VARCHAR) AS Val
-  FROM [rpt].[ETLBatchExecutions]
-UNION ALL
-SELECT [ETLBatchExecutionId]
-	  ,'Name' AS Label
-      ,[ETLBatchName] AS Val
-  FROM [rpt].[ETLBatchExecutions]
-UNION ALL
-SELECT [ETLBatchExecutionId]
-	  ,'Status' AS Label
-      ,[ETLBatchStatus]
-  FROM [rpt].[ETLBatchExecutions]
-UNION ALL
-SELECT [ETLBatchExecutionId]
-	  ,'Total Pkgs' AS Label
-      ,CAST([TotalETLPackageCount] AS VARCHAR)
-  FROM [rpt].[ETLBatchExecutions]
-UNION ALL
-SELECT [ETLBatchExecutionId]
-	  ,'Remaining Pkgs' AS Label
-      ,CAST([TotalRemainingETLPackageCount] AS VARCHAR)
-  FROM [rpt].[ETLBatchExecutions]
-UNION ALL
-SELECT [ETLBatchExecutionId]
-	  ,'Status Last Updated' AS Label
-	,FORMAT( [BatchStatusLastUpdatedDate], 'dd/MM/yyyy HH:mm tt', 'en-US' ) 
-  FROM [rpt].[ETLBatchExecutions] ) t
-WHERE
-	[ETLBatchExecutionId] = @ETLBatchExecutionId</CommandText>
+EXEC rpt.GetETLBatchExecutionStatusUnpivoted @ETLBatchExecutionId;</CommandText>
       </Query>
       <Fields>
         <Field Name="ETLBatchExecutionId">
@@ -247,31 +192,19 @@ WHERE
         </Field>
       </Fields>
     </DataSet>
-    <DataSet Name="BatchExecutionPerformancePast60Days">
+    <DataSet Name="ETLBatchPerformancePastNDays">
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
         <QueryParameters>
-          <QueryParameter Name="@ETLBatchExecutionId">
-            <Value>=Parameters!ETLBatchExecutionId.Value</Value>
+          <QueryParameter Name="@ETLBatchId">
+            <Value>=Parameters!ETLBatchId.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@DaysBack">
+            <Value>=Parameters!PerformanceDaysBack.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT
-  [ETLBatchExecutionId]
-  ,[StartDateTime]
-  ,[ExecutionDurationInMinutes]
-  ,CAST([ExecutionDurationInMinutes] / 60 AS VARCHAR) + ':' + CAST([ExecutionDurationInMinutes] % 60 AS VARCHAR) AS ExecutionDurationString
-  ,[DayOfWeekName]
-  ,ETLBatchStatus
-FROM   
-	[rpt].[ETLBatchExecutions] be
-WHERE
-  ETLBatchId = (SELECT
-                    ETLBatchId
-                  FROM   [rpt].ETLBatchExecutions
-	  WHERE ETLBatchExecutionId = @ETLBatchExecutionId  )
-  AND [StartDateTime] &gt;= DATEADD(DAY,-60, GETDATE())
-ORDER  BY
-  [StartDateTime] </CommandText>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLBatchPerformancePastNDays</CommandText>
       </Query>
       <Fields>
         <Field Name="ETLBatchExecutionId">
@@ -300,30 +233,6 @@ ORDER  BY
         </Field>
       </Fields>
     </DataSet>
-    <DataSet Name="DiskSpace">
-      <Query>
-        <DataSourceName>SSISExecutionManager</DataSourceName>
-        <CommandText>EXEC util.GetDiskSpace</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="volume_mount_point">
-          <DataField>volume_mount_point</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="TotalGB">
-          <DataField>TotalGB</DataField>
-          <rd:TypeName>System.Int64</rd:TypeName>
-        </Field>
-        <Field Name="AvailableGB">
-          <DataField>AvailableGB</DataField>
-          <rd:TypeName>System.Int64</rd:TypeName>
-        </Field>
-        <Field Name="PctFree">
-          <DataField>PctFree</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-      </Fields>
-    </DataSet>
     <DataSet Name="ETLPackagesInFailedState">
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
@@ -333,20 +242,8 @@ ORDER  BY
             <rd:UserDefined>true</rd:UserDefined>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT 
-       [ETLBatchExecutionId]
-      ,[SSISDBFolderName]
-      ,[SSISDBProjectName]
-      ,[SSISDBPackageName]
-      ,[ETLPackageGroupId]
-      ,[LastPackageFailureStartTime]
-      ,[LastPackageSuccessStartTime]
-      ,[FirstErrorMessage]
-      ,[ErrorDateTime]
-  FROM 
-      [rpt].[ETLPackagesInFailedState] fs
-WHERE
-       ETLBatchExecutionId= @ETLBatchExecutionId</CommandText>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLPackagesInFailedState</CommandText>
       </Query>
       <Fields>
         <Field Name="ETLBatchExecutionId">
@@ -387,22 +284,19 @@ WHERE
         </Field>
       </Fields>
     </DataSet>
-    <DataSet Name="ETLBatchExecutionEvents">
+    <DataSet Name="ETLBatchExecutionLastNEvents">
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
         <QueryParameters>
           <QueryParameter Name="@ETLBatchExecutionId">
             <Value>=Parameters!ETLBatchExecutionId.Value</Value>
           </QueryParameter>
+          <QueryParameter Name="@LastNEvents">
+            <Value>10</Value>
+          </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT TOP 10
-  [EventDateTime]
-  ,[Description]
-FROM   [rpt].[ETLBatchExecutionEvents]
-WHERE
-  [ETLBatchExecutionId] = @ETLBatchExecutionId
-ORDER  BY
-  [EventDateTime] DESC </CommandText>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLBatchExecutionLastNEvents</CommandText>
       </Query>
       <Fields>
         <Field Name="EventDateTime">
@@ -423,16 +317,34 @@ ORDER  BY
             <Value>=Parameters!ETLBatchExecutionId.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT ETLBatchStatus
-FROM
- rpt.ETLBatchExecutions
-WHERE
-  ETLBatchExecutionId = @ETLBatchExecutionId</CommandText>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLBatchExecutionStatus</CommandText>
       </Query>
       <Fields>
         <Field Name="ETLBatchStatus">
           <DataField>ETLBatchStatus</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="ETLBatchParamList">
+      <Query>
+        <DataSourceName>SSISExecutionManager</DataSourceName>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLBatchParamList</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="ETLBatchId">
+          <DataField>ETLBatchId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ETLBatchName">
+          <DataField>ETLBatchName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExecutionCount">
+          <DataField>ExecutionCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
@@ -496,6 +408,9 @@ WHERE
                                 </Parameter>
                                 <Parameter Name="ETLPackageGroupId">
                                   <Value>=Fields!ETLPackageGroupId.Value</Value>
+                                </Parameter>
+                                <Parameter Name="ETLBatchId">
+                                  <Value>=Fields!ETLBatchId.Value</Value>
                                 </Parameter>
                               </Parameters>
                             </Drillthrough>
@@ -1217,7 +1132,7 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>CurrentlyRunningETLPackages</DataSetName>
+            <DataSetName>RunningETLPackages</DataSetName>
             <Top>0.44388in</Top>
             <Left>3.74862in</Left>
             <Height>0.71in</Height>
@@ -2032,7 +1947,7 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>ETLBatchExecution</DataSetName>
+            <DataSetName>ETLBatchExecutionStatusUnpivoted</DataSetName>
             <Top>0.44388in</Top>
             <Height>0.71in</Height>
             <Width>3.45139in</Width>
@@ -2050,7 +1965,7 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Batch Execution Duration (past 60 days)</Value>
+                    <Value>="Batch Execution Duration (past " + Parameters!PerformanceDaysBack.Value.ToString + " days)"</Value>
                     <Style>
                       <FontSize>12pt</FontSize>
                       <FontWeight>Bold</FontWeight>
@@ -2429,7 +2344,7 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
                 <VerticalAlign>Top</VerticalAlign>
               </Style>
             </ChartNoDataMessage>
-            <DataSetName>BatchExecutionPerformancePast60Days</DataSetName>
+            <DataSetName>ETLBatchPerformancePastNDays</DataSetName>
             <Top>6.96875in</Top>
             <Height>3.04861in</Height>
             <Width>11.70139in</Width>
@@ -3214,7 +3129,7 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>ETLBatchExecutionEvents</DataSetName>
+            <DataSetName>ETLBatchExecutionLastNEvents</DataSetName>
             <SortExpressions>
               <SortExpression>
                 <Value>=Fields!EventDateTime.Value</Value>
@@ -3245,21 +3160,54 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
     </ReportSection>
   </ReportSections>
   <ReportParameters>
+    <ReportParameter Name="ETLBatchId">
+      <DataType>Integer</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>ETLBatchParamList</DataSetName>
+          <ValueField>ETLBatchId</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <Prompt>ETL Batch Type</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>ETLBatchParamList</DataSetName>
+          <ValueField>ETLBatchId</ValueField>
+          <LabelField>ETLBatchName</LabelField>
+        </DataSetReference>
+      </ValidValues>
+    </ReportParameter>
     <ReportParameter Name="ETLBatchExecutionId">
       <DataType>Integer</DataType>
-      <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value>9881</Value>
-        </Values>
-      </DefaultValue>
-      <Prompt>ETL Batch Execution Id</Prompt>
+      <Prompt>ETL Batch Execution</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>ETLBatchExecutionsParamList</DataSetName>
+          <ValueField>ETLBatchExecutionId</ValueField>
+          <LabelField>ETLBatchName</LabelField>
+        </DataSetReference>
+      </ValidValues>
+      <UsedInQuery>True</UsedInQuery>
     </ReportParameter>
     <ReportParameter Name="CancelBatchInd">
       <DataType>Boolean</DataType>
       <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>false</Value>
+        </Values>
+      </DefaultValue>
       <Prompt>Cancel Batch ?</Prompt>
       <Hidden>true</Hidden>
+    </ReportParameter>
+    <ReportParameter Name="PerformanceDaysBack">
+      <DataType>Integer</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>30</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Performance Days Back</Prompt>
     </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
@@ -3270,12 +3218,22 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>0</RowIndex>
-          <ParameterName>ETLBatchExecutionId</ParameterName>
+          <ParameterName>ETLBatchId</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
           <RowIndex>0</RowIndex>
+          <ParameterName>ETLBatchExecutionId</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>2</ColumnIndex>
+          <RowIndex>0</RowIndex>
           <ParameterName>CancelBatchInd</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>3</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>PerformanceDaysBack</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>

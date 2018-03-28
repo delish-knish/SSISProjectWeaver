@@ -10,23 +10,26 @@
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="ETLBatchExecutions">
+    <DataSet Name="ETLBatchExecutionsParamList">
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
-        <CommandText>SELECT TOP 40
-  ETLBatchExecutionId
-  ,CAST(ETLBatchExecutionId AS VARCHAR) + ' ' + ETLBatchName + ' - ' + DayOfWeekName + ' - ' + FORMAT( StartDateTime , 'MM/dd/yyyy h:mmtt', 'en-US' ) AS ETLBatchName
-FROM
- rpt.ETLBatchExecutions
-ORDER BY 
-  ETLBatchExecutionId DESC</CommandText>
+        <QueryParameters>
+          <QueryParameter Name="@MaxBatchesToReturn">
+            <Value>20</Value>
+          </QueryParameter>
+          <QueryParameter Name="@ETLBatchId">
+            <Value>=Parameters!ETLBatchId.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLBatchExecutionsParamList</CommandText>
       </Query>
       <Fields>
-        <Field Name="Id">
+        <Field Name="ETLBatchExecutionId">
           <DataField>ETLBatchExecutionId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="Name">
+        <Field Name="ETLBatchName">
           <DataField>ETLBatchName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
@@ -108,6 +111,49 @@ WHERE
         </Field>
         <Field Name="ETLPackageExecutionStatus">
           <DataField>ETLPackageExecutionStatus</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="ETLBatchParamList">
+      <Query>
+        <DataSourceName>SSISExecutionManager</DataSourceName>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLBatchParamList</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="ETLBatchId">
+          <DataField>ETLBatchId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ETLBatchName">
+          <DataField>ETLBatchName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExecutionCount">
+          <DataField>ExecutionCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="ETLPackageGroupParamList">
+      <Query>
+        <DataSourceName>SSISExecutionManager</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@ETLBatchId">
+            <Value>=Parameters!ETLBatchId.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLPackageGroupParamList</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="ETLPackageGroupId">
+          <DataField>ETLPackageGroupId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ETLPackageGroup">
+          <DataField>ETLPackageGroup</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -545,18 +591,44 @@ rownumber("ETLPackageExecutions") = 25, "Silver")</Color>
     </ReportSection>
   </ReportSections>
   <ReportParameters>
+    <ReportParameter Name="ETLBatchId">
+      <DataType>Integer</DataType>
+      <Prompt>ETLBatch Type</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>ETLBatchParamList</DataSetName>
+          <ValueField>ETLBatchId</ValueField>
+          <LabelField>ETLBatchName</LabelField>
+        </DataSetReference>
+      </ValidValues>
+    </ReportParameter>
     <ReportParameter Name="ETLBatchExecutionId">
       <DataType>Integer</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>9995</Value>
-        </Values>
-      </DefaultValue>
-      <Prompt>ETL Batch Execution Id</Prompt>
+      <Prompt>ETL Batch Execution</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>ETLBatchExecutionsParamList</DataSetName>
+          <ValueField>ETLBatchExecutionId</ValueField>
+          <LabelField>ETLBatchName</LabelField>
+        </DataSetReference>
+      </ValidValues>
     </ReportParameter>
     <ReportParameter Name="ETLPackageGroupId">
       <DataType>Integer</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+        </Values>
+      </DefaultValue>
       <Prompt>ETL Package Group Id</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>ETLPackageGroupParamList</DataSetName>
+          <ValueField>ETLPackageGroupId</ValueField>
+          <LabelField>ETLPackageGroup</LabelField>
+        </DataSetReference>
+      </ValidValues>
     </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
@@ -567,10 +639,15 @@ rownumber("ETLPackageExecutions") = 25, "Silver")</Color>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>0</RowIndex>
-          <ParameterName>ETLBatchExecutionId</ParameterName>
+          <ParameterName>ETLBatchId</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>ETLBatchExecutionId</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>2</ColumnIndex>
           <RowIndex>0</RowIndex>
           <ParameterName>ETLPackageGroupId</ParameterName>
         </CellDefinition>

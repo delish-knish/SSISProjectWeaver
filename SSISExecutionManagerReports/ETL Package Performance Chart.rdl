@@ -10,27 +10,19 @@
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="ETLPackageDuration">
+    <DataSet Name="ETLPackageExecutionNDaysHistory">
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
         <QueryParameters>
           <QueryParameter Name="@ETLPackageId">
             <Value>=Parameters!ETLPackageId.Value</Value>
           </QueryParameter>
+          <QueryParameter Name="@DaysBack">
+            <Value>=Parameters!PerformanceDaysBack.Value</Value>
+          </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT
-  ETLPackageId,
-  SSISDBProjectName,
-  SSISDBPackageName,
-  PackageStartDateTime,
-  DATEDIFF(MINUTE, PackageStartDateTime, PackageEndDateTime) AS Duration
-FROM
-  [rpt].[ETLPackageExecutionHistory]
-WHERE
-  ETLPackageId = @ETLPackageId 
-  AND DATEDIFF(DD,PackageStartDateTime, GETDATE()) &lt;=60
-ORDER  BY
-  PackageStartDateTime</CommandText>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLPackageExecutionNDaysHistory</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
@@ -56,27 +48,19 @@ ORDER  BY
         </Field>
       </Fields>
     </DataSet>
-    <DataSet Name="ETLPackage">
+    <DataSet Name="ETLPackageParamList">
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
-        <CommandText>SELECT
-	[ETLPackageId]
-	,[SSISDBProjectName] + '.' + [SSISDBPackageName] AS Name
-FROM
-	[rpt].[ETLPackages]
-WHERE
-	ETLPackageId &gt; 0
-ORDER BY 
-	[SSISDBProjectName]
-	,[SSISDBPackageName]</CommandText>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLPackageParamList</CommandText>
       </Query>
       <Fields>
         <Field Name="ETLPackageId">
           <DataField>ETLPackageId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="Name">
-          <DataField>Name</DataField>
+        <Field Name="ETLPackageName">
+          <DataField>ETLPackageName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -435,7 +419,7 @@ ORDER BY
                 <VerticalAlign>Top</VerticalAlign>
               </Style>
             </ChartNoDataMessage>
-            <DataSetName>ETLPackageDuration</DataSetName>
+            <DataSetName>ETLPackageExecutionNDaysHistory</DataSetName>
             <Top>0.47167in</Top>
             <Height>4.46875in</Height>
             <Width>12.03125in</Width>
@@ -468,11 +452,20 @@ ORDER BY
       <Prompt>ETL Package</Prompt>
       <ValidValues>
         <DataSetReference>
-          <DataSetName>ETLPackage</DataSetName>
+          <DataSetName>ETLPackageParamList</DataSetName>
           <ValueField>ETLPackageId</ValueField>
-          <LabelField>Name</LabelField>
+          <LabelField>ETLPackageName</LabelField>
         </DataSetReference>
       </ValidValues>
+    </ReportParameter>
+    <ReportParameter Name="PerformanceDaysBack">
+      <DataType>Integer</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>30</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Performance Days Back</Prompt>
     </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
@@ -484,6 +477,11 @@ ORDER BY
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>0</RowIndex>
           <ParameterName>ETLPackageId</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>PerformanceDaysBack</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>

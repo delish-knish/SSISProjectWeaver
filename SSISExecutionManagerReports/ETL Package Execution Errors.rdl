@@ -14,25 +14,21 @@
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
         <QueryParameters>
+          <QueryParameter Name="@ETLBatchExecutionId">
+            <Value>=nothing</Value>
+          </QueryParameter>
           <QueryParameter Name="@SSISDBExecutionId">
             <Value>=Parameters!SSISDBExecutionId.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT * 
-FROM 
-  rpt.ETLPackageExecutionErrors 
-WHERE 
-  SSISDBExecutionId = @SSISDBExecutionId </CommandText>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLPackageExecutionErrors</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
         <Field Name="ETLBatchExecutionId">
           <DataField>ETLBatchExecutionId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="CallingJobName">
-          <DataField>CallingJobName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="SSISDBProjectName">
           <DataField>SSISDBProjectName</DataField>
@@ -41,10 +37,6 @@ WHERE
         <Field Name="SSISDBPackageName">
           <DataField>SSISDBPackageName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ETLPackageExecutionErrorId">
-          <DataField>ETLPackageExecutionErrorId</DataField>
-          <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
         <Field Name="SSISDBExecutionId">
           <DataField>SSISDBExecutionId</DataField>
@@ -65,10 +57,6 @@ WHERE
         <Field Name="EmailNotificationSentDateTime">
           <DataField>EmailNotificationSentDateTime</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="ETLPackageExecutionErrorType">
-          <DataField>ETLPackageExecutionErrorType</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="ETLPackageRestartDateTime">
           <DataField>ETLPackageRestartDateTime</DataField>
@@ -849,7 +837,7 @@ WHERE
   </ReportSections>
   <ReportParameters>
     <ReportParameter Name="SSISDBExecutionId">
-      <DataType>String</DataType>
+      <DataType>Integer</DataType>
       <Prompt>SSISDB Execution Id</Prompt>
     </ReportParameter>
   </ReportParameters>

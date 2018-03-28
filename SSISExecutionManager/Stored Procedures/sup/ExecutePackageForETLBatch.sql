@@ -26,6 +26,9 @@ AS
         AND @SSISDBProjectName = SSISDBProjectName
         AND @SSISDBPackageName = SSISDBPackageName)
 
+    IF @ETLPackageId IS NULL
+      THROW 50000, 'The package does not exist. No packages were executed.', 1;
+
     --Execute the package
     EXEC [ctl].ExecuteETLPackage
       @ETLBatchExecutionId,

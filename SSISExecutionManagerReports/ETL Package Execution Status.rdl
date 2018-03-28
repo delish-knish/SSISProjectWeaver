@@ -18,30 +18,8 @@
             <Value>=Parameters!ETLBatchExecutionId.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT p.[ETLBatchExecutionId],
-       p.[ETLBatchName],
-       p.[ETLPackageGroupId],
-       p.[ETLPackageId],
-       p.[SSISDBExecutionId],
-       p.[SSISDBFolderName], 
-       p.[SSISDBProjectName],
-       p.[SSISDBPackageName],
-       p.[ExecutionStartDateTime],
-       p.[ExecutionEndDateTime],
-       p.[ExecutionDurationInMinutes],
-       p.[PackageExecutionStatus],
-       p.[SSISParentExecutionStatus],
-       p.[EntryPointPackageInd],
-       p.[ReadyForExecutionInd],
-       b.[ETLBatchStatus]
-FROM   
-  [rpt].[ETLPackageExecutionStatuses] p
-JOIN 
-  [rpt].[ETLBatchExecutions] b ON p.[ETLBatchExecutionId] = b.[ETLBatchExecutionId]
-WHERE 
-  p.[ETLBatchExecutionId] = @ETLBatchExecutionId
-ORDER  BY 
-  ISNULL([ExecutionStartDateTime], '9999-12-31') , [SSISDBProjectName]</CommandText>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLPackageExecutionStatuses</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
@@ -111,25 +89,49 @@ ORDER  BY
         </Field>
       </Fields>
     </DataSet>
-    <DataSet Name="ETLBatchExecutions">
+    <DataSet Name="ETLBatchExecutionsParamList">
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
-        <CommandText>SELECT TOP 40
-  ETLBatchExecutionId
-  ,CAST(ETLBatchExecutionId AS VARCHAR) + ' ' + ETLBatchName + ' - ' + DayOfWeekName + ' - ' + FORMAT( StartDateTime , 'MM/dd/yyyy h:mmtt', 'en-US' ) AS ETLBatchName
-FROM
- rpt.ETLBatchExecutions
-ORDER BY 
-  ETLBatchExecutionId DESC</CommandText>
+        <QueryParameters>
+          <QueryParameter Name="@MaxBatchesToReturn">
+            <Value>20</Value>
+          </QueryParameter>
+          <QueryParameter Name="@ETLBatchId">
+            <Value>=Parameters!ETLBatchId.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLBatchExecutionsParamList</CommandText>
       </Query>
       <Fields>
-        <Field Name="Id">
+        <Field Name="ETLBatchExecutionId">
           <DataField>ETLBatchExecutionId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="Name">
+        <Field Name="ETLBatchName">
           <DataField>ETLBatchName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="ETLBatchParamList">
+      <Query>
+        <DataSourceName>SSISExecutionManager</DataSourceName>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLBatchParamList</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="ETLBatchId">
+          <DataField>ETLBatchId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ETLBatchName">
+          <DataField>ETLBatchName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExecutionCount">
+          <DataField>ExecutionCount</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
@@ -1849,15 +1851,25 @@ Fields!PackageExecutionStatus.Value = "Canceled", "Salmon"
     </ReportSection>
   </ReportSections>
   <ReportParameters>
+    <ReportParameter Name="ETLBatchId">
+      <DataType>Integer</DataType>
+      <Prompt>ETL Batch Type</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>ETLBatchParamList</DataSetName>
+          <ValueField>ETLBatchId</ValueField>
+          <LabelField>ETLBatchName</LabelField>
+        </DataSetReference>
+      </ValidValues>
+    </ReportParameter>
     <ReportParameter Name="ETLBatchExecutionId">
       <DataType>Integer</DataType>
-      <Nullable>true</Nullable>
       <Prompt>ETL Batch Execution</Prompt>
       <ValidValues>
         <DataSetReference>
-          <DataSetName>ETLBatchExecutions</DataSetName>
-          <ValueField>Id</ValueField>
-          <LabelField>Name</LabelField>
+          <DataSetName>ETLBatchExecutionsParamList</DataSetName>
+          <ValueField>ETLBatchExecutionId</ValueField>
+          <LabelField>ETLBatchName</LabelField>
         </DataSetReference>
       </ValidValues>
     </ReportParameter>
@@ -1869,6 +1881,11 @@ Fields!PackageExecutionStatus.Value = "Canceled", "Salmon"
       <CellDefinitions>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>ETLBatchId</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
           <RowIndex>0</RowIndex>
           <ParameterName>ETLBatchExecutionId</ParameterName>
         </CellDefinition>

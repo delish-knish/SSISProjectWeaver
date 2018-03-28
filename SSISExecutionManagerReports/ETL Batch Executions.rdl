@@ -17,18 +17,16 @@
           <QueryParameter Name="@CancelETLBatchExecutionId">
             <Value>=Parameters!CancelETLBatchExecutionId.Value</Value>
           </QueryParameter>
+          <QueryParameter Name="@ETLBatchId">
+            <Value>=Parameters!ETLBatchId.Value</Value>
+          </QueryParameter>
         </QueryParameters>
         <CommandText>IF @CancelETLBatchExecutionId IS NOT NULL
 BEGIN
-  EXEC [ctl].[EndETLBatchExecution] @CancelETLBatchExecutionId, 10;
-  EXEC ctl.StopAllPackagesForETLBatchExecution @CancelETLBatchExecutionId;
-  EXEC [log].[InsertETLBatchExecutionEvent] 6,@CancelETLBatchExecutionId,NULL,'Batch canceled';
+  EXEC [sup].[CancelETLBatchExecution] @CancelETLBatchExecutionId;
 END
 
-SELECT        ETLBatchExecutionId, CallingJobName, ETLBatchName, DayOfWeekName, StartDateTime, EndDateTime, ExecutionDurationInMinutes, ETLBatchStatus, TotalEntryPointPackageCount, 
-                         TotalRemainingEntryPointPackageCount, TotalETLPackageCount, TotalRemainingETLPackageCount, BatchStatusLastUpdatedDate
-FROM            rpt.ETLBatchExecutions
-ORDER BY StartDateTime DESC</CommandText>
+EXEC [rpt].[GetETLBatchExecutions] @ETLBatchId = @ETLBatchId;</CommandText>
       </Query>
       <Fields>
         <Field Name="ETLBatchExecutionId">
@@ -38,6 +36,10 @@ ORDER BY StartDateTime DESC</CommandText>
         <Field Name="CallingJobName">
           <DataField>CallingJobName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ETLBatchId">
+          <DataField>ETLBatchId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="ETLBatchName">
           <DataField>ETLBatchName</DataField>
@@ -82,6 +84,23 @@ ORDER BY StartDateTime DESC</CommandText>
         <Field Name="BatchStatusLastUpdatedDate">
           <DataField>BatchStatusLastUpdatedDate</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="ETLBatchParamList">
+      <Query>
+        <DataSourceName>SSISExecutionManager</DataSourceName>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLBatchParamList</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="ETLBatchId">
+          <DataField>ETLBatchId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ETLBatchName">
+          <DataField>ETLBatchName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
@@ -1194,6 +1213,9 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                                     <Parameter Name="ETLBatchExecutionId">
                                       <Value>=Fields!ETLBatchExecutionId.Value</Value>
                                     </Parameter>
+                                    <Parameter Name="ETLBatchId">
+                                      <Value>=Fields!ETLBatchId.Value</Value>
+                                    </Parameter>
                                   </Parameters>
                                 </Drillthrough>
                               </Action>
@@ -1220,6 +1242,7 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -1309,6 +1332,9 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                                   <Parameters>
                                     <Parameter Name="ETLBatchExecutionId">
                                       <Value>=Fields!ETLBatchExecutionId.Value</Value>
+                                    </Parameter>
+                                    <Parameter Name="ETLBatchId">
+                                      <Value>=Fields!ETLBatchId.Value</Value>
                                     </Parameter>
                                   </Parameters>
                                 </Drillthrough>
@@ -2088,6 +2114,24 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
       <Prompt>Cancel ETL Batch Execution Id</Prompt>
       <Hidden>true</Hidden>
     </ReportParameter>
+    <ReportParameter Name="ETLBatchId">
+      <DataType>Integer</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>ETLBatchParamList</DataSetName>
+          <ValueField>ETLBatchId</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <Prompt>ETL Batch Type</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>ETLBatchParamList</DataSetName>
+          <ValueField>ETLBatchId</ValueField>
+          <LabelField>ETLBatchName</LabelField>
+        </DataSetReference>
+      </ValidValues>
+      <UsedInQuery>True</UsedInQuery>
+    </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
@@ -2098,6 +2142,11 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>0</RowIndex>
           <ParameterName>CancelETLBatchExecutionId</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>ETLBatchId</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>

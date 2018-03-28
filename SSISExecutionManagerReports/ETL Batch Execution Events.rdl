@@ -18,11 +18,8 @@
             <Value>=Parameters!ETLBatchExecutionId.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT * 
-FROM 
-  rpt.ETLBatchExecutionEvents 
-WHERE 
-  [ETLBatchExecutionId] = @ETLBatchExecutionId</CommandText>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLBatchExecutionEvents</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
@@ -54,12 +51,12 @@ WHERE
           <DataField>PackageName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="ETLBatchEventId">
-          <DataField>ETLBatchEventId</DataField>
+        <Field Name="ETLBatchExecutionEventId">
+          <DataField>ETLBatchExecutionEventId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
-        <Field Name="ETLBatchEventType">
-          <DataField>ETLBatchEventType</DataField>
+        <Field Name="ETLBatchExecutionEventType">
+          <DataField>ETLBatchExecutionEventType</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="EventDateTime">
@@ -72,16 +69,16 @@ WHERE
         </Field>
       </Fields>
     </DataSet>
-    <DataSet Name="ETLBatchExecutions">
+    <DataSet Name="ETLBatchExecutionsParamList">
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
-        <CommandText>SELECT TOP 20
-  ETLBatchExecutionId
-  ,CAST(ETLBatchExecutionId AS VARCHAR) + ' ' + ETLBatchName + ' - ' + DayOfWeekName + ' - ' + FORMAT( StartDateTime , 'MM/dd/yyyy h:mmtt', 'en-US' ) AS ETLBatchName
-FROM
- rpt.ETLBatchExecutions
-ORDER BY 
-  ETLBatchExecutionId DESC</CommandText>
+        <QueryParameters>
+          <QueryParameter Name="@MaxBatchesToReturn">
+            <Value>20</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetETLBatchExecutionsParamList</CommandText>
       </Query>
       <Fields>
         <Field Name="ETLBatchExecutionId">
@@ -386,14 +383,14 @@ ORDER BY
                                     <TablixCells>
                                       <TablixCell>
                                         <CellContents>
-                                          <Textbox Name="ETLBatchEventId">
+                                          <Textbox Name="ETLBatchExecutionEventId">
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!ETLBatchEventId.Value</Value>
+                                                    <Value>=Fields!ETLBatchExecutionEventId.Value</Value>
                                                     <Style>
                                                       <FontFamily />
                                                       <FontSize>8pt</FontSize>
@@ -406,7 +403,7 @@ ORDER BY
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
-                                            <rd:DefaultName>ETLBatchEventId</rd:DefaultName>
+                                            <rd:DefaultName>ETLBatchExecutionEventId</rd:DefaultName>
                                             <Style>
                                               <Border>
                                                 <Color>LightGrey</Color>
@@ -499,14 +496,14 @@ ORDER BY
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
-                                          <Textbox Name="ETLBatchEventType">
+                                          <Textbox Name="ETLBatchExecutionEventType">
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!ETLBatchEventType.Value</Value>
+                                                    <Value>=Fields!ETLBatchExecutionEventType.Value</Value>
                                                     <Style>
                                                       <FontFamily />
                                                       <FontSize>8pt</FontSize>
@@ -517,7 +514,7 @@ ORDER BY
                                                 <Style />
                                               </Paragraph>
                                             </Paragraphs>
-                                            <rd:DefaultName>ETLBatchEventType</rd:DefaultName>
+                                            <rd:DefaultName>ETLBatchExecutionEventType</rd:DefaultName>
                                             <Style>
                                               <Border>
                                                 <Color>LightGrey</Color>
@@ -771,7 +768,7 @@ ORDER BY
       <Prompt>ETL Batch Execution</Prompt>
       <ValidValues>
         <DataSetReference>
-          <DataSetName>ETLBatchExecutions</DataSetName>
+          <DataSetName>ETLBatchExecutionsParamList</DataSetName>
           <ValueField>ETLBatchExecutionId</ValueField>
           <LabelField>ETLBatchName</LabelField>
         </DataSetReference>
@@ -781,11 +778,11 @@ ORDER BY
   <ReportParametersLayout>
     <GridLayoutDefinition>
       <NumberOfColumns>1</NumberOfColumns>
-      <NumberOfRows>1</NumberOfRows>
+      <NumberOfRows>2</NumberOfRows>
       <CellDefinitions>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
-          <RowIndex>0</RowIndex>
+          <RowIndex>1</RowIndex>
           <ParameterName>ETLBatchExecutionId</ParameterName>
         </CellDefinition>
       </CellDefinitions>

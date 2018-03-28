@@ -10,7 +10,7 @@
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="event_messages">
+    <DataSet Name="SSISDBEventMessage">
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
         <QueryParameters>
@@ -18,13 +18,8 @@
             <Value>=Parameters!SSISDBExecutionId.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT * 
-FROM 
-  SSISDB.catalog.event_messages 
-WHERE 
-  operation_id = @SSISDBExecutionId 
-ORDER BY 
-  message_time DESC</CommandText>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>rpt.GetEventMessagesFromSSISDBCatalog</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
@@ -753,7 +748,7 @@ ORDER BY
                                   </TablixMember>
                                 </TablixMembers>
                               </TablixRowHierarchy>
-                              <DataSetName>event_messages</DataSetName>
+                              <DataSetName>SSISDBEventMessage</DataSetName>
                               <Top>0.3in</Top>
                               <Height>0.64in</Height>
                               <Width>11.20834in</Width>
@@ -798,7 +793,7 @@ ORDER BY
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>event_messages</DataSetName>
+            <DataSetName>SSISDBEventMessage</DataSetName>
             <PageBreak>
               <BreakLocation>End</BreakLocation>
             </PageBreak>

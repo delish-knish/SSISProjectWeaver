@@ -1,4 +1,4 @@
-﻿CREATE FUNCTION [dbo].[func_GetETLBatchStatusId] (@ETLBatchId INT)
+﻿CREATE FUNCTION [dbo].[func_GetETLBatchStatusId] (@ETLBatchExecutionId INT)
 RETURNS INT
 AS
   BEGIN
@@ -7,7 +7,7 @@ AS
          FROM
            ctl.[ETLBatchExecution]
          WHERE
-          [ETLBatchExecutionId] = @ETLBatchId)
+          [ETLBatchExecutionId] = @ETLBatchExecutionId)
 
       RETURN @ReturnValue
   END 
