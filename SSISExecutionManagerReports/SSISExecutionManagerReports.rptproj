@@ -46,8 +46,8 @@
       <FullPath>ETL Package Performance Chart.rdl</FullPath>
     </ProjectItem>
     <ProjectItem>
-      <Name>ETL Packages.rdl</Name>
-      <FullPath>ETL Packages.rdl</FullPath>
+      <Name>ETL Package Inventory.rdl</Name>
+      <FullPath>ETL Package Inventory.rdl</FullPath>
     </ProjectItem>
     <ProjectItem>
       <Name>Execute ETL Package.rdl</Name>
