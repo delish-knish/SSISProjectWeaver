@@ -1242,7 +1242,6 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -2103,6 +2102,23 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
     </ReportSection>
   </ReportSections>
   <ReportParameters>
+    <ReportParameter Name="ETLBatchId">
+      <DataType>Integer</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+        </Values>
+      </DefaultValue>
+      <Prompt>ETL Batch Type</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>ETLBatchParamList</DataSetName>
+          <ValueField>ETLBatchId</ValueField>
+          <LabelField>ETLBatchName</LabelField>
+        </DataSetReference>
+      </ValidValues>
+    </ReportParameter>
     <ReportParameter Name="CancelETLBatchExecutionId">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
@@ -2114,24 +2130,6 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
       <Prompt>Cancel ETL Batch Execution Id</Prompt>
       <Hidden>true</Hidden>
     </ReportParameter>
-    <ReportParameter Name="ETLBatchId">
-      <DataType>Integer</DataType>
-      <DefaultValue>
-        <DataSetReference>
-          <DataSetName>ETLBatchParamList</DataSetName>
-          <ValueField>ETLBatchId</ValueField>
-        </DataSetReference>
-      </DefaultValue>
-      <Prompt>ETL Batch Type</Prompt>
-      <ValidValues>
-        <DataSetReference>
-          <DataSetName>ETLBatchParamList</DataSetName>
-          <ValueField>ETLBatchId</ValueField>
-          <LabelField>ETLBatchName</LabelField>
-        </DataSetReference>
-      </ValidValues>
-      <UsedInQuery>True</UsedInQuery>
-    </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
@@ -2141,12 +2139,12 @@ Fields!ETLBatchStatus.Value = "Canceled", "LightGrey"
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>0</RowIndex>
-          <ParameterName>CancelETLBatchExecutionId</ParameterName>
+          <ParameterName>ETLBatchId</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
           <RowIndex>0</RowIndex>
-          <ParameterName>ETLBatchId</ParameterName>
+          <ParameterName>CancelETLBatchExecutionId</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>
