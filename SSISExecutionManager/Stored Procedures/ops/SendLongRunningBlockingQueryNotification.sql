@@ -44,9 +44,9 @@ AS
 		  ,ISNULL(blocker.login_name, '')	    AS BlockingLoginName
 		  ,ISNULL(dt.text  , '')                AS BlockedQuery
 		  ,Isnull(blocker.text, '')				AS BlockingQuery
-		FROM   sys.dm_exec_requests dr
-			   CROSS APPLY sys.dm_exec_sql_text(sql_handle) dt
-			   INNER JOIN sys.dm_exec_sessions de
+		FROM   master.sys.dm_exec_requests dr
+			   CROSS APPLY master.sys.dm_exec_sql_text(sql_handle) dt
+			   INNER JOIN master.sys.dm_exec_sessions de
 					   ON dr.session_id = de.session_id
 			   LEFT JOIN (SELECT
 							dr.session_id
@@ -54,9 +54,9 @@ AS
 							,de.program_name
 							,de.login_name
 							,text
-						  FROM   sys.dm_exec_requests dr
-								 CROSS APPLY sys.dm_exec_sql_text(sql_handle) dt
-								 INNER JOIN sys.dm_exec_sessions de
+						  FROM   master.sys.dm_exec_requests dr
+								 CROSS APPLY master.sys.dm_exec_sql_text(sql_handle) dt
+								 INNER JOIN master.sys.dm_exec_sessions de
 										 ON dr.session_id = de.session_id) blocker
 					  ON dr.blocking_session_id = blocker.session_id
 		WHERE
@@ -93,7 +93,7 @@ AS
 			  IF @WinningLogin = @BlockedHostName AND @BlockingHostName <> @WinningLogin
 			  BEGIN
 			    DECLARE @KillSQL NVARCHAR(4000) = 'KILL ' + CAST(@BlockingSessionId AS VARCHAR(100));
-				EXEC sp_executesql @KillSQL;
+				EXEC master.sys.sp_executesql @KillSQL;
 			  END
 
             EXEC msdb.dbo.sp_send_dbmail @recipients = @EmailRecipients,@subject = 'Blocking occurring on long running query',@body = @MailBody

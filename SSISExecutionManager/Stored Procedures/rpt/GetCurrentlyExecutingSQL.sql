@@ -16,10 +16,10 @@ AS
       ,wait_resource
       ,last_wait_type
     FROM
-      sys.dm_exec_requests r
-      OUTER APPLY sys.Dm_exec_sql_text(sql_handle) t
+      master.sys.dm_exec_requests r
+      OUTER APPLY master.sys.dm_exec_sql_text(sql_handle) t
     WHERE
-      session_id != @@SPID -- don't show this query
+      session_id <> @@SPID -- don't show this query
       AND session_id > 50 -- don't show system queries
     ORDER  BY
       r.start_time
