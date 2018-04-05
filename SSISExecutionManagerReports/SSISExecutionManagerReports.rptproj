@@ -42,12 +42,12 @@
       <FullPath>ETL Package Executions Gantt Chart.rdl</FullPath>
     </ProjectItem>
     <ProjectItem>
-      <Name>ETL Package Performance Chart.rdl</Name>
-      <FullPath>ETL Package Performance Chart.rdl</FullPath>
-    </ProjectItem>
-    <ProjectItem>
       <Name>ETL Package Inventory.rdl</Name>
       <FullPath>ETL Package Inventory.rdl</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>ETL Package Performance Chart.rdl</Name>
+      <FullPath>ETL Package Performance Chart.rdl</FullPath>
     </ProjectItem>
     <ProjectItem>
       <Name>Execute ETL Package.rdl</Name>
@@ -61,7 +61,7 @@
       <Options>
         <OutputPath>bin\Debug</OutputPath>
         <TargetServerVersion>SSRS2016</TargetServerVersion>
-        <TargetServerURL>http://localhost/reportserver</TargetServerURL>
+        <TargetServerURL>http://nsmwpuredw01/reportserver</TargetServerURL>
         <TargetFolder>SSISExecutionManagerReports</TargetFolder>
         <TargetDataSourceFolder>Data Sources</TargetDataSourceFolder>
         <TargetDatasetFolder>Datasets</TargetDatasetFolder>
@@ -87,7 +87,7 @@
       <Options>
         <OutputPath>bin\Release</OutputPath>
         <TargetServerVersion>SSRS2016</TargetServerVersion>
-        <TargetServerURL>http://nsmwpuredw01/ReportServer</TargetServerURL>
+        <TargetServerURL>http://psmwpuredw01/ReportServer</TargetServerURL>
         <TargetFolder>SSISExecutionManagerReports</TargetFolder>
         <TargetDataSourceFolder>Data Sources</TargetDataSourceFolder>
         <TargetDatasetFolder>Datasets</TargetDatasetFolder>
