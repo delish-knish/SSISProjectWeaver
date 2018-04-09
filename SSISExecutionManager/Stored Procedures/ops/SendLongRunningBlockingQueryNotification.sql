@@ -90,7 +90,7 @@ AS
 			  @BlockingQuery + @CRLF + @CRLF +
 			  IIF(@WinningLogin = @BlockedLogin AND @BlockingLogin <> @WinningLogin, 'Session ' + CAST(@BlockingSessionId AS NVARCHAR(20)) + ' KILLED!', '');
 
-			  IF @WinningLogin = @BlockedHostName AND @BlockingHostName <> @WinningLogin
+			  IF @WinningLogin = @BlockedLogin AND @BlockingLogin <> @WinningLogin
 			  BEGIN
 			    DECLARE @KillSQL NVARCHAR(4000) = 'KILL ' + CAST(@BlockingSessionId AS VARCHAR(100));
 				EXEC master.sys.sp_executesql @KillSQL;
