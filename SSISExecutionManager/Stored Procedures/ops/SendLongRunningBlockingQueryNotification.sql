@@ -8,18 +8,18 @@ AS
     --------------------------------------
     --Declare variables
     --------------------------------------
-    DECLARE @BlockedHostName			NVARCHAR(200),
-            @BlockedProgramName			NVARCHAR(400),
-            @BlockedLogin				NVARCHAR(400),
-            @RunningTime				NVARCHAR(400),
-            @BlockingSessionId			INT,
-			@BlockingHostName			NVARCHAR(200),
-            @BlockingProgramName		NVARCHAR(400),
-            @BlockingLogin				NVARCHAR(400),
-            @BlockedQuery				NVARCHAR(4000),
-            @BlockingQuery				NVARCHAR(4000),
+    DECLARE @BlockedHostName			NVARCHAR(MAX),
+            @BlockedProgramName			NVARCHAR(MAX),
+            @BlockedLogin				NVARCHAR(MAX),
+            @RunningTime				NVARCHAR(MAX),
+            @BlockingSessionId			NVARCHAR(MAX),
+			@BlockingHostName			NVARCHAR(MAX),
+            @BlockingProgramName		NVARCHAR(MAX),
+            @BlockingLogin				NVARCHAR(MAX),
+            @BlockedQuery				NVARCHAR(MAX),
+            @BlockingQuery				NVARCHAR(MAX),
             @MailBody					NVARCHAR(MAX),
-            @CRLF						CHAR(2) = CHAR(13) + CHAR(10)
+            @CRLF						NVARCHAR(MAX) = CHAR(13) + CHAR(10)
 
 
 
@@ -72,27 +72,27 @@ AS
         BEGIN
             SELECT
               @MailBody = N'On Server ' + @@SERVERNAME + @CRLF + 
-			  N'--Session causing blocking: ' + CAST(@BlockingSessionId AS NVARCHAR(20)) + @CRLF +
+			  N'--Session causing blocking: ' + @BlockingSessionId + @CRLF +
 			  N'--Host causing blocking: ' + @BlockingHostName + @CRLF +
 			  N'--Program causing blocking: ' + @BlockingProgramName + @CRLF + 
 			  N'--Login causing blocking: ' + @BlockingLogin + @CRLF + 
 			  N'--Host blocked: ' + @BlockedHostName + @CRLF +
 			  N'--Program blocked: ' + @BlockedProgramName + @CRLF + 
 			  N'--Login blocked: ' + @BlockedLogin + @CRLF + 
-			  N'--Blocked for: ' + @RunningTime + @CRLF + @CRLF + 
+			  N'--Blocked for: ' + @RunningTime + @CRLF + @CRLF +  
+			  IIF(@WinningLogin = @BlockedLogin AND @BlockingLogin <> @WinningLogin, N'Session ' + @BlockingSessionId + ' KILLED!' + @CRLF + @CRLF, N'') +
 			  N'  --------------------------------------------------------------' + @CRLF + 
 			  N'  ---- BLOCKED QUERY' + @CRLF + 
-			  N'  --------------------------------------------------------------' + @CRLF + @CRLF + 
-			  @BlockedQuery + @CRLF + @CRLF + @CRLF + 
+			  N'  --------------------------------------------------------------' + @CRLF +
+			  @BlockedQuery + @CRLF + @CRLF +
 			  N'  --------------------------------------------------------------------------' + @CRLF + 
 			  N'  ---- BLOCKING QUERY ' + @CRLF +
-              N'  --------------------------------------------------------------------------' + @CRLF + @CRLF + 
-			  @BlockingQuery + @CRLF + @CRLF +
-			  IIF(@WinningLogin = @BlockedLogin AND @BlockingLogin <> @WinningLogin, 'Session ' + CAST(@BlockingSessionId AS NVARCHAR(20)) + ' KILLED!', '');
+              N'  --------------------------------------------------------------------------' + @CRLF + 
+			  @BlockingQuery;
 
 			  IF @WinningLogin = @BlockedLogin AND @BlockingLogin <> @WinningLogin
 			  BEGIN
-			    DECLARE @KillSQL NVARCHAR(4000) = 'KILL ' + CAST(@BlockingSessionId AS VARCHAR(100));
+			    DECLARE @KillSQL NVARCHAR(4000) = 'KILL ' + @BlockingSessionId;
 				EXEC master.sys.sp_executesql @KillSQL;
 			  END
 
