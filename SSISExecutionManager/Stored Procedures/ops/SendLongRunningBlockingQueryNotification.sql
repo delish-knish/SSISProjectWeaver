@@ -60,7 +60,8 @@ AS
 										 ON dr.session_id = de.session_id) blocker
 					  ON dr.blocking_session_id = blocker.session_id
 		WHERE
-		  dr.blocking_session_id > 0
+		  ( DATEDIFF(s, start_time, GETDATE())%3600 ) / 60 >= @BlockingDurationInMinutes
+		  AND dr.blocking_session_id > 0
 		ORDER  BY
 		  start_time ASC 
 
