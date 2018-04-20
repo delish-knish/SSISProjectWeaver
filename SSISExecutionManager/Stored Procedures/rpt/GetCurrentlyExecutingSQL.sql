@@ -2,14 +2,14 @@
 AS
     SELECT
       r.start_time                                                  [Start Time]
-      ,session_ID                                                   [SPID]
+      ,session_id                                                   [SPID]
       ,DB_NAME(database_id)                                         [Database]
       ,SUBSTRING(t.text, ( r.statement_start_offset / 2 ) + 1, CASE
                                                                  WHEN statement_end_offset = -1
-                                                                       OR statement_end_offset = 0 THEN ( DATALENGTH(t.Text) - r.statement_start_offset / 2 ) + 1
+                                                                       OR statement_end_offset = 0 THEN ( DATALENGTH(t.text) - r.statement_start_offset / 2 ) + 1
                                                                  ELSE ( r.statement_end_offset - r.statement_start_offset ) / 2 + 1
                                                                END) [Executing SQL]
-      ,Status
+      ,status
       ,command
       ,wait_type
       ,wait_time
