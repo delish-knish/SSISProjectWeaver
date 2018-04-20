@@ -81,9 +81,9 @@
     <Folder Include="Tables\ref" />
     <Folder Include="Views" />
     <Folder Include="Views\rpt" />
-    <Folder Include="Stored Procedures\etl" />
     <Folder Include="Stored Procedures\util" />
     <Folder Include="Stored Procedures\rpt" />
+    <Folder Include="Stored Procedures\etl" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Functions\Scalar-valued\func_GetConfigurationValue.sql" />
@@ -192,10 +192,7 @@
     <Build Include="Stored Procedures\cfg\DeleteETLPackageGroup_ETLPackageGroupDependency.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLPackageGroup_ETLPackageGroupDependency.sql" />
     <Build Include="Views\rpt\ETLPackageGroupDependencies.sql" />
-    <Build Include="Stored Procedures\etl\DisableForeignKeyConstraints.sql" />
     <Build Include="Security\Schemas\etl.sql" />
-    <Build Include="Stored Procedures\etl\EnableForeignKeyConstraints.sql" />
-    <Build Include="Stored Procedures\etl\InsertForeignKeyConstraintViolations.sql" />
     <Build Include="Tables\log\ForeignKeyConstraintViolation.sql" />
     <Build Include="Stored Procedures\cfg\ClearHistory.sql" />
     <Build Include="Views\rpt\ETLPackageExecutableStatistics.sql" />
@@ -247,6 +244,9 @@
     <Build Include="Stored Procedures\rpt\GetETLPackageParamList.sql" />
     <Build Include="Stored Procedures\rpt\GetETLPackageExecutionHistory.sql" />
     <Build Include="Stored Procedures\rpt\GetETLPackageGroups.sql" />
+    <Build Include="Stored Procedures\etl\DisableForeignKeyConstraints.sql" />
+    <Build Include="Stored Procedures\etl\EnableForeignKeyConstraints.sql" />
+    <Build Include="Stored Procedures\etl\InsertForeignKeyConstraintViolations.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="References\SSISDB.dacpac" />
