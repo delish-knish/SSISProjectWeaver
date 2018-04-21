@@ -113,9 +113,13 @@
     <Build Include="Stored Procedures\cfg\SaveSQLCommand.sql" />
     <Build Include="Stored Procedures\ctl\DeleteETLBatchExecution.sql" />
     <Build Include="Stored Procedures\ctl\EndETLBatchExecution.sql" />
-    <Build Include="Stored Procedures\ctl\ExecuteETLBatch.sql" />
+    <Build Include="Stored Procedures\ctl\ExecuteETLBatch.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
     <Build Include="Stored Procedures\ctl\ExecuteETLPackage.sql" />
-    <Build Include="Stored Procedures\ctl\ExecuteETLPackagesForBatchExecution.sql" />
+    <Build Include="Stored Procedures\ctl\ExecuteETLPackagesForBatchExecution.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
     <None Include="Stored Procedures\ctl\ExecuteETLPackageGroupSQLCommands.sql" />
     <Build Include="Stored Procedures\ctl\InsertETLBatchSSISDBExecution.sql" />
     <Build Include="Stored Procedures\ctl\InsertUnhandledError.sql" />
@@ -199,16 +203,24 @@
     <Build Include="Tables\ref\SSISDBLoggingLevel.sql" />
     <Build Include="Views\rpt\ETLBatchGroupsStatuses.sql" />
     <Build Include="Stored Procedures\ops\SendETLBatchGroupsStatusesNotification.sql" />
-    <Build Include="Stored Procedures\ctl\AreETLBatchSQLCommandConditionsMet.sql" />
+    <Build Include="Stored Procedures\ctl\AreETLBatchSQLCommandConditionsMet.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
     <Build Include="Functions\Scalar-valued\func_IsETLBatchExecutionTimedOut.sql" />
     <Build Include="Functions\Table-valued\func_GetETLBatchExecutionSSISDBExecutionSummary.sql" />
     <Build Include="Functions\Scalar-valued\func_IsETLPackageRunning.sql" />
     <Build Include="Functions\Scalar-valued\func_IsPackageGroupComplete.sql" />
-    <Build Include="Stored Procedures\sqlcmd\IsFilePresent.sql" />
+    <Build Include="Stored Procedures\sqlcmd\IsFilePresent.sql">
+      <SuppressTSqlWarnings>71562</SuppressTSqlWarnings>
+    </Build>
     <Build Include="Security\Schemas\util.sql" />
-    <Build Include="Stored Procedures\util\GetDiskSpace.sql" />
+    <Build Include="Stored Procedures\util\GetDiskSpace.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
     <Build Include="Views\rpt\ETLPackagesInFailedState.sql" />
-    <Build Include="Stored Procedures\util\CopyDatabase.sql" />
+    <Build Include="Stored Procedures\util\CopyDatabase.sql">
+      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+    </Build>
     <Build Include="Tables\cfg\ETLBatch.sql" />
     <Build Include="Tables\cfg\ETLPackageGroup_ETLPackage_SQLCommandCondition.sql" />
     <Build Include="Tables\cfg\ETLBatch_SQLCommandCondition.sql" />
