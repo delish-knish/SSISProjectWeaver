@@ -107,7 +107,7 @@ AS
               ,ExecuteThursdayInd
               ,ExecuteFridayInd
               ,ExecuteSaturdayInd
-              ,SupportSeverityLevelId )
+              ,SupportSeverityLevelId  )
       VALUES( source.ETLPackageGroupId
               ,source.ETLPackageId
               ,source.EnabledInd
