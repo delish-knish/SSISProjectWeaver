@@ -1,22 +1,22 @@
-﻿CREATE PROCEDURE [cfg].[SaveETLPackageGroup_ETLPackage] @ETLPackageGroupId            INT,
-                                                        @ETLPackageId                 INT,
-                                                        @EnabledInd                   INT,
-                                                        @IgnoreForBatchCompleteInd    BIT = 0,
-                                                        @ReadyForExecutionInd         BIT,
-                                                        @BypassEntryPointInd          BIT,
-                                                        @IgnoreDependenciesInd        BIT,
-														@IgnoreSQLCommandConditionsDefaultInd BIT,
-                                                        @MaximumRetryAttempts         INT,
-                                                        @OverrideSSISDBLoggingLevelId INT,
-														@ExecuteNthDayOfMonth		  INT,
-                                                        @ExecuteSundayInd             BIT,
-                                                        @ExecuteMondayInd             BIT,
-                                                        @ExecuteTuesdayInd            BIT,
-                                                        @ExecuteWednesdayInd          BIT,
-                                                        @ExecuteThursdayInd           BIT,
-                                                        @ExecuteFridayInd             BIT,
-                                                        @ExecuteSaturdayInd           BIT,
-                                                        @SupportSeverityLevelId       INT
+﻿CREATE PROCEDURE [cfg].[SaveETLPackageGroup_ETLPackage] @ETLPackageGroupId                    INT,
+                                                       @ETLPackageId                         INT,
+                                                       @EnabledInd                           INT,
+                                                       @IgnoreForBatchCompleteInd            BIT = 0,
+                                                       @ReadyForExecutionInd                 BIT,
+                                                       @BypassEntryPointInd                  BIT,
+                                                       @IgnoreDependenciesInd                BIT,
+                                                       @IgnoreSQLCommandConditionsDefaultInd BIT,
+                                                       @MaximumRetryAttempts                 INT,
+                                                       @OverrideSSISDBLoggingLevelId         INT,
+                                                       @ExecuteNthDayOfMonth                 INT,
+                                                       @ExecuteSundayInd                     BIT,
+                                                       @ExecuteMondayInd                     BIT,
+                                                       @ExecuteTuesdayInd                    BIT,
+                                                       @ExecuteWednesdayInd                  BIT,
+                                                       @ExecuteThursdayInd                   BIT,
+                                                       @ExecuteFridayInd                     BIT,
+                                                       @ExecuteSaturdayInd                   BIT,
+                                                       @SupportSeverityLevelId               INT
 AS
     --Get entry-point SSISDBPackageId
     DECLARE @EntryPointETLPackageId BIGINT = (SELECT
@@ -26,7 +26,7 @@ AS
        WHERE
         ETLPackageId = @ETLPackageId)
 
-    --If the lookup to the SSISDB fails, throw an exception with an explanation
+    --Validate configuration
     IF ( @EntryPointETLPackageId IS NOT NULL
          AND @ReadyForExecutionInd = 1 )
         OR ( @BypassEntryPointInd = 0 )
@@ -45,90 +45,87 @@ AS
             THROW 50006, 'Only entry-point packages can have their logging level overridden.', 1;
       END
 
-    ELSE --Save the ETLPackage row
-      BEGIN
-          MERGE [cfg].[ETLPackageGroup_ETLPackage] AS Target
-          USING (SELECT
-                   @ETLPackageGroupId
-                   ,@ETLPackageId
-                   ,@EnabledInd
-                   ,@IgnoreForBatchCompleteInd
-                   ,@ReadyForExecutionInd
-                   ,@BypassEntryPointInd
-                   ,@IgnoreDependenciesInd
-				   ,@IgnoreSQLCommandConditionsDefaultInd
-                   ,@MaximumRetryAttempts
-                   ,@OverrideSSISDBLoggingLevelId
-				   ,@ExecuteNthDayOfMonth
-                   ,@ExecuteSundayInd
-                   ,@ExecuteMondayInd
-                   ,@ExecuteTuesdayInd
-                   ,@ExecuteWednesdayInd
-                   ,@ExecuteThursdayInd
-                   ,@ExecuteFridayInd
-                   ,@ExecuteSaturdayInd
-                   ,@SupportSeverityLevelId) AS source (ETLPackageGroupId, ETLPackageId, EnabledInd, IgnoreForBatchCompleteInd, ReadyForExecutionInd, BypassEntryPointInd, IgnoreDependenciesInd, IgnoreSQLCommandConditionsDefaultInd, MaximumRetryAttempts, OverrideSSISDBLoggingLevelId, ExecuteNthDayOfMonth, ExecuteSundayInd, ExecuteMondayInd, ExecuteTuesdayInd, ExecuteWednesdayInd, ExecuteThursdayInd, ExecuteFridayInd, ExecuteSaturdayInd, SupportSeverityLevelId )
-          ON target.[ETLPackageGroupId] = source.ETLPackageGroupId
-             AND target.ETLPackageId = source.ETLPackageId
-          WHEN Matched THEN
-            UPDATE SET EnabledInd = source.EnabledInd
-                       ,[IgnoreForBatchCompleteDefaultInd] = source.IgnoreForBatchCompleteInd
-                       ,ReadyForExecutionInd = source.ReadyForExecutionInd
-                       ,[BypassEntryPointDefaultInd] = source.BypassEntryPointInd
-                       ,[IgnoreDependenciesDefaultInd] = source.IgnoreDependenciesInd
-					   ,IgnoreSQLCommandConditionsDefaultInd = source.IgnoreSQLCommandConditionsDefaultInd
-                       ,[MaximumRetryAttemptsDefault] = source.MaximumRetryAttempts
-                       ,OverrideSSISDBLoggingLevelId = source.OverrideSSISDBLoggingLevelId
-					   ,ExecuteNthDayOfMonth = source.ExecuteNthDayOfMonth
-                       ,ExecuteSundayInd = source.ExecuteSundayInd
-                       ,ExecuteMondayInd = source.ExecuteMondayInd
-                       ,ExecuteTuesdayInd = source.ExecuteTuesdayInd
-                       ,ExecuteWednesdayInd = source.ExecuteWednesdayInd
-                       ,ExecuteThursdayInd = source.ExecuteThursdayInd
-                       ,ExecuteFridayInd = source.ExecuteFridayInd
-                       ,ExecuteSaturdayInd = source.ExecuteSaturdayInd
-                       ,SupportSeverityLevelId = source.SupportSeverityLevelId
-                       ,[LastUpdatedDate] = GETDATE()
-                       ,[LastUpdatedUser] = SUSER_SNAME()
-          WHEN NOT MATCHED THEN
-            INSERT (ETLPackageGroupId
-                    ,ETLPackageId
-                    ,EnabledInd
-                    ,IgnoreForBatchCompleteDefaultInd
-                    ,ReadyForExecutionInd
-                    ,BypassEntryPointDefaultInd
-                    ,IgnoreDependenciesDefaultInd
-					,IgnoreSQLCommandConditionsDefaultInd
-                    ,MaximumRetryAttemptsDefault
-                    ,OverrideSSISDBLoggingLevelId
-					,ExecuteNthDayOfMonth
-                    ,ExecuteSundayInd
-                    ,ExecuteMondayInd
-                    ,ExecuteTuesdayInd
-                    ,ExecuteWednesdayInd
-                    ,ExecuteThursdayInd
-                    ,ExecuteFridayInd
-                    ,ExecuteSaturdayInd
-                    ,SupportSeverityLevelId )
-            VALUES( source.ETLPackageGroupId
-                    ,source.ETLPackageId
-                    ,source.EnabledInd
-                    ,source.IgnoreForBatchCompleteInd
-                    ,source.ReadyForExecutionInd
-                    ,source.BypassEntryPointInd
-                    ,source.IgnoreDependenciesInd
-					,source.IgnoreSQLCommandConditionsDefaultInd
-                    ,source.MaximumRetryAttempts
-                    ,source.OverrideSSISDBLoggingLevelId
-					,source.ExecuteNthDayOfMonth
-                    ,source.ExecuteSundayInd
-                    ,source.ExecuteMondayInd
-                    ,source.ExecuteTuesdayInd
-                    ,source.ExecuteWednesdayInd
-                    ,source.ExecuteThursdayInd
-                    ,source.ExecuteFridayInd
-                    ,source.ExecuteSaturdayInd
-                    ,source.SupportSeverityLevelId);
-      END
+    MERGE [cfg].[ETLPackageGroup_ETLPackage] AS Target
+    USING (SELECT
+             @ETLPackageGroupId
+             ,@ETLPackageId
+             ,@EnabledInd
+             ,@IgnoreForBatchCompleteInd
+             ,@ReadyForExecutionInd
+             ,@BypassEntryPointInd
+             ,@IgnoreDependenciesInd
+             ,@IgnoreSQLCommandConditionsDefaultInd
+             ,@MaximumRetryAttempts
+             ,@OverrideSSISDBLoggingLevelId
+             ,@ExecuteNthDayOfMonth
+             ,@ExecuteSundayInd
+             ,@ExecuteMondayInd
+             ,@ExecuteTuesdayInd
+             ,@ExecuteWednesdayInd
+             ,@ExecuteThursdayInd
+             ,@ExecuteFridayInd
+             ,@ExecuteSaturdayInd
+             ,@SupportSeverityLevelId) AS source (ETLPackageGroupId, ETLPackageId, EnabledInd, IgnoreForBatchCompleteInd, ReadyForExecutionInd, BypassEntryPointInd, IgnoreDependenciesInd, IgnoreSQLCommandConditionsDefaultInd, MaximumRetryAttempts, OverrideSSISDBLoggingLevelId, ExecuteNthDayOfMonth, ExecuteSundayInd, ExecuteMondayInd, ExecuteTuesdayInd, ExecuteWednesdayInd, ExecuteThursdayInd, ExecuteFridayInd, ExecuteSaturdayInd, SupportSeverityLevelId )
+    ON target.[ETLPackageGroupId] = source.ETLPackageGroupId
+       AND target.ETLPackageId = source.ETLPackageId
+    WHEN Matched THEN
+      UPDATE SET EnabledInd = source.EnabledInd
+                 ,[IgnoreForBatchCompleteDefaultInd] = source.IgnoreForBatchCompleteInd
+                 ,ReadyForExecutionInd = source.ReadyForExecutionInd
+                 ,[BypassEntryPointDefaultInd] = source.BypassEntryPointInd
+                 ,[IgnoreDependenciesDefaultInd] = source.IgnoreDependenciesInd
+                 ,IgnoreSQLCommandConditionsDefaultInd = source.IgnoreSQLCommandConditionsDefaultInd
+                 ,[MaximumRetryAttemptsDefault] = source.MaximumRetryAttempts
+                 ,OverrideSSISDBLoggingLevelId = source.OverrideSSISDBLoggingLevelId
+                 ,ExecuteNthDayOfMonth = source.ExecuteNthDayOfMonth
+                 ,ExecuteSundayInd = source.ExecuteSundayInd
+                 ,ExecuteMondayInd = source.ExecuteMondayInd
+                 ,ExecuteTuesdayInd = source.ExecuteTuesdayInd
+                 ,ExecuteWednesdayInd = source.ExecuteWednesdayInd
+                 ,ExecuteThursdayInd = source.ExecuteThursdayInd
+                 ,ExecuteFridayInd = source.ExecuteFridayInd
+                 ,ExecuteSaturdayInd = source.ExecuteSaturdayInd
+                 ,SupportSeverityLevelId = source.SupportSeverityLevelId
+                 ,[LastUpdatedDate] = GETDATE()
+                 ,[LastUpdatedUser] = SUSER_SNAME()
+    WHEN NOT MATCHED THEN
+      INSERT (ETLPackageGroupId
+              ,ETLPackageId
+              ,EnabledInd
+              ,IgnoreForBatchCompleteDefaultInd
+              ,ReadyForExecutionInd
+              ,BypassEntryPointDefaultInd
+              ,IgnoreDependenciesDefaultInd
+              ,IgnoreSQLCommandConditionsDefaultInd
+              ,MaximumRetryAttemptsDefault
+              ,OverrideSSISDBLoggingLevelId
+              ,ExecuteNthDayOfMonth
+              ,ExecuteSundayInd
+              ,ExecuteMondayInd
+              ,ExecuteTuesdayInd
+              ,ExecuteWednesdayInd
+              ,ExecuteThursdayInd
+              ,ExecuteFridayInd
+              ,ExecuteSaturdayInd
+              ,SupportSeverityLevelId )
+      VALUES( source.ETLPackageGroupId
+              ,source.ETLPackageId
+              ,source.EnabledInd
+              ,source.IgnoreForBatchCompleteInd
+              ,source.ReadyForExecutionInd
+              ,source.BypassEntryPointInd
+              ,source.IgnoreDependenciesInd
+              ,source.IgnoreSQLCommandConditionsDefaultInd
+              ,source.MaximumRetryAttempts
+              ,source.OverrideSSISDBLoggingLevelId
+              ,source.ExecuteNthDayOfMonth
+              ,source.ExecuteSundayInd
+              ,source.ExecuteMondayInd
+              ,source.ExecuteTuesdayInd
+              ,source.ExecuteWednesdayInd
+              ,source.ExecuteThursdayInd
+              ,source.ExecuteFridayInd
+              ,source.ExecuteSaturdayInd
+              ,source.SupportSeverityLevelId);
 
     RETURN 0 
