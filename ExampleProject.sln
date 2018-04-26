@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{159641D6-6404-4A2A-AE62-294DE0FE8301}") = "ExampleProjectA", "ExampleProjectA\ExampleProjectA.dtproj", "{64203D8E-1BDE-4DDC-970A-9CC05C34ACC7}"
+EndProject
+Project("{159641D6-6404-4A2A-AE62-294DE0FE8301}") = "ExampleProjectB", "ExampleProjectB\ExampleProjectB.dtproj", "{E5A94176-1A51-4682-9B95-FEDF0869972A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+		Release|Default = Release|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{64203D8E-1BDE-4DDC-970A-9CC05C34ACC7}.Development|Default.ActiveCfg = Development
+		{64203D8E-1BDE-4DDC-970A-9CC05C34ACC7}.Development|Default.Build.0 = Development
+		{64203D8E-1BDE-4DDC-970A-9CC05C34ACC7}.Release|Default.ActiveCfg = Release
+		{64203D8E-1BDE-4DDC-970A-9CC05C34ACC7}.Release|Default.Build.0 = Release
+		{E5A94176-1A51-4682-9B95-FEDF0869972A}.Development|Default.ActiveCfg = Development
+		{E5A94176-1A51-4682-9B95-FEDF0869972A}.Development|Default.Build.0 = Development
+		{E5A94176-1A51-4682-9B95-FEDF0869972A}.Release|Default.ActiveCfg = Release
+		{E5A94176-1A51-4682-9B95-FEDF0869972A}.Release|Default.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {13597577-0815-49B2-9728-593A8F979ABB}
+	EndGlobalSection
+EndGlobal
