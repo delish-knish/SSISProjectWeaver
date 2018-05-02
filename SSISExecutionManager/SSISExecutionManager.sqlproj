@@ -8,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{f8ea7c7b-9b18-4b2e-9d59-a7539c6aeb05}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -89,9 +89,9 @@
     <Build Include="Functions\Scalar-valued\func_GetConfigurationValue.sql" />
     <Build Include="Functions\Scalar-valued\func_GetETLBatchStatusId.sql" />
     <Build Include="Functions\Scalar-valued\func_GetLastPackageExecutionStatus.sql" />
-    <Build Include="Functions\Scalar-valued\func_GetSQLAgentJobNextRunDateTime.sql" />
+    <None Include="Functions\Scalar-valued\func_GetSQLAgentJobNextRunDateTime.sql" />
     <Build Include="Functions\Scalar-valued\func_GetSSISDBPackageId.sql" />
-    <Build Include="Functions\Scalar-valued\func_IsSQLAgentJobRunning.sql" />
+    <None Include="Functions\Scalar-valued\func_IsSQLAgentJobRunning.sql" />
     <Build Include="Functions\Table-valued\ops\func_GetSSISPackageExecutionMessages.sql" />
     <Build Include="Functions\Table-valued\func_GetETLBatchExecutionStatus.sql" />
     <Build Include="Functions\Table-valued\func_GetETLPackageExecutionErrorsForBatchExecution.sql" />
@@ -134,7 +134,7 @@
     <Build Include="Stored Procedures\ops\SendAndLogLongRunningETLPackageNotification.sql" />
     <Build Include="Stored Procedures\ops\SendLongRunningBlockingQueryNotification.sql" />
     <Build Include="Stored Procedures\ops\SendSSISErrorEmail.sql" />
-    <Build Include="Stored Procedures\sqlcmd\CheckAndWaitForCompetingJobs.sql" />
+    <None Include="Stored Procedures\sqlcmd\CheckAndWaitForCompetingJobs.sql" />
     <Build Include="Stored Procedures\sup\EnableDisableProjectPackage.sql" />
     <Build Include="Stored Procedures\sup\ExecutePackageForETLBatch.sql" />
     <Build Include="Stored Procedures\sup\ResetProjectPackageForNormalExecution.sql" />
@@ -272,15 +272,10 @@
       <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
       <DatabaseSqlCmdVariable>SSISDB</DatabaseSqlCmdVariable>
     </ArtifactReference>
-    <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
-      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac</HintPath>
+    <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac">
+      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\AzureV12\SqlSchemas\master.dacpac</HintPath>
       <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
       <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
-    </ArtifactReference>
-    <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\msdb.dacpac">
-      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\msdb.dacpac</HintPath>
-      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
-      <DatabaseVariableLiteralValue>msdb</DatabaseVariableLiteralValue>
     </ArtifactReference>
   </ItemGroup>
   <ItemGroup>

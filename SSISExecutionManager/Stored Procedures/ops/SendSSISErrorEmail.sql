@@ -37,6 +37,6 @@ AS
       SET @EmailBody = N'<p>' + @EmailBodyHeader + '</p><b>No errors found.<b>';
 
 
-    EXEC msdb.dbo.sp_send_dbmail @recipients = @EmailRecipients,@subject = @EmailSubject,@body = @EmailBody,@body_format = 'HTML',@importance = 'High';
+    --EXEC msdb.dbo.sp_send_dbmail @recipients = @EmailRecipients,@subject = @EmailSubject,@body = @EmailBody,@body_format = 'HTML',@importance = 'High';
 
     RETURN 0 

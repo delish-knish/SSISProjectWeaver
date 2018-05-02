@@ -56,7 +56,7 @@ AS
                 SELECT
                   @MailBody = N'Project "' + @SSISDBProjectName + '", Package "' + @SSISDBPackageName + ', configured for environment "' + @SSISEnvironmentName + '" has been flagged for restart on server "' + @ServerName + '.'
 
-                EXEC msdb.dbo.sp_send_dbmail @recipients = @ErrorEmailRecipients,@subject = 'Packaged Flagged for Restart',@body = @MailBody,@importance = 'High'
+                --EXEC msdb.dbo.sp_send_dbmail @recipients = @ErrorEmailRecipients,@subject = 'Packaged Flagged for Restart',@body = @MailBody,@importance = 'High'
             END
 
           FETCH NEXT FROM UnexpectedErrorCursor INTO @ETLPackageId, @SSISDBFolderName, @SSISDBProjectName, @SSISDBPackageName, @SSISDBExecutionId, @ETLPackageGroupId;

@@ -87,10 +87,10 @@ AS
                            + ' minutes.  The execution event started at '
                            + CONVERT(VARCHAR(30), @StartTime) + '.'
 
-            EXEC msdb.dbo.sp_send_dbmail
-              @recipients = @EmailRecipients,
-              @subject = 'Slow Running SSIS Package',
-              @body = @EMailBody
+            --EXEC msdb.dbo.sp_send_dbmail
+            --  @recipients = @EmailRecipients,
+            --  @subject = 'Slow Running SSIS Package',
+            --  @body = @EMailBody
 
             INSERT INTO [log].ETLPackageExecutionLongRunning
                         (SSISDBExecutionId

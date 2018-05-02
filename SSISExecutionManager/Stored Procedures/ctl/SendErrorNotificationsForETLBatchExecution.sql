@@ -110,11 +110,11 @@ AS
                         + @CRLF + @CRLF + N'Error Description: '
                         + @ErrorMessage
 
-          EXEC msdb.dbo.sp_send_dbmail
-            @recipients = @ErrorEmailRecipients,
-            @subject = 'Open Incident',
-            @body = @MailBody,
-            @importance = 'High'
+          --EXEC msdb.dbo.sp_send_dbmail
+          --  @recipients = @ErrorEmailRecipients,
+          --  @subject = 'Open Incident',
+          --  @body = @MailBody,
+          --  @importance = 'High'
 
           --Mark the errors as having a notification sent
           UPDATE [log].ETLPackageExecutionError

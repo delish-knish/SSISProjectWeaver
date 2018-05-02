@@ -72,11 +72,11 @@ AS
                                             + @SQLCommandName + '" on server "'
                                             + @ServerName + '.'
 
-                            EXEC msdb.dbo.sp_send_dbmail
-                              @recipients = @EmailRecipients,
-                              @subject = 'ETL Batch Condition Not Met',
-                              @body = @MailBody,
-                              @importance = 'High'
+                            --EXEC msdb.dbo.sp_send_dbmail
+                            --  @recipients = @EmailRecipients,
+                            --  @subject = 'ETL Batch Condition Not Met',
+                            --  @body = @MailBody,
+                            --  @importance = 'High'
                         END
 
                   BREAK;
@@ -100,11 +100,11 @@ AS
                                             + @SQLCommandName + '" on server "'
                                             + @ServerName + '.'
 
-                            EXEC msdb.dbo.sp_send_dbmail
-                              @recipients = @EmailRecipients,
-                              @subject = 'ETL Batch Condition Met',
-                              @body = @MailBody,
-                              @importance = 'High'
+                            --EXEC msdb.dbo.sp_send_dbmail
+                            --  @recipients = @EmailRecipients,
+                            --  @subject = 'ETL Batch Condition Met',
+                            --  @body = @MailBody,
+                            --  @importance = 'High'
                         END
               END
 

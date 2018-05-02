@@ -83,11 +83,11 @@ AS
 
 	SET @tableHTML = REPLACE(@tableHTML, '<td>', '<td style="border: 1px solid black;">')
 
-    EXEC msdb.dbo.sp_send_dbmail
-      @recipients = @EmailRecipients,
-      @subject = @EmailSubject,
-      @body = @tableHTML,
-      @body_format = 'HTML',
-      @importance = 'High';
+    --EXEC msdb.dbo.sp_send_dbmail
+    --  @recipients = @EmailRecipients,
+    --  @subject = @EmailSubject,
+    --  @body = @tableHTML,
+    --  @body_format = 'HTML',
+    --  @importance = 'High';
 
     RETURN 0

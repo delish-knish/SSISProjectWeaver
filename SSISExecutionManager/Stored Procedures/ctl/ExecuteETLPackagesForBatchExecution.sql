@@ -100,11 +100,11 @@ AS
                                             + @SQLCommandName + '" on server "'
                                             + @ServerName + '.'
 
-                            EXEC msdb.dbo.sp_send_dbmail
-                              @recipients = @EmailRecipients,
-                              @subject = 'Package Condition Not Met',
-                              @body = @MailBody,
-                              @importance = 'High'
+                            --EXEC msdb.dbo.sp_send_dbmail
+                            --  @recipients = @EmailRecipients,
+                            --  @subject = 'Package Condition Not Met',
+                            --  @body = @MailBody,
+                            --  @importance = 'High'
                         END
 
                       BREAK;
@@ -129,11 +129,11 @@ AS
                                             + '" has met condition "' + @SQLCommandName
                                             + '" on server "' + @ServerName + '.'
 
-                            EXEC msdb.dbo.sp_send_dbmail
-                              @recipients = @EmailRecipients,
-                              @subject = 'Package Condition Met',
-                              @body = @MailBody,
-                              @importance = 'High'
+                            --EXEC msdb.dbo.sp_send_dbmail
+                            --  @recipients = @EmailRecipients,
+                            --  @subject = 'Package Condition Met',
+                            --  @body = @MailBody,
+                            --  @importance = 'High'
                         END
                   END
 

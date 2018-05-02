@@ -97,7 +97,7 @@ AS
 				EXEC master.sys.sp_executesql @KillSQL;
 			  END
 
-            EXEC msdb.dbo.sp_send_dbmail @recipients = @EmailRecipients,@subject = 'Blocking occurring on long running query',@body = @MailBody
+            --EXEC msdb.dbo.sp_send_dbmail @recipients = @EmailRecipients,@subject = 'Blocking occurring on long running query',@body = @MailBody
 
             FETCH NEXT FROM MY_CURSOR INTO @BlockedHostName, @BlockedProgramName, @BlockedLogin, @RunningTime, @BlockingSessionId, @BlockingHostName, @BlockingProgramName, @BlockingLogin, @BlockedQuery, @BlockingQuery		
         END

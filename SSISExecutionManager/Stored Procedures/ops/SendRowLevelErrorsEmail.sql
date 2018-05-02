@@ -44,11 +44,11 @@ AS
 								FOR XML PATH('tr'), TYPE ) AS NVARCHAR(MAX) )
                      + N'</table>';
 
-    EXEC msdb.dbo.sp_send_dbmail
-      @recipients = @EmailRecipients,
-      @subject = @EmailSubject,
-      @body = @tableHTML,
-      @body_format = 'HTML',
-      @importance = 'High';
+    --EXEC msdb.dbo.sp_send_dbmail
+    --  @recipients = @EmailRecipients,
+    --  @subject = @EmailSubject,
+    --  @body = @tableHTML,
+    --  @body_format = 'HTML',
+    --  @importance = 'High';
 
     RETURN 0
