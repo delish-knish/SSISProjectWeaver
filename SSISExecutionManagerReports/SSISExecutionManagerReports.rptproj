@@ -63,7 +63,6 @@
     <Report Include="ETL Package Executions Gantt Chart.rdl" />
     <Report Include="ETL Package Inventory.rdl" />
     <Report Include="ETL Package Performance Chart.rdl" />
-    <Report Include="ETL Packages.rdl" />
     <Report Include="Execute ETL Package.rdl" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Reporting Services\Microsoft.ReportingServices.MSBuilder.targets" />

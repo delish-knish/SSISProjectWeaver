@@ -1,0 +1,7 @@
+1) SQL Server database engine 2012+
+2) Visual Studio 2017 Communit Edition
+2) SSDT for VS2017 (database, SSIS, SSRS, SSAS)
+3) vsts agent installed and configured
+4) SSISDB catalog created (for example projects)
+5) PowerShell ReportingServicesTools (Install-Module -Name ReportingServicesTools)
+
