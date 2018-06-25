@@ -259,6 +259,7 @@
     <Build Include="Stored Procedures\etl\DisableForeignKeyConstraints.sql" />
     <Build Include="Stored Procedures\etl\EnableForeignKeyConstraints.sql" />
     <Build Include="Stored Procedures\etl\InsertForeignKeyConstraintViolations.sql" />
+    <Build Include="Stored Procedures\cfg\ConfigureFromSSISDB.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="References\SSISDB.dacpac" />

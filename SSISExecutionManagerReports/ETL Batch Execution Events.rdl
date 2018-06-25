@@ -13,13 +13,19 @@
     <DataSet Name="ETLBatchExecutionEvents">
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
-        <QueryParameters>
-          <QueryParameter Name="@ETLBatchExecutionId">
-            <Value>=Parameters!ETLBatchExecutionId.Value</Value>
-          </QueryParameter>
-        </QueryParameters>
-        <CommandType>StoredProcedure</CommandType>
-        <CommandText>rpt.GetETLBatchExecutionEvents</CommandText>
+        <CommandText>SELECT 
+[ETLBatchExecutionId]
+      ,[CallingJobName]
+      ,[ETLBatchName]
+      ,[ETLPackageId]
+      ,[FolderName]
+      ,[ProjectName]
+      ,[PackageName]
+      ,[ETLBatchExecutionEventId]
+      ,[ETLBatchExecutionEventType]
+      ,[EventDateTime]
+      ,[Description]
+FROM rpt.ETLBatchExecutionEvents</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
@@ -74,7 +80,7 @@
         <DataSourceName>SSISExecutionManager</DataSourceName>
         <QueryParameters>
           <QueryParameter Name="@MaxBatchesToReturn">
-            <Value>20</Value>
+            <Value>=Parameters!MaxBatchesToReturn.Value</Value>
           </QueryParameter>
         </QueryParameters>
         <CommandType>StoredProcedure</CommandType>
@@ -763,8 +769,23 @@
     </ReportSection>
   </ReportSections>
   <ReportParameters>
+    <ReportParameter Name="MaxBatchesToReturn">
+      <DataType>Integer</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>30</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>MaxBatchesToReturn</Prompt>
+      <Hidden>true</Hidden>
+    </ReportParameter>
     <ReportParameter Name="ETLBatchExecutionId">
       <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>1</Value>
+        </Values>
+      </DefaultValue>
       <Prompt>ETL Batch Execution</Prompt>
       <ValidValues>
         <DataSetReference>
@@ -778,11 +799,16 @@
   <ReportParametersLayout>
     <GridLayoutDefinition>
       <NumberOfColumns>1</NumberOfColumns>
-      <NumberOfRows>2</NumberOfRows>
+      <NumberOfRows>3</NumberOfRows>
       <CellDefinitions>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>1</RowIndex>
+          <ParameterName>MaxBatchesToReturn</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>2</RowIndex>
           <ParameterName>ETLBatchExecutionId</ParameterName>
         </CellDefinition>
       </CellDefinitions>

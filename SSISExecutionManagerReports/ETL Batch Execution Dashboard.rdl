@@ -14,11 +14,12 @@
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
         <QueryParameters>
-          <QueryParameter Name="@MaxBatchesToReturn">
-            <Value>20</Value>
-          </QueryParameter>
           <QueryParameter Name="@ETLBatchId">
             <Value>=Parameters!ETLBatchId.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@MaxBatchesToReturn">
+            <Value>=Parameters!MaxBatchesToReturn.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
           </QueryParameter>
         </QueryParameters>
         <CommandType>StoredProcedure</CommandType>
@@ -292,7 +293,8 @@ EXEC rpt.GetETLBatchExecutionStatusUnpivoted @ETLBatchExecutionId;</CommandText>
             <Value>=Parameters!ETLBatchExecutionId.Value</Value>
           </QueryParameter>
           <QueryParameter Name="@LastNEvents">
-            <Value>10</Value>
+            <Value>=Parameters!LastNEvents.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
           </QueryParameter>
         </QueryParameters>
         <CommandType>StoredProcedure</CommandType>
@@ -3160,6 +3162,35 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
     </ReportSection>
   </ReportSections>
   <ReportParameters>
+    <ReportParameter Name="MaxBatchesToReturn">
+      <DataType>Integer</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>30</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>MaxBatchesToReturn</Prompt>
+      <Hidden>true</Hidden>
+    </ReportParameter>
+    <ReportParameter Name="PerformanceDaysBack">
+      <DataType>Integer</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>30</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Performance Days Back</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="LastNEvents">
+      <DataType>Integer</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>10</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>LastNEvents</Prompt>
+      <Hidden>true</Hidden>
+    </ReportParameter>
     <ReportParameter Name="ETLBatchId">
       <DataType>Integer</DataType>
       <DefaultValue>
@@ -3200,15 +3231,6 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
       <Prompt>Cancel Batch ?</Prompt>
       <Hidden>true</Hidden>
     </ReportParameter>
-    <ReportParameter Name="PerformanceDaysBack">
-      <DataType>Integer</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>30</Value>
-        </Values>
-      </DefaultValue>
-      <Prompt>Performance Days Back</Prompt>
-    </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
@@ -3218,22 +3240,32 @@ rownumber("ETLBatchGroupsStatuses") = 25, "Silver")</Color>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>0</RowIndex>
-          <ParameterName>ETLBatchId</ParameterName>
+          <ParameterName>MaxBatchesToReturn</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
           <RowIndex>0</RowIndex>
-          <ParameterName>ETLBatchExecutionId</ParameterName>
+          <ParameterName>PerformanceDaysBack</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>2</ColumnIndex>
           <RowIndex>0</RowIndex>
-          <ParameterName>CancelBatchInd</ParameterName>
+          <ParameterName>LastNEvents</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>3</ColumnIndex>
           <RowIndex>0</RowIndex>
-          <ParameterName>PerformanceDaysBack</ParameterName>
+          <ParameterName>ETLBatchId</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>1</RowIndex>
+          <ParameterName>ETLBatchExecutionId</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>1</RowIndex>
+          <ParameterName>CancelBatchInd</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>
