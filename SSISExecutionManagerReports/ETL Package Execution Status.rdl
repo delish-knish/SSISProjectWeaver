@@ -94,7 +94,7 @@
         <DataSourceName>SSISExecutionManager</DataSourceName>
         <QueryParameters>
           <QueryParameter Name="@MaxBatchesToReturn">
-            <Value>20</Value>
+            <Value>=Parameters!MaxBatchesToReturn.Value</Value>
           </QueryParameter>
           <QueryParameter Name="@ETLBatchId">
             <Value>=Parameters!ETLBatchId.Value</Value>
@@ -1851,6 +1851,16 @@ Fields!PackageExecutionStatus.Value = "Canceled", "Salmon"
     </ReportSection>
   </ReportSections>
   <ReportParameters>
+    <ReportParameter Name="MaxBatchesToReturn">
+      <DataType>Integer</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>30</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>MaxBatchesToReturn</Prompt>
+      <Hidden>true</Hidden>
+    </ReportParameter>
     <ReportParameter Name="ETLBatchId">
       <DataType>Integer</DataType>
       <Prompt>ETL Batch Type</Prompt>
@@ -1882,10 +1892,15 @@ Fields!PackageExecutionStatus.Value = "Canceled", "Salmon"
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>0</RowIndex>
-          <ParameterName>ETLBatchId</ParameterName>
+          <ParameterName>MaxBatchesToReturn</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>ETLBatchId</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>2</ColumnIndex>
           <RowIndex>0</RowIndex>
           <ParameterName>ETLBatchExecutionId</ParameterName>
         </CellDefinition>
