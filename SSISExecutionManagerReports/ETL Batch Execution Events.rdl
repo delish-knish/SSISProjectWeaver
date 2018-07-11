@@ -13,6 +13,11 @@
     <DataSet Name="ETLBatchExecutionEvents">
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@ETLBatchExecutionId">
+            <Value>=Parameters!ETLBatchExecutionId.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
         <CommandText>SELECT 
 [ETLBatchExecutionId]
       ,[CallingJobName]
@@ -25,7 +30,8 @@
       ,[ETLBatchExecutionEventType]
       ,[EventDateTime]
       ,[Description]
-FROM rpt.ETLBatchExecutionEvents</CommandText>
+FROM rpt.ETLBatchExecutionEvents
+WHERE [ETLBatchExecutionId] = @ETLBatchExecutionId</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
@@ -780,7 +786,7 @@ FROM rpt.ETLBatchExecutionEvents</CommandText>
       <Hidden>true</Hidden>
     </ReportParameter>
     <ReportParameter Name="ETLBatchExecutionId">
-      <DataType>String</DataType>
+      <DataType>Integer</DataType>
       <DefaultValue>
         <Values>
           <Value>1</Value>
