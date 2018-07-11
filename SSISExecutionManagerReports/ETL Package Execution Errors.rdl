@@ -14,9 +14,6 @@
       <Query>
         <DataSourceName>SSISExecutionManager</DataSourceName>
         <QueryParameters>
-          <QueryParameter Name="@ETLBatchExecutionId">
-            <Value>=nothing</Value>
-          </QueryParameter>
           <QueryParameter Name="@SSISDBExecutionId">
             <Value>=Parameters!SSISDBExecutionId.Value</Value>
           </QueryParameter>
