@@ -15,7 +15,7 @@
         <DataSourceName>SSISExecutionManager</DataSourceName>
         <QueryParameters>
           <QueryParameter Name="@MaxBatchesToReturn">
-            <Value>20</Value>
+            <Value>=Parameters!MaxBatchesToReturn.Value</Value>
           </QueryParameter>
           <QueryParameter Name="@ETLBatchId">
             <Value>=Parameters!ETLBatchId.Value</Value>
@@ -591,6 +591,16 @@ rownumber("ETLPackageExecutions") = 25, "Silver")</Color>
     </ReportSection>
   </ReportSections>
   <ReportParameters>
+    <ReportParameter Name="MaxBatchesToReturn">
+      <DataType>Integer</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>20</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>MaxBatchesToReturn</Prompt>
+      <Hidden>true</Hidden>
+    </ReportParameter>
     <ReportParameter Name="ETLBatchId">
       <DataType>Integer</DataType>
       <Prompt>ETLBatch Type</Prompt>
@@ -639,15 +649,20 @@ rownumber("ETLPackageExecutions") = 25, "Silver")</Color>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>0</RowIndex>
-          <ParameterName>ETLBatchId</ParameterName>
+          <ParameterName>MaxBatchesToReturn</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
           <RowIndex>0</RowIndex>
-          <ParameterName>ETLBatchExecutionId</ParameterName>
+          <ParameterName>ETLBatchId</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>2</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>ETLBatchExecutionId</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>3</ColumnIndex>
           <RowIndex>0</RowIndex>
           <ParameterName>ETLPackageGroupId</ParameterName>
         </CellDefinition>
