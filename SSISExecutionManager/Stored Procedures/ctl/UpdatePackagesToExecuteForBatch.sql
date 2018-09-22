@@ -6,6 +6,7 @@ AS
     FROM   dbo.[func_GetETLPackagesForBatchExecution](@ETLBatchExecutionId) pkg 
            JOIN [cfg].ETLPackageGroup_ETLPackage epgep
              ON pkg.ETLPackageId = epgep.ETLPackageId 
+				AND pkg.ETLPackageGroupId = epgep.ETLPackageGroupId
 		  JOIN [cfg].ETLPackage ep ON epgep.ETLPackageId = ep.ETLPackageId
     WHERE
       ep.EntryPointPackageInd = 1
