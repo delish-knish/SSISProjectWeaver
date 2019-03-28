@@ -37,37 +37,37 @@ AS
     /* Insert Packages from @SSISDBPackages list*/
     WITH cte_ETLPackage
          AS (SELECT
-               fldr.NAME        AS SSISDBFolderName
-               ,prjct.NAME      AS SSISDBProjectName
-               ,pkg.NAME        AS SSISDBPackageName
+               fldr.[name]        AS SSISDBFolderName
+               ,prjct.[name]      AS SSISDBProjectName
+               ,pkg.[name]        AS SSISDBPackageName
                ,pkg.entry_point AS EntryPointPackageInd
              FROM
                [$(SSISDB)].catalog.folders AS fldr
                JOIN [$(SSISDB)].catalog.projects AS prjct
                  ON prjct.folder_id = fldr.folder_id
-                    AND @SSISDBProjectNames LIKE '%' + prjct.NAME + '%'
+                    AND @SSISDBProjectNames LIKE '%' + prjct.[name] + '%'
                JOIN [$(SSISDB)].catalog.packages AS pkg
                  ON pkg.project_id = prjct.project_id
-                    AND pkg.NAME LIKE '%' + @SSISDBPackages + '%'
+                    AND pkg.[name] LIKE '%' + @SSISDBPackages + '%'
              WHERE
-               @SSISDBFolderNames LIKE '%' + fldr.NAME + '%'
+               @SSISDBFolderNames LIKE '%' + fldr.[name] + '%'
                AND @SSISDBPackages IS NOT NULL
              UNION
              -- To import all of the packages
              SELECT
-               fldr.NAME        AS SSISDBFolderName
-               ,prjct.NAME      AS SSISDBProjectName
-               ,pkg.NAME        AS SSISDBPackageName
+               fldr.[name]        AS SSISDBFolderName
+               ,prjct.[name]      AS SSISDBProjectName
+               ,pkg.[name]        AS SSISDBPackageName
                ,pkg.entry_point AS EntryPointPackageInd
              FROM
                [$(SSISDB)].catalog.folders AS fldr
                JOIN [$(SSISDB)].catalog.projects AS prjct
                  ON prjct.folder_id = fldr.folder_id
-                    AND @SSISDBProjectNames LIKE '%' + prjct.NAME + '%'
+                    AND @SSISDBProjectNames LIKE '%' + prjct.[name] + '%'
                JOIN [$(SSISDB)].catalog.packages AS pkg
                  ON pkg.project_id = prjct.project_id
              WHERE
-               @SSISDBFolderNames LIKE '%' + fldr.NAME + '%'
+               @SSISDBFolderNames LIKE '%' + fldr.[name] + '%'
                AND @SSISDBPackages IS NULL)
     MERGE cfg.ETLPackage trgt
     USING cte_ETLPackage src

@@ -8,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{f8ea7c7b-9b18-4b2e-9d59-a7539c6aeb05}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql140DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -89,9 +89,9 @@
     <Build Include="Functions\Scalar-valued\func_GetConfigurationValue.sql" />
     <Build Include="Functions\Scalar-valued\func_GetETLBatchStatusId.sql" />
     <Build Include="Functions\Scalar-valued\func_GetLastPackageExecutionStatus.sql" />
-    <Build Include="Functions\Scalar-valued\func_GetSQLAgentJobNextRunDateTime.sql" />
+    <None Include="Functions\Scalar-valued\func_GetSQLAgentJobNextRunDateTime.sql" />
     <Build Include="Functions\Scalar-valued\func_GetSSISDBPackageId.sql" />
-    <Build Include="Functions\Scalar-valued\func_IsSQLAgentJobRunning.sql" />
+    <None Include="Functions\Scalar-valued\func_IsSQLAgentJobRunning.sql" />
     <Build Include="Functions\Table-valued\ops\func_GetSSISPackageExecutionMessages.sql" />
     <Build Include="Functions\Table-valued\func_GetETLBatchExecutionStatus.sql" />
     <Build Include="Functions\Table-valued\func_GetETLPackageExecutionErrorsForBatchExecution.sql" />
@@ -118,23 +118,35 @@
     </Build>
     <Build Include="Stored Procedures\ctl\ExecuteETLPackage.sql" />
     <Build Include="Stored Procedures\ctl\ExecuteETLPackagesForBatchExecution.sql">
-      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+      <SuppressTSqlWarnings>71502,71562</SuppressTSqlWarnings>
     </Build>
     <None Include="Stored Procedures\ctl\ExecuteETLPackageGroupSQLCommands.sql" />
     <Build Include="Stored Procedures\ctl\InsertETLBatchSSISDBExecution.sql" />
     <Build Include="Stored Procedures\ctl\InsertUnhandledError.sql" />
-    <Build Include="Stored Procedures\ctl\RestartETLPackagesForETLBatchExecution.sql" />
+    <Build Include="Stored Procedures\ctl\RestartETLPackagesForETLBatchExecution.sql">
+      <SuppressTSqlWarnings>71562</SuppressTSqlWarnings>
+    </Build>
     <Build Include="Stored Procedures\ctl\SaveETLBatchExecution.sql" />
-    <Build Include="Stored Procedures\ctl\SendErrorNotificationsForETLBatchExecution.sql" />
+    <Build Include="Stored Procedures\ctl\SendErrorNotificationsForETLBatchExecution.sql">
+      <SuppressTSqlWarnings>71562</SuppressTSqlWarnings>
+    </Build>
     <Build Include="Stored Procedures\ctl\UpdateETLBatchStatus.sql" />
     <Build Include="Stored Procedures\ctl\UpdatePackagesToExecuteForBatch.sql" />
     <Build Include="Stored Procedures\log\InsertETLBatchExecutionEvent.sql" />
     <Build Include="Stored Procedures\log\SaveETLPackageExecutionErrors.sql" />
     <Build Include="Stored Procedures\log\SaveETLPackageExecutions.sql" />
-    <Build Include="Stored Procedures\ops\SendAndLogLongRunningETLPackageNotification.sql" />
-    <Build Include="Stored Procedures\ops\SendLongRunningBlockingQueryNotification.sql" />
-    <Build Include="Stored Procedures\ops\SendSSISErrorEmail.sql" />
-    <Build Include="Stored Procedures\sqlcmd\CheckAndWaitForCompetingJobs.sql" />
+    <Build Include="Stored Procedures\ops\SendAndLogLongRunningETLPackageNotification.sql">
+      <SuppressTSqlWarnings>71562</SuppressTSqlWarnings>
+    </Build>
+    <None Include="Stored Procedures\ops\SendLongRunningBlockingQueryNotification.sql">
+      <SuppressTSqlWarnings>71561,71562</SuppressTSqlWarnings>
+    </None>
+    <Build Include="Stored Procedures\ops\SendSSISErrorEmail.sql">
+      <SuppressTSqlWarnings>71562</SuppressTSqlWarnings>
+    </Build>
+    <Build Include="Stored Procedures\sqlcmd\CheckAndWaitForCompetingJobs.sql">
+      <SuppressTSqlWarnings>71502,71562</SuppressTSqlWarnings>
+    </Build>
     <Build Include="Stored Procedures\sup\EnableDisableProjectPackage.sql" />
     <Build Include="Stored Procedures\sup\ExecutePackageForETLBatch.sql" />
     <Build Include="Stored Procedures\sup\ResetProjectPackageForNormalExecution.sql" />
@@ -189,9 +201,13 @@
     <Build Include="Stored Procedures\cfg\SaveETLPackageGroup_ETLPackage.sql" />
     <None Include="Stored Procedures\cfg\SaveETLPackageGroup_SQLCommand.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLPackageGroup_ETLPackage_SQLCommandCondition.sql" />
-    <Build Include="Stored Procedures\ops\SendRowLevelErrorsEmail.sql" />
+    <Build Include="Stored Procedures\ops\SendRowLevelErrorsEmail.sql">
+      <SuppressTSqlWarnings>71562</SuppressTSqlWarnings>
+    </Build>
     <Build Include="Views\rpt\ETLPackageGroupExecutions.sql" />
-    <Build Include="Stored Procedures\ops\SendCompleteBatchExecutionStatistics.sql" />
+    <Build Include="Stored Procedures\ops\SendCompleteBatchExecutionStatistics.sql">
+      <SuppressTSqlWarnings>71562</SuppressTSqlWarnings>
+    </Build>
     <None Include="Tables\ctl\DropCreateIndexesTable.sql" />
     <Build Include="Stored Procedures\cfg\DeleteETLPackageGroup_ETLPackageGroupDependency.sql" />
     <Build Include="Stored Procedures\cfg\SaveETLPackageGroup_ETLPackageGroupDependency.sql" />
@@ -202,9 +218,11 @@
     <Build Include="Views\rpt\ETLPackageExecutableStatistics.sql" />
     <Build Include="Tables\ref\SSISDBLoggingLevel.sql" />
     <Build Include="Views\rpt\ETLBatchGroupsStatuses.sql" />
-    <Build Include="Stored Procedures\ops\SendETLBatchGroupsStatusesNotification.sql" />
+    <Build Include="Stored Procedures\ops\SendETLBatchGroupsStatusesNotification.sql">
+      <SuppressTSqlWarnings>71562</SuppressTSqlWarnings>
+    </Build>
     <Build Include="Stored Procedures\ctl\AreETLBatchSQLCommandConditionsMet.sql">
-      <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
+      <SuppressTSqlWarnings>71502,71562</SuppressTSqlWarnings>
     </Build>
     <Build Include="Functions\Scalar-valued\func_IsETLBatchExecutionTimedOut.sql" />
     <Build Include="Functions\Table-valued\func_GetETLBatchExecutionSSISDBExecutionSummary.sql" />
@@ -237,10 +255,14 @@
     <Build Include="Stored Procedures\ctl\StopAllPackagesForETLBatchExecution.sql" />
     <Build Include="Views\rpt\ETLBatchSSISDBExecutions.sql" />
     <Build Include="Views\rpt\ETLPackages.sql" />
-    <Build Include="Stored Procedures\rpt\GetCurrentlyExecutingSQL.sql" />
+    <None Include="Stored Procedures\rpt\GetCurrentlyExecutingSQL.sql">
+      <SuppressTSqlWarnings>71562</SuppressTSqlWarnings>
+    </None>
     <Build Include="Stored Procedures\rpt\GetETLBatchExecutionsParamList.sql" />
     <Build Include="Stored Procedures\sup\CancelETLBatchExecution.sql" />
-    <Build Include="Stored Procedures\ctl\StopETLPackageExecution.sql" />
+    <Build Include="Stored Procedures\ctl\StopETLPackageExecution.sql">
+      <SuppressTSqlWarnings>71562</SuppressTSqlWarnings>
+    </Build>
     <Build Include="Stored Procedures\rpt\GetETLBatchGroupStatuses.sql" />
     <Build Include="Stored Procedures\rpt\GetRunningETLPackages.sql" />
     <Build Include="Stored Procedures\rpt\GetETLBatchParamList.sql" />
@@ -268,18 +290,18 @@
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
-    <ArtifactReference Include="References\SSISDB.dacpac">
-      <HintPath>References\SSISDB.dacpac</HintPath>
+    <ArtifactReference Include="..\..\SSISExecutionManagerDacpacs2017\SSISDB.dacpac">
+      <HintPath>..\..\SSISExecutionManagerDacpacs2017\SSISDB.dacpac</HintPath>
       <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
       <DatabaseSqlCmdVariable>SSISDB</DatabaseSqlCmdVariable>
     </ArtifactReference>
-    <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
-      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac</HintPath>
+    <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\140\SqlSchemas\master.dacpac">
+      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\140\SqlSchemas\master.dacpac</HintPath>
       <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
       <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
     </ArtifactReference>
-    <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\msdb.dacpac">
-      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\msdb.dacpac</HintPath>
+    <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\140\SqlSchemas\msdb.dacpac">
+      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\140\SqlSchemas\msdb.dacpac</HintPath>
       <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
       <DatabaseVariableLiteralValue>msdb</DatabaseVariableLiteralValue>
     </ArtifactReference>
@@ -295,7 +317,7 @@
     </SqlCmdVariable>
     <SqlCmdVariable Include="SSISDB">
       <DefaultValue>SSISDB</DefaultValue>
-      <Value>$(SqlCmdVar__1)</Value>
+      <Value>$(SqlCmdVar__9)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="SSISServerName">
       <DefaultValue>localhost</DefaultValue>
