@@ -14,7 +14,7 @@ AS
                  AND es.execution_result IS NULL
                  AND eme.MessageDateTime IS NULL THEN 
 					CASE ex.status 
-						WHEN 7 THEN 7
+						WHEN 7 THEN 0
 						WHEN 3 THEN 4
 						ELSE 5 --The package has started but hasn't completed, been cancelled, or failed, so it is running
 					END 
