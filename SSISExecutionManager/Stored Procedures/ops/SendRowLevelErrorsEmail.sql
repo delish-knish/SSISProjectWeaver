@@ -4,6 +4,15 @@
 													@ETLBatchExecutionId INT = NULL,
 													@EmailRecipientsOverride VARCHAR(MAX) = NULL
 AS
+	DECLARE @ErrorCount INT = (SELECT 
+											count(*)
+									FROM 
+										[log].[ETLPackageExecutionRowLevelError] err
+										LEFT JOIN [ctl].[ETLBatchSSISDBExecutions] ex ON err.SSISDBExecutionId = ex.SSISDBExecutionId --older versions didn't write the execution id to the row level error table, hence the left join
+									WHERE 
+										(err.ErrorDateTime BETWEEN DATEADD(hour, -@TimeIntervalInHours, GETDATE()) AND GETDATE() OR @TimeIntervalInHours IS NULL) 
+										AND ( ex.ETLBatchExecutionId = @ETLBatchExecutionId OR @ETLBatchExecutionId IS NULL) );
+	
 	DECLARE @EmailRecipients VARCHAR(MAX) = ( ISNULL(@EmailRecipientsOverride,[dbo].[func_GetConfigurationValue] ('Email Recipients - Monitors')) );
 
 
@@ -44,7 +53,8 @@ AS
 								FOR XML PATH('tr'), TYPE ) AS NVARCHAR(MAX) )
                      + N'</table>';
 
-    EXEC msdb.dbo.sp_send_dbmail
+    IF @ErrorCount > 0
+	EXEC msdb.dbo.sp_send_dbmail
       @recipients = @EmailRecipients,
       @subject = @EmailSubject,
       @body = @tableHTML,
